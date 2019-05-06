@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "charge_btn",
+    "texture": "c438076c-a537-4d58-b8a3-dcc8a77701eb",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      152,
+      123
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      152,
+      123
+    ]
+  }
+}

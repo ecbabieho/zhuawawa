@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "zhuanchang_show",
+    "texture": "b7dd5b90-48b8-40c7-8dbf-8c8f31c0e6c6",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      321,
+      82
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      321,
+      82
+    ]
+  }
+}

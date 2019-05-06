@@ -1,0 +1,56 @@
+2018-09-22T13:39:23.639Z - normal: Load ~/.CocosCreator/settings.json
+2018-09-22T13:39:23.643Z - normal: checking language setting...
+2018-09-22T13:39:23.644Z - normal: Language: zh
+2018-09-22T13:39:25.178Z - success: protocol editor-framework registered
+2018-09-22T13:39:25.179Z - success: protocol app registered
+2018-09-22T13:39:25.179Z - success: protocol theme registered
+2018-09-22T13:39:25.179Z - success: protocol packages registered
+2018-09-22T13:39:25.181Z - success: protocol unpack registerred
+2018-09-22T13:39:25.181Z - success: protocol disable-commonjs registerred
+2018-09-22T13:39:25.418Z - normal: connected!
+2018-09-22T13:39:25.421Z - normal: Check project /Users/machao/Desktop/zhuawawacode/zhuawawazs
+2018-09-22T13:39:25.424Z - normal: Initializing Cocos2d
+2018-09-22T13:39:25.853Z - normal: Initializing Asset Database
+2018-09-22T13:39:25.919Z - success: protocol uuid registerred
+2018-09-22T13:39:25.919Z - success: protocol db registerred
+2018-09-22T13:39:25.920Z - success: protocol thumbnail registerred
+2018-09-22T13:39:25.920Z - normal: Loading editor/builtin packages
+2018-09-22T13:39:25.967Z - success: anysdk loaded
+2018-09-22T13:39:26.182Z - success: assets loaded
+2018-09-22T13:39:26.188Z - success: builder loaded
+2018-09-22T13:39:26.192Z - success: cocos-analytics loaded
+2018-09-22T13:39:26.200Z - success: console loaded
+2018-09-22T13:39:26.253Z - success: fb-instant-games loaded
+2018-09-22T13:39:26.263Z - success: hierarchy loaded
+2018-09-22T13:39:26.271Z - success: inspector loaded
+2018-09-22T13:39:26.273Z - success: keystore loaded
+2018-09-22T13:39:26.280Z - success: node-library loaded
+2018-09-22T13:39:26.283Z - success: package-asset loaded
+2018-09-22T13:39:26.286Z - success: preferences loaded
+2018-09-22T13:39:26.291Z - success: project-exporter loaded
+2018-09-22T13:39:26.319Z - success: project-importer loaded
+2018-09-22T13:39:26.324Z - success: project-settings loaded
+2018-09-22T13:39:26.332Z - success: ui-kit loaded
+2018-09-22T13:39:26.341Z - success: ui-grid loaded
+2018-09-22T13:39:26.348Z - success: scene loaded
+2018-09-22T13:39:26.351Z - success: sprite-editor loaded
+2018-09-22T13:39:26.358Z - success: store loaded
+2018-09-22T13:39:26.368Z - success: timeline loaded
+2018-09-22T13:39:26.369Z - normal: Loading builtin packages
+2018-09-22T13:39:26.382Z - success: asset-db-debugger loaded
+2018-09-22T13:39:26.383Z - success: color-picker loaded
+2018-09-22T13:39:26.390Z - success: package-manager loaded
+2018-09-22T13:39:26.392Z - success: qqplay-adapter loaded
+2018-09-22T13:39:26.403Z - success: sdkbox loaded
+2018-09-22T13:39:26.411Z - success: tester loaded
+2018-09-22T13:39:26.417Z - success: ui-kit-preview-extra loaded
+2018-09-22T13:39:26.423Z - success: ui-kit-preview loaded
+2018-09-22T13:39:26.429Z - success: ui-tree loaded
+2018-09-22T13:39:26.431Z - success: weapp-adapter loaded
+2018-09-22T13:39:28.240Z - normal: Initializing project /Users/machao/Desktop/zhuawawacode/zhuawawazs
+2018-09-22T13:39:28.244Z - normal: Loading packages
+2018-09-22T13:39:28.251Z - normal: Watching packages
+2018-09-22T13:39:28.435Z - normal: Run Application
+2018-09-22T13:39:29.345Z - success: preview server running at http://localhost:7456
+2018-09-22T13:39:38.532Z - normal: 1.9.3
+2018-09-22T13:43:21.873Z - normal: 解压 CocosCreator房卡麻将源码-幼麟游戏 成功

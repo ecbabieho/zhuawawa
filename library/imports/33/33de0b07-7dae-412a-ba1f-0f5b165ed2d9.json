@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "prize_bar",
+    "texture": "2818318b-e48b-4531-8323-05212151dfc4",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      750,
+      145
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      750,
+      145
+    ]
+  }
+}

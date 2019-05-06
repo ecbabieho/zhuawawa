@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "zhuawawa_top",
+    "texture": "5364c719-23b6-433a-b0e4-5f619556d33d",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      143,
+      47
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      143,
+      47
+    ]
+  }
+}

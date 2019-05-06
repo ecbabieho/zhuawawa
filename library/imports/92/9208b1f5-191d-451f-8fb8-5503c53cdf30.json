@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "ganzi",
+    "texture": "924279fd-ed54-4f43-b7f2-f92103f733cf",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      751,
+      29
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      751,
+      29
+    ]
+  }
+}
