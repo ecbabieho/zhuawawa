@@ -33,17 +33,20 @@ https://www.domain.com/index.php/Admin
 ```
 cetos6.8+lamp
 ```
-# 产品模块目录 
-## svr_all/Application/Wechat目录为微信公众号文件目录 svr_all/Application/Admin为管理系统文件目录 其他目录结构请参考Thinkphp目录结构
+## 产品模块目录 
+### svr_all/Application/Wechat目录为微信公众号文件目录 
+### svr_all/Application/Admin为管理系统文件目录 其他目录结构请参考Thinkphp目录结构
+
 ## 抓娃娃
 ### 1.代理分销在Agent Controller下
-#### 代理商赠送会员/金币,查看已邀请下级，充值会员，所赚返现，提现等。
+### 代理商赠送会员/金币,查看已邀请下级，充值会员，所赚返现，提现等。
 ### 2.活动在Activity Controller下
+### 宝箱活动（box_game），广发银行办信用卡活动(guangfa_act)，种水果活动(lvguonongchang_zyf)
+### 3.抓娃娃主模块:
+### 品牌活动领取金币（act）、收货地址(address)、背包（bag）、充值(charge)、普通场（game）、黄金场（game_gloden）、钻石场（game_diamond）、娃娃列表（index）、邀请海报（invite）、领养娃娃游戏（lingyang_wawa）、赠送好友娃娃（send_friend）、会员充值(vip_charge)等。
 
-#### 宝箱活动（box_game），广发银行办信用卡活动(guangfa_act)，种水果活动(lvguonongchang_zyf)
-### 3.抓娃娃主模块:品牌活动领取金币（act）、收货地址(address)、背包（bag）、充值(charge)、普通场（game）、黄金场（game_gloden）、钻石场（game_diamond）、娃娃列表（index）、邀请海报（invite）、领养娃娃游戏（lingyang_wawa）、赠送好友娃娃（send_friend）、会员充值(vip_charge)等。
 ## 线下一卡通会员
 ### 1.会员卡在Vip下，包含商户列表(index)、商户搜索(search)、商户简介(shop_detail)、会员续费(recharge)、个人中心(personal)、商户入驻申请(ruzhu)、商户活动(act_detail)、每日签到得金币(sign)等。
 ## 社区
 ### 社区包含发帖评论，结合抓娃娃里面的有索要娃娃发帖
-#### 1.社区在Community Controller下
+### 1.社区在Community Controller下
