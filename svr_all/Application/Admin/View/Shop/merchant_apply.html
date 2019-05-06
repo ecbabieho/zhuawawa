@@ -1,0 +1,132 @@
+<style type="text/css">
+	.menu_pid{
+		display:block;
+		height:36px;
+		line-height:36px;
+		width:100%;
+		padding-left:10px;
+		border-color: #D2D2D2!important;
+	}
+</style>
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">商家名称</label>
+					<div class="layui-input-block">
+						<input type="text" id="search_name" placeholder="请输入商家名称" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="search_lottery()">
+						<i class="layui-icon layui-icon-search  layuiadmin-button-btn"></i>
+					</a>
+					<!--<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-add-1 layuiadmin-button-btn"></i>
+					</a>-->
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="coverImageTpl">
+	<img src="{{d.cover_image}}" title="{{d.cover_image}}" style="width:100%;">
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Shop/ajax_get_merchant_apply")}', //数据接口
+			page: true, //开启分页
+			limit:10,
+			limits:[10,20,30,40,50,60,70,80,90,200],
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'cover_image', title: '门头照片', width:150,templet:"#coverImageTpl"},
+					{field: 'merchant_name', title: '商家名称', width:200},
+					{field: 'link_name', title: '联系人', width:150},
+					{field: 'tel', title: '电话', width:200},
+					{field: 'address', title: '地址', width:300},
+					{field: 'business_time', title: '营业时间', width:150},
+					{field: 'recommend', title: '商家推荐', width:150},
+					{field: 'discount', title: '会员优惠', width:150},
+					{field: 'user_nickname', title: '申请人', width:150},
+					{fixed: 'right',title:'操作',  align:'center', toolbar: '#barDemo',fixed: 'right', width:200} 
+					]
+					]
+				});
+
+	});
+	table.on('tool(users)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+	  if(layEvent === 'del'){ //删除
+		layer.confirm('确定删除此选项吗？', function(index){
+		  layer.close(index);
+		  
+		  //向服务端发送删除指令
+		  var sub_data = {
+			id:data['id']
+		  };
+		  $.post("{:U('Shop/ajax_delete_merchant_apply')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('删除成功',function(){
+					//window.location.reload();
+				})
+				obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		  });
+		});
+	  }
+	});
+	function search_lottery(){
+		var name = $("#search_name").val();
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				name:name,
+			}
+		})
+	}
+	
+	
+	function fabu(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('Shop/ajax_public_config')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+</script>

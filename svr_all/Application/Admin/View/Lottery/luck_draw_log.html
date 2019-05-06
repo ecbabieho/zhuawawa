@@ -1,0 +1,100 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">用户</label>
+					<div class="layui-input-block">
+						<select id="user_id_s">
+							<option value="">全部用户</option>
+							<volist name="user_list" id="vo">
+							<option value="{$vo['id']}">{$vo['id']}-{$vo['nickname']}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">抓娃娃</label>
+					<div class="layui-input-block">
+						<select id="lottery_goods_id_s">
+							<option value="">全部抓娃娃</option>
+							<volist name="goods_list" id="vo">
+							<option value="{$vo['id']}">{$vo['name']}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width:88px;">收货人电话/ID</label>
+					<div class="layui-input-block" style="margin-left: 118px;">
+						<input type="text" id="search_val" placeholder="请输入收货人电话/ID" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="search_lottery()">
+						<i class="layui-icon layui-icon-search  layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script type="text/html" id="publicTpl">
+	{{#  if(d.status === '0'){ }}
+	<span class="layui-badge" onclick="fabu({{d.id}},1)" style="color:white;background-color:red;cursor:pointer">未发货</span>
+	{{#  } }}
+	{{#  if(d.status === '1'){ }}
+	<span class="layui-badge-rim" style="color:white;background-color:green;">已发货</span>
+
+	{{#  } }}
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Lottery/ajax_get_luck_draw_log")}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'user_id', title: '用户ID', width:100, sort: true},
+					{field: 'user_nickname', title: '用户昵称', width:200},
+					{field: 'lottery_config_name', title: '抓娃娃名称', width:200},
+					{field: 'consume_num', title: '消耗糖豆数量', width:100},
+					{field: 'is_hit', title: '是否中奖', width:100},
+					{field: 'hit_good_name', title: '中奖娃娃名称', width:200},
+					{field: 'add_time', title: '抽奖时间', width:180},
+					]
+					]
+				});
+
+	});
+	
+	function search_lottery(){
+		var user_id = $("#user_id_s").val();
+		var lottery_goods_id = $("#lottery_goods_id_s").val();
+		var search_val = $("#search_val").val();
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				user_id:user_id,
+				lottery_goods_id:lottery_goods_id,
+				search_val:search_val,
+			}
+		})
+	}
+</script>

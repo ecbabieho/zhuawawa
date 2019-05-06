@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>发表帖子</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weui/1.1.3/style/weui.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-weui/1.2.1/css/jquery-weui.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell">
+			<div class="weui-cell__bd">
+				<input class="weui-input" type="text" placeholder="标题" id="title" <if condition="$Think.get.lottery_good_id neq ''">value="#晒娃娃 我抓到了{$lottery_config['name']}里面的{$lottery_good['name']}，速来围观！"</if><if condition="$Think.get.beg_gift_id neq ''">value="#求娃娃 求大神送我一个{$beg_gift['name']}里面的娃娃！"</if>>
+			</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__bd">
+				<textarea class="weui-textarea" placeholder="请至少输入5个字" rows="3" id="content"> <if condition="$Think.get.lottery_good_id neq ''">#晒娃娃 我抓到了{$lottery_config['name']}里面的{$lottery_good['name']}，速来围观！</if><if condition="$Think.get.beg_gift_id neq ''">#求娃娃 求大神送我一个{$beg_gift['name']}里面的娃娃！</if></textarea>
+			</div>
+		</div>
+		<div class="weui-cells weui-cells_form" id="uploader">
+			<div class="weui-cell">
+				<div class="weui-cell__bd">
+					<div class="weui-uploader">
+						<div class="weui-uploader__hd">
+							<p class="weui-uploader__title">图片上传</p>
+							<div class="weui-uploader__info"><span id="uploadCount">0</span>/5</div>
+						</div>
+						<div class="weui-uploader__bd">
+							<ul class="weui-uploader__files" id="uploaderFiles"></ul>
+							<div class="weui-uploader__input-box">
+								<input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<if condition="$user['is_manager'] eq 0">
+		<a href="javascript:;" class="weui-btn weui-btn_primary" style="margin:10px;" onclick="sub()">发表</a>
+	</if>
+	<if condition="$user['is_manager'] eq 1">
+		<a href="javascript:;" class="weui-btn weui-btn_primary" style="margin:10px;" onclick="sub()">发表帖子</a>
+		<a href="javascript:;" class="weui-btn weui-btn_primary" style="margin:10px;" onclick="sub_gl()">发表攻略</a>
+	</if>
+
+	<script>
+		var _mtac = {};
+		(function() {
+			var mta = document.createElement("script");
+			mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+			mta.setAttribute("name", "MTAH5");
+			mta.setAttribute("sid", "500627254");
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(mta, s);
+		})();
+	</script>
+</body>
+</html>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.4/weui.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	var uploadCount = 0;
+	var images = [];
+	var loading;
+	weui.uploader('#uploader', {
+		url: '{:U("Community/upload_image")}',
+		auto: true,
+		type: 'file',
+		fileVal: 'file',
+		compress: {
+			width: 1600,
+			height: 1600,
+			quality: .8
+		},
+		onBeforeQueued: function(files) {
+			if(["image/jpg", "image/jpeg", "image/png", "image/gif"].indexOf(this.type) < 0){
+				weui.alert('请上传图片文件哦~');
+		   return false; // 阻止文件添加
+		}
+		if(this.size > 10 * 1024 * 1024){
+			weui.alert('请上传不超过10M的图片哦~');
+			return false;
+		}
+	   if (files.length > 5) { // 防止一下子选择过多文件
+	   	weui.alert('最多只能上传5张图片，请重新选择哦~');
+	   	return false;
+	   }
+	   if (uploadCount + 1 > 5) {
+	   	weui.alert('最多只能上传5张图片哦~');
+	   	return false;
+	   }
+
+	   ++uploadCount;
+	},
+	onProgress: function(procent){
+		loading = weui.loading('上传中...');
+		return true; // 阻止默认行为，不使用默认的进度显示
+	},
+	onSuccess: function (ret) {
+		loading.hide();
+		images.push(ret['data']['path']);
+		var content = $("#content").val();
+		if (content.substr(content.length-1,2) == "\n" || content.length == "") {
+			content = $("#content").val() + "[图片" + (images.length) + "]\r\n";
+		}
+		else{
+			content = $("#content").val() + "\r\n[图片" + (images.length) + "]\r\n";
+		}
+		$("#content").val(content);
+		$("#uploadCount").text(images.length);
+		$(".weui-uploader__file").each(function(){
+			var id = $(this).data('id');
+			$(this).attr('onclick',"show_gallery(" + (parseInt(id)-1)+ ")");
+		})
+	}
+});
+	function sub(){
+		var title = $("#title").val();
+		if (title == "") {
+			alert("请输入标题~");
+			return;
+		}
+		var content = $("#content").val();
+		if (content.length < 5) {
+			alert("内容最少五个字哦~");
+			return;
+		}
+		var data = {
+			title:title,
+			content:content,
+			images:encodeURIComponent(JSON.stringify(images)),
+			lottery_good_id:'{$lottery_good_id}',
+			lottery_config_id:'{$lottery_config_id}',
+			lottery_record_id:'{$Think.get.lottery_record_id}'
+		}
+		$.post("{:U("Community/ajax_fabu_tiezi")}",data,function(ret){
+			if (ret['code'] == 0) {
+				alert("发表成功~");
+				window.location.href = "{:U("Community/index")}";
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	function sub_gl(){
+		var title = $("#title").val();
+		if (title == "") {
+			alert("请输入标题~");
+			return;
+		}
+		var content = $("#content").val();
+		if (content.length < 5) {
+			alert("内容最少五个字哦~");
+			return;
+		}
+		var data = {
+			title:title,
+			content:content,
+			images:encodeURIComponent(JSON.stringify(images)),
+			type:1
+		}
+		$.post("{:U("Community/ajax_fabu_tiezi")}",data,function(ret){
+			if (ret['code'] == 0) {
+				alert("发表成功~");
+				window.location.href = "{:U("Community/index")}";
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	function show_gallery(id){
+		var gallery = weui.gallery(images[id], {
+			onDelete: function(){
+				if(confirm('您确定删除此图片吗？')){ 
+					uploadCount--;
+					var content = $("#content").val();
+					content = content.replace("[图片" + (id + 1)+ "]\n","");
+					$("#content").val(content);
+					$("#uploadCount").text(uploadCount);
+					gallery.hide();
+					$(".weui-uploader__file").eq(id).remove();
+				}
+			}
+		});
+	}
+	
+	
+</script>

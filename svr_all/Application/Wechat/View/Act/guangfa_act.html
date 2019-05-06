@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>{:I("type")}邀请您免费领糖豆抓娃娃啦~</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/gf_act.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="index-bg gf_act">
+	<div class="logo">
+		<img src="__PUBLIC__/weixin/image/gf_act/logo.png" alt="广发银行活动" class="img">
+	</div>
+	<div class="bg">
+		<img src="__PUBLIC__/weixin/image/gf_act/bg.png" class="img">
+	</div>
+	<ul class="show_list">
+		<li>
+			<p class="title">过审人数</p>
+			<p class="num">{$user_count}</p>
+		</li>
+		<li>
+			<p class="title">糖豆数量</p>
+			<p class="num">{$total_coin}</p>
+		</li>
+	</ul>
+	<div class="act_con">
+		<p class="text">1.过审人数少于50个人时，每人赠送100糖豆；</p>
+		<p class="text" style="padding-top:10px">2.过审人数超过50人之后，每增加1人则每人发放糖豆数量增加2个，最高奖励为300糖豆/卡。</p>
+	</div>
+	<a href="javascript:show_sub_info();" class="apply_btn"></a>
+	<div class="act_rules_t">
+		<image src="__PUBLIC__/weixin/image/gf_act/act_rule.png" class="img">
+	</div>
+	<ol class="act_rule">
+		<li>凡是未持有广发银行信用卡用户，有正式工作，工作单位有座机均可参与。</li>
+		<li>活动仅限西安地区包括阎良、临潼用户参与。</li>
+		<li>申请办卡资料请务必认真填写，恶意填写资料用户将面临封号风险。</li>
+		<li>
+			<p>糖豆发放时间：</p>
+			<p>2018年9月20日当天由客服统一赠送。</p>
+		</li>
+		<li>
+			<p>糖豆发放方式：</p>
+			<p class="ans">请搜索关注微信公众号“哐糖”关注即可。</a></p>
+		</li>
+		<li>
+			<p>活动时间：</p>
+			<p>即日（2018年9月5日）起至2018年9月19日结束。</p>
+		</li>
+	</ol>
+	<div class="act_rules_t">
+		<image src="__PUBLIC__/weixin/image/gf_act/cjwt.png" class="img">
+	</div>
+	<ol class="act_rule cjwt" style="margin-bottom: 70px;">
+		<li>
+			<p>申请办理之后必须要使用激活或刷卡才可以领取糖豆吗？</p>
+			<p class="ans">没有这样的限制，您可以不激活，或不刷卡使用都可以获得，只需要您符合活动规则1中的条件即可。</p>
+		</li>
+		<li>
+			<p>我可以提交我家人或朋友的信息吗？可以获得更多糖豆吗？</p>
+			<p class="ans">当然可以，前提是您得和家人或朋友提前沟通好，要是在进行办卡的过程中，家人不清楚情况的话，可能会导致办卡失败，无法获得更多糖豆。比如您填写2位亲友办卡成功即可获得双倍糖豆哦~</p>
+		</li>
+		<li>
+			<p>有限制一个人可以提交多少个办卡人信息吗？</p>
+			<p class="ans">当然没有，您可以无限制提交，但是务必保证尽可能高的办卡成功率，当然您的办卡成功您的糖豆也是翻倍的。</p>
+		</li>
+		<li>
+			<p>资料填写错误了怎么办？</p>
+			<p class="ans">没关系，您可以在公众号内留言，提交您的ID号（个人中心即可查看），以及您填写的办卡人姓名即可，客服可以将您填写的错误资料删除。但是请注意，务必认真填写，超过三次（不包含三次）以上填写错误可能会面临被封号的风险，不能抓娃娃，不能领取免费糖豆咯~</p>
+		</li>
+		<li>
+			<p>还有其他问题？</p>
+			<p class="ans">请搜索关注“哐糖”关注公众号提问。</a></p>
+		</li>
+		<li>
+			<p>广发银行信用卡有什么好处？</p>
+			<p class="ans"><a href="http://card.cgbchina.com.cn/subsite/201805/22081785/gfr.html" style="color:#ff4f01;text-decoration: underline;">《广发银行信用卡超级优惠权益》</a></p>
+		</li>
+	</ol>
+	<div class="bind_tel_bg" id="sub_info">
+		<ul class="address_list bind_tel">
+			<li class="border_bottom">
+				<input type="text" id="real_name" class="input" placeholder="请输入办卡人的姓名">
+				<span class="icon_close" onclick="close_sub_info()" style="margin-right:-5px;"></span>
+			</li>
+			<li class="border_bottom">
+				<input type="tel" id="tel" class="input" placeholder="请输入办卡人手机号">
+			</li>
+			<li class="border_bottom">
+				<input type="text" id="company_name" class="input" placeholder="请输入办卡人公司/单位名称">
+			</li>
+			<li class="border_bottom">
+				<input type="text" id="company_tel" class="input" placeholder="请输入办卡人单位座机号码">
+			</li>
+			<li>
+				<a href="javascript:sub_apply();" class="address_save_btn" style="height: 40px;;line-height: 40px;font-size: 14px;margin:10px auto;">提交</a>
+			</li>
+
+		</ul>
+	</div>
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+function close_sub_info(){
+	$("#sub_info").fadeOut();
+}
+function show_sub_info(){
+	$("#sub_info").fadeIn();
+}
+function sub_apply(){
+	var type = "{:I("type")}";
+	var real_name = $("#real_name").val();
+	var tel = $("#tel").val();
+	var company_name = $("#company_name").val();
+	var company_tel = $("#company_tel").val();
+	if (real_name == ""
+		|| tel == ""
+		|| company_name == ""
+		|| company_tel == "") {
+		alert("请将信息填写完整！");
+		return;
+	}
+	var data = {
+		type:type,
+		real_name:real_name,
+		tel:tel,
+		company_name:company_name,
+		company_tel:company_tel,
+		company_address:"",
+	}
+	$.post("{:U("Act/ajax_sub_xinyongka_act")}",data,function(ret){
+		if (ret['code'] == "") {
+			alert("恭喜您，提交成功！客服将会在9月20日为大家统一发放糖豆！");
+			window.location.reload();
+		}
+		else{
+			alert(ret['msg']);
+		}
+	})
+}
+</script>

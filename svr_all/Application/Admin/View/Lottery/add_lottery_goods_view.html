@@ -1,0 +1,131 @@
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-sm12">
+			<div class="layui-card row">
+				<div class="layui-card-body">
+					<form class="layui-form" action="">
+						<div class="layui-form-item">
+							<label class="layui-form-label">名称</label>
+							<div class="layui-input-block">
+								<input type="text" id="name" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">所属分类</label>
+							<div class="layui-input-block">
+								<select id="lottery_type_id" name="lottery_type_id">
+									<option value="">请选择分类</option>
+									<volist name="lottery_type" id="vo">
+										<option value="{$vo.id}" >{$vo.name}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">封面图片</label>
+							<div class="layui-input-block">
+								<div class="layui-upload" style="text-align:left">
+									<blockquote class="layui-elem-quote">图片请上传200px*200px的背景透明纯奖品图片，此图片会在抽奖页面展示~~ <br/><strong>注意：一定要是背景透明的png图片，点击图片即可上传</strong></blockquote>
+									<div class="layui-upload-list">
+										<img class="layui-upload-img" id="cover_image" style="width:200px;height:200px;border:1px solid #CCC;" src="<?php echo 'https://' . $_SERVER['SERVER_NAME'];?>__PUBLIC__/resources/images/upload_holder_good.png">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">成本</label>
+							<div class="layui-input-block">
+								<input type="text" id="cost" lay-verify="title" autocomplete="off" placeholder="请输入成本" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">库存</label>
+							<div class="layui-input-block">
+								<input type="text" id="stock" lay-verify="title" autocomplete="off" placeholder="请输入库存" class="layui-input" value="99999999">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">备注</label>
+							<div class="layui-input-block">
+								<textarea id="remarks" style='width:100%;height:200px;resize: none;padding:10px;line-height:20px;'></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<a href='javascript:;' class="layui-btn" onclick='sub()'>立即提交</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var layer, element;
+	layui.use(['layer', 'element'], function () {
+		layer = layui.layer;
+	});
+		//单图片上传
+	layui.use('upload', function () {
+		var upload = layui.upload;
+		var uploadInst = upload.render({
+			elem: '#cover_image',//绑定元素
+			url: '{:U("Index/upload_image")}',//上传接口
+			before: function (obj){
+				//预读图片
+				obj.preview(function (index, file, result) {
+					$('#cover_image').attr('src', result);
+				});
+			},
+			done: function (res) {
+				$('#cover_image').attr('src', res['data']['path']);
+			},
+			error: function () {
+				//请求异常回调
+			}
+		});
+	});
+	function sub() {
+		var cover_image = $("#cover_image").attr('src');
+		var name = $("#name").val();
+		var cost = $("#cost").val();
+		var remarks = $("#remarks").val();
+		var stock = $("#stock").val();
+		var lottery_type_id = $('#lottery_type_id').val();
+		if(name == ''){
+			layer.msg('请填写娃娃名称');
+			return;
+		}
+		if(cover_image == undefined){
+			layer.msg('请上传娃娃图片');
+			return;
+		}
+		if(lottery_type_id == ''){
+			layer.msg('请选择所属分类');
+			return;
+		}
+		var add_xinxi = {
+			name: name,
+			lottery_type_id: lottery_type_id,
+			cover_image:cover_image,
+			cost:cost,
+			remarks:remarks,
+			stock:stock,
+		};
+		lottery_config = encodeURIComponent(JSON.stringify(add_xinxi));
+		var data = {
+			lottery_config: lottery_config
+		}
+		$.post("{:U('Lottery/ajax_add_lottery_goods')}", data, function (ret) {
+			if (ret['code'] == '0') {
+				layer.msg('添加成功', function () {
+					window.location.href="{:U('Lottery/good_list')}";
+				});
+			} else {
+				layer.msg(ret['msg']);
+			}
+		})
+	}
+</script>

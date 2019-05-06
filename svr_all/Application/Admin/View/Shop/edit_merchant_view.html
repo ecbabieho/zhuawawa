@@ -1,0 +1,371 @@
+<style>
+.layui-input-block {
+    margin-left: 115px;
+}
+.layui-form-label {
+    width: 85px;
+}
+</style>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=ce1d7952bfe7215b1cecb51b69ae04f2"></script> 
+<script src="http://webapi.amap.com/ui/1.0/main.js"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=ce1d7952bfe7215b1cecb51b69ae04f2&plugin=AMap.Geocoder"></script>
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-sm8">
+			<div class="layui-card">
+				<div class="layui-card-header">
+					店铺资料
+				</div>
+				<div class="layui-card-body">
+					<form class="layui-form" action='#'>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">店铺名称：</label>
+								<div class="layui-input-block">
+									<input type="text" id="name" placeholder="请输入店铺名称" autocomplete="off" class="layui-input" value="{$merchant['name']}">
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">列表页图片</label>
+							<div class="layui-input-block">
+								<div class="layui-upload" style="text-align:left">
+									<blockquote class="layui-elem-quote">图片请上传300px*300px格式为jpg的图片，此图片会在首页页面展示~~ <br/><strong>注意：点击图片即可上传</strong></blockquote>
+									<div class="layui-upload-list">
+										<img class="layui-upload-img" id="cover_image" style="width:200px;height:200px;border:1px solid #CCC;" src="<if condition="$merchant['image'] neq ''"> {$merchant.image} </if><if condition="$merchant['image'] eq ''"><?php echo 'https://' . $_SERVER['SERVER_NAME'];?>__PUBLIC__/resources/images/upload_holder_good.png </if>">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">详情页图片</label>
+							<div class="layui-input-block">
+								<div class="layui-upload" style="text-align:left">
+									<blockquote class="layui-elem-quote">图片请上传600px*600px格式为jpg的图片，此图片会在首页页面展示~~ <br/><strong>注意：点击图片即可上传</strong></blockquote>
+									<div class="layui-upload-list">
+										<img class="layui-upload-img" id="info_image" style="width:400px;height:400px;border:1px solid #CCC;" src="<if condition="$merchant['info_image'] neq ''"> {$merchant.info_image} </if><if condition="$merchant['info_image'] eq ''"><?php echo 'https://' . $_SERVER['SERVER_NAME'];?>__PUBLIC__/resources/images/upload_holder_good.png </if>">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">所属分类</label>
+							<div class="layui-input-block">
+								<select id="merchant_category_id" name="merchant_category_id">
+										<option value="">请选择分类</option>
+										<volist name="category_list" id="vo">
+											<option value="{$vo.id}" <if condition="$vo['id'] eq $merchant['category_id']"> selected </if>>{$vo.name}</option>
+										</volist>
+								</select>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">绑定用户：</label>
+								<div class="layui-input-block">
+									<input type="text" id="bind_user_id" placeholder="请输入绑定用户ID" autocomplete="off" class="layui-input" value="{$merchant['bind_user_id']}">
+								</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">所属商圈：</label>
+								<div class="layui-input-block">
+									<input type="text" id="trading_area" placeholder="请输入所属商圈" autocomplete="off" class="layui-input" value="{$merchant['trading_area']}">
+								</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">主营项目：</label>
+								<div class="layui-input-block">
+									<input type="text" id="main_camp" placeholder="请输入主营项目" autocomplete="off" class="layui-input" value="{$merchant['main_camp']}">
+								</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">营业时间：</label>
+								<div class="layui-input-block">
+									<input type="text" id="business_time" placeholder="请输入营业时间" autocomplete="off" class="layui-input" value="{$merchant['business_time']}">
+								</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">会员优惠：</label>
+								<div class="layui-input-block">
+									<input type="text" id="vip_discount" placeholder="请输入会员优惠" autocomplete="off" class="layui-input" value="{$merchant['vip_discount']}">
+								</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">推荐：</label>
+								<div class="layui-input-block">
+									<textarea  id="recommend" style='width:97%;height:150px;text-align:left;resize:none;padding:10px;'>{$merchant.recommend}</textarea>
+								</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">联系人：</label>
+								<div class="layui-input-block">
+									<input type="text" id="link_name" placeholder="请输入联系人姓名" autocomplete="off" class="layui-input" value="{$merchant['link_name']}">
+								</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">联系电话：</label>
+								<div class="layui-input-block">
+									<input type="text" id="link_tel" placeholder="请输入联系电话" autocomplete="off" class="layui-input" value="{$merchant['link_tel']}">
+								</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">店铺地址：</label>
+								<div class="layui-input-block">
+									<input type="text" id="address"  placeholder="请输入店铺地址" autocomplete="off" class="layui-input" value="{$merchant['address']}">
+								</div>
+							</div>
+						</div>
+						<div class="layui-row layui-col-space10 layui-form-item">
+							<div class="layui-col-lg12">
+								<label class="layui-form-label">地图标注：</label>
+								<div class="layui-input-block" id="mapContainer" style="height: 300px;margin-top:10px;">
+									
+								</div>
+								<small class="layui-input-block" style="color:#000;">可在下方地图拖动微调店铺坐标位置</small>
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label">详情编辑</label>
+							<div class="layui-input-block">
+								<textarea class='layui-textarea' id="content" style='height:350px;text-align:left'>{$merchant.content}</textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<a class="layui-btn" id='sub_btn' href="javascript:;">立即更新</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-sm4">
+			<div class="layui-card">
+				<div class="layui-card-header">
+					店铺二维码
+				</div>
+				<div class="layui-card-body">
+					<img src="{$merchant['qrcode']|default=''}">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+	<script type="text/javascript" src="__PUBLIC__/resources/umeditor/template.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="__PUBLIC__/resources/umeditor/umeditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="__PUBLIC__/resources/umeditor/umeditor.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/resources/umeditor/zh-cn.js"></script>
+    <script src="__PUBLIC__/resources/Sortable.min.js"></script>
+	<link href="__PUBLIC__/resources/umeditor/themes/default/css/umeditor.min.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+	//https://lbs.amap.com/api/javascript-api/example/amap-ui-positionpicker/position-picker
+	//https://lbs.amap.com/api/javascript-api/example/amap-ui-poipicker/index
+	
+	
+</script>
+    <script type="text/javascript">//实例化编辑器
+		var um = UM.getEditor('content');
+		var layer, element;
+		layui.use(['layer', 'element'], function () {
+			layer = layui.layer;
+		});
+		//单图片上传
+		layui.use('upload', function () {
+			var upload = layui.upload;
+			var uploadInst = upload.render({
+				elem: '#cover_image',//绑定元素
+				url: '{:U("Index/upload_image")}',//上传接口
+				before: function (obj){
+					//预读图片
+				obj.preview(function (index, file, result) {
+					console.log(file)
+					$('#cover_image').attr('src', result);
+				});
+				},
+				done: function (res) {
+					$('#cover_image').attr('src', res['data']['path']);
+				},
+				error: function () {
+					//请求异常回调
+				}
+			});
+		});
+		//单图片上传
+		layui.use('upload', function () {
+			var upload = layui.upload;
+			var uploadInst = upload.render({
+				elem: '#info_image',//绑定元素
+				url: '{:U("Index/upload_image")}',//上传接口
+				before: function (obj){
+					//预读图片
+				obj.preview(function (index, file, result) {
+					console.log(file)
+					$('#info_image').attr('src', result);
+				});
+				},
+				done: function (res) {
+					$('#info_image').attr('src', res['data']['path']);
+				},
+				error: function () {
+					//请求异常回调
+				}
+			});
+		});
+    var map,lat,lng,marker = null,positionPicker = null;
+	map = new AMap.Map('mapContainer', {
+		resizeEnable: true,
+		center: [<if condition="$merchant['lat_lng'] eq ''">108.886676, 34.215289</if><if condition="$merchant['lat_lng'] neq ''">{$merchant['lat_lng']}</if>],
+		zoom: 17,
+	});
+	AMapUI.loadUI(['control/BasicControl'], function(BasicControl) {
+		//缩放控件，显示Zoom值
+		map.addControl(new BasicControl.Zoom({
+			position: {
+				top:'70px',
+				right:'10px',
+			},
+			showZoomNum: true
+		}));
+	});
+	marker = new AMap.Marker({
+		position:[<if condition="$merchant['lat_lng'] eq ''">108.886676, 34.215289</if><if condition="$merchant['lat_lng'] neq ''">{$merchant['lat_lng']}</if>],
+        draggable: true,
+        cursor: 'move',
+        raiseOnDrag: true
+	});
+	
+	marker.setMap(map);
+	map.setZoom(17);
+	map.setCenter([<if condition="$merchant['lat_lng'] eq ''">108.886676, 34.215289</if><if condition="$merchant['lat_lng'] neq ''">{$merchant['lat_lng']}</if>]);
+	AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch'],function(){
+		var autoOptions = {
+			city: "", //城市，默认全国
+			input:"address"//使用联想输入的input的id
+		};
+		autocomplete= new AMap.Autocomplete(autoOptions);
+		AMap.event.addListener(autocomplete, "select", function(result){
+			address = result['poi']['address'] + result['poi']['name'];
+			district =  result['poi']['district'];
+			//alert(JSON.stringify(result));
+			lat = result['poi']['location']['lat'];
+			lng = result['poi']['location']['lng'];
+			if (marker != null) {
+				map.remove(marker);
+			}
+			marker = new AMap.Marker({
+				position:[result['poi']['location']['lng'],result['poi']['location']['lat']],
+				draggable: true,
+				cursor: 'move',
+				raiseOnDrag: true
+			});
+			marker.setMap(map);
+			map.setZoom(17);
+			map.setCenter([result['poi']['location']['lng'],result['poi']['location']['lat']]);
+			
+			AMap.event.addListener(marker,'dragend',function(){
+				var temp = marker.getPosition(); 
+				lat = temp.lat;
+				lng = temp.lng;
+				var geocoder = new AMap.Geocoder({
+					radius: 1000,
+					extensions: "all"
+				});        
+				geocoder.getAddress([lng,lat], function(status, result) {
+					if (status === 'complete' && result.info === 'OK') {
+						geocoder_CallBack(result);
+					}
+				});      
+			 });
+		}); 
+	});
+	 AMap.event.addListener(marker,'dragend',function(){
+		var temp = marker.getPosition(); 
+		lat = temp.lat;
+		lng = temp.lng;
+		var geocoder = new AMap.Geocoder({
+            radius: 1000,
+            extensions: "all"
+        });        
+        geocoder.getAddress([lng,lat], function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                geocoder_CallBack(result);
+            }
+        });      
+	 });
+	function geocoder_CallBack(data) {
+        var address = data.regeocode.formattedAddress; //返回地址描述
+		$('#address').val(address);
+    }
+	$('#sub_btn').click(function(){
+		var name = $('#name').val();
+		var link_name = $('#link_name').val();
+		var link_tel = $('#link_tel').val();
+		var address = $('#address').val();
+		var merchant_category_id = $('#merchant_category_id').val();
+		var image = $("#cover_image").attr('src');
+		var content = um.getContent();
+		
+		var trading_area = $('#trading_area').val();
+		var main_camp = $('#main_camp').val();
+		var business_time = $('#business_time').val();
+		var vip_discount = $('#vip_discount').val();
+		var recommend = $('#recommend').val();
+		var bind_user_id = $('#bind_user_id').val();
+		var info_image = $("#info_image").attr('src');
+		var lat_lng = '';
+		if(lat != '' && lat != undefined && lat != 'undefined'){
+			lat_lng = lng+','+lat;
+		}
+		var add_xinxi = {
+			'id':{:I('id')},
+			'name':name,
+			'link_name':link_name,
+			'link_tel':link_tel,
+			'address':address,
+			'lat_lng':lat_lng,
+			'image':image,
+			'info_image':info_image,
+			'content':content,
+			'merchant_category_id':merchant_category_id,
+			'trading_area':trading_area,
+			'main_camp':main_camp,
+			'business_time':business_time,
+			'vip_discount':vip_discount,
+			'recommend':recommend,
+			'bind_user_id':bind_user_id,
+		}
+			lottery_config = encodeURIComponent(JSON.stringify(add_xinxi));
+			var data = {
+				lottery_config: lottery_config
+			}
+		$.post("{:U('Shop/ajax_edit_merchant')}",data,function(ret){
+			if (ret['code'] != 0) {
+				layer.msg(ret['msg']);
+			}
+			else{
+				layer.msg("修改成功",function(){
+					window.location.reload();
+				});
+			}
+		})
+	
+	});
+    </script>

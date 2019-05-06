@@ -1,0 +1,273 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-add-circle layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="logs">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("User/ajax_get_pay_config")}'+'?id=<?php echo $id;?>', //数据接口
+			page: false, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'name', title: '名称', width:200, sort: true},
+					{field: 'days', title: '天数', width:150},
+					{field: 'price', title: '价格', width:150},
+					{field: 'discount_price', title: '折扣价格', width:150},
+					{field: 'info', title: '备注', width:150},
+					{fixed: 'right',title:'操作', width:150, align:'center', toolbar: '#barDemo'} 
+					]
+					]
+				});
+
+	});
+	table.on('tool(logs)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+	  if(layEvent === 'detail'){ //查看
+	  	console.log(data['name']);
+		//do somehing
+	  }  else if(layEvent === 'del'){ //删除
+	  	layer.confirm('确定要删除此选项吗？', function(index){
+		  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+		  layer.close(index);
+		  //向服务端发送删除指令
+		  var sub_data = {
+		  	id:data['id']
+		  };
+		  $.post("{:U('User/ajax_delete_pay_config')}",sub_data,function(ret){
+		  	if(ret['code'] == 0){
+		  		layer.msg('删除成功',function(){
+		  			window.location.reload();
+		  		})
+		  	}else{
+		  		layer.msg(ret['msg']);
+		  	}
+
+		  });
+		});
+	  } else if(layEvent === 'edit'){ //编辑
+	  	edit_view(data);
+	  }
+	});
+	function edit_view(data){
+		$('body').append("<div id='edit_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>名称</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='edit_name'  required  lay-verify='required' placeholder='请输入名称' autocomplete='off' class='layui-input'  value='"+data['name']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>天数</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='number' id='edit_days'  required  lay-verify='required' placeholder='请输入天数' autocomplete='off' class='layui-input' value='"+data['days']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>价格</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='number' id='edit_price'  required  lay-verify='required' placeholder='请输入价格' autocomplete='off' class='layui-input' value='"+data['price']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>折扣价格</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='number' id='edit_discount_price'  required  lay-verify='required' placeholder='请输入折扣价格' autocomplete='off' class='layui-input' value='"+data['discount_price']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>备注</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='edit_info'  required  lay-verify='required' placeholder='请输入备注' autocomplete='off' class='layui-input' value='"+data['info']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'编辑会员购买规则',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['650px', '450px'],
+            content: $("#edit_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var edit_name = $("#edit_name").val();
+            	var edit_days = $('#edit_days').val();
+            	var edit_price = $('#edit_price').val();
+            	var edit_discount_price = $('#edit_discount_price').val();
+            	var edit_info = $('#edit_info').val();
+            	var id = $('#type_id').val();
+            	if(edit_name == ''){
+            		layer.msg('请输入名称');
+            		return;
+            	}
+				if(edit_days == ''){
+            		layer.msg('请输入天数');
+            		return;
+            	}
+				if(edit_price == ''){
+            		layer.msg('请输入价格');
+            		return;
+            	}
+				if(edit_discount_price == ''){
+            		layer.msg('请输入折扣价格');
+            		return;
+            	}
+            	var sub_data = {
+            		id:id,
+            		name:edit_name,
+            		days:edit_days,
+            		price:edit_price,
+            		discount_price:edit_discount_price,
+            		info:edit_info,
+            	}
+            	$.post("{:U('User/ajax_edit_pay_config')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('配置成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal").remove()
+			}
+		});
+	}
+	function sub(){
+		$('body').append("<div id='add_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>名称</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='add_name'  required  lay-verify='required' placeholder='请输入名称' autocomplete='off' class='layui-input' >"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>天数</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='number' id='add_days'  required  lay-verify='required' placeholder='请输入天数' autocomplete='off' class='layui-input'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>价格</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='number' id='add_price'  required  lay-verify='required' placeholder='请输入价格' autocomplete='off' class='layui-input'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>折扣价格</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='number' id='add_discount_price'  required  lay-verify='required' placeholder='请输入折扣价格' autocomplete='off' class='layui-input'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>备注</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='add_info'  required  lay-verify='required' placeholder='请输入备注' autocomplete='off' class='layui-input'>"+
+				"</div>"+
+			"</div>"+
+			"<input type='hidden' id='grade_id' value='<?php echo $id;?>'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'添加会员购买规则',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['650px', '450px'],
+            content: $("#add_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var add_name = $("#add_name").val();
+            	var add_days = $('#add_days').val();
+            	var add_price = $('#add_price').val();
+            	var add_discount_price = $('#add_discount_price').val();
+            	var add_info = $('#add_info').val();
+            	var grade_id = $('#grade_id').val();
+            	if(add_name == ''){
+            		layer.msg('请输入名称');
+            		return;
+            	}
+				if(add_days == ''){
+            		layer.msg('请输入天数');
+            		return;
+            	}
+				if(add_price == ''){
+            		layer.msg('请输入价格');
+            		return;
+            	}
+				if(add_discount_price == ''){
+            		layer.msg('请输入折扣价格');
+            		return;
+            	}
+            	var sub_data = {
+            		grade_id:grade_id,
+            		name:add_name,
+            		days:add_days,
+            		price:add_price,
+            		discount_price:add_discount_price,
+            		info:add_info,
+            	}
+            	$.post("{:U('User/ajax_add_pay_config')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('配置成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#add_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#add_modal").remove()
+			}
+		});
+	}
+</script>

@@ -1,0 +1,100 @@
+<style type="text/css">
+	.menu_pid{
+		display:block;
+		height:36px;
+		line-height:36px;
+		width:100%;
+		padding-left:10px;
+		border-color: #D2D2D2!important;
+	}
+</style>
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">商家名称</label>
+					<div class="layui-input-block">
+						<select id="merchant_id">
+						<option value="">请选择商家</option>
+						<volist name="merchants" id="vo">
+						<option value="{$vo.id}">{$vo.id}-{$vo.name}</option>
+						</volist>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">用户昵称</label>
+					<div class="layui-input-block">
+						<select id="user_id">
+						<option value="">请选择用户</option>
+						<volist name="users" id="vo">
+						<option value="{$vo.id}">{$vo.id}-{$vo.nickname}</option>
+						</volist>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="search_logs()">
+						<i class="layui-icon layui-icon-search  layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/html" id="merchantCoverImageTpl">
+	<img src="{{d.merchant_image}}" title="{{d.merchant_image}}" style="width:100%;">
+</script>
+<script type="text/html" id="userImageTpl">
+	<img src="{{d.user_head_image}}" title="{{d.user_head_image}}" style="width:100%;">
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Shop/ajax_get_user_arrive_logs")}', //数据接口
+			page: true, //开启分页
+			limit:10,
+			limits:[10,20,30,40,50,60,70,80,90,200],
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'add_time', title: '到店时间', width:180, sort: true},
+					{field: 'merchant_image', title: '商家图片', width:180,templet:"#merchantCoverImageTpl"},
+					{field: 'merchant_name', title: '商家名称', width:180, sort: true},
+					{field: 'merchant_arrive_times', title: '商家到店次数', width:180, sort: true},
+					{field: 'user_head_image', title: '用户头像', width:180,templet:"#userImageTpl"},
+					{field: 'user_nickname', title: '用户昵称', width:200},
+					{field: 'user_arrive_times', title: '用户到店次数', width:200},
+					]
+					]
+				});
+
+	});
+	function search_logs(){
+		var merchant_id = $("#merchant_id").val();
+		var user_id = $("#user_id").val();
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				user_id:user_id,
+				merchant_id:merchant_id,
+			}
+		})
+	}
+</script>

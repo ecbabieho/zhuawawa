@@ -1,0 +1,167 @@
+body,html{
+	background-color: #FFFFFF;
+}
+input,button{
+	border: none;
+	outline: none;
+}
+.re_title{
+	padding: 0 .26rem;
+	height: 1.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.re_icon{
+	width: 0.4rem;
+	height: 0.4rem;
+	background-size:100% 100%;
+	background-position: center;
+	background-repeat:no-repeat;
+	background-image: url('../image/oil.png')
+}
+.re_text{
+	color: #3d3d3d;
+	font-size: 0.26rem;
+	margin-left: 0.1rem; 
+}
+.re_action{
+	display: block;
+	height: 0.84rem;
+	line-height: 0.84rem;
+	background-color: #ffffe3;
+	font-size: .24rem;
+	color: #e19d26;
+	padding: 0 .26rem;
+}
+.re_input_box{
+	padding-top: .14rem;
+	padding-left: .26rem;	
+	padding-right: .26rem;
+}
+.re_input_po{
+	width: 100%;
+	height: .7rem;
+	font-size: .4rem;
+	color: #959595;
+}
+ input::-webkit-input-placeholder {
+    /* placeholder颜色  */
+     color: #959595;
+     /* placeholder字体大小  */
+     font-size: .4rem;
+}
+.re_input_text{
+	font-size: .2rem;
+	color: #c9c9c9;
+}
+.re_line{
+	height: .02rem;
+	background-color: #d2d2d2;
+}
+.re_care_icon{
+	width: .24rem;
+	height: .24rem;
+	background-size:100% 100%;
+	background-position: center;
+	background-repeat:no-repeat;
+	background-image: url('../image/action_icon.png');
+}
+.re_care_box{
+	display: flex;
+	height: .74rem;
+	align-items: center;
+	padding: 0 .26rem;
+}
+.re_care_text{
+	display: inline-block;
+	color: #e19d26;
+	font-size: .24rem;
+	margin-left: .1rem;
+}
+.recharge_item{
+	padding: .38rem 1.14rem;
+	display: flex;
+	justify-content: space-between;
+}
+.recharge_list{
+	width: 2.14rem;
+	height: 1.24rem;
+	border: 2px solid #aeaeae;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.recharge_one{
+	font-size: .3rem;
+	color: #646464;
+}
+.recharge_two{
+	font-size: .2rem;
+	color: #646464;
+}
+.active {
+	border-color: #ff6376;
+}
+.active .recharge_one{
+	color: #ff6376;
+}
+.active .recharge_two{
+	color: #ff6376;
+}
+.have_read{
+	height: .74rem;
+	padding-left: .26rem;
+	display: flex;
+	align-items: center;
+}
+.have_read .re_care_texts{
+	margin-left: .1rem;
+	color: #8a8a8a;
+}
+.have_read .re_care_icon {
+	background-image: url('../image/chooseW.png')
+}
+.have_read .re_care_icon_active {
+	background-image: url('../image/chooseY.png')
+}
+
+.re_btn{
+	width: 7.16rem;
+	height: 1.32rem;
+	background-color: #1aad19;
+	border-radius: 5px;
+	display: flex;
+    flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto .44rem;
+}
+.re_btn:disabled{
+	background-color: #a3a3a3;
+}
+.re_btn_textone{
+	font-size: .34rem;
+	color: #ffffff;
+}
+.re_btn_texttwo{
+	font-size: .24rem;
+	color: #ffffff;
+}
+.text_list{
+	padding: 0 .26rem;
+	margin-bottom: .1rem;
+}
+.text_list .re_care_texts{
+	color: #8a8a8a;
+}
+.little_one{
+	display: inline-block;
+	margin-right: .1rem;
+	width: .07rem;
+	height: .07rem;
+	border-radius: 50%;
+	background-color: #8b8b8b;
+}

@@ -1,0 +1,46 @@
+<?php
+return array(
+	//'配置项'=>'配置值'
+	'DB_TYPE' => 'mysql', // 数据库类型
+	'DB_HOST' => 'localhost', // 服务器地址
+	'DB_NAME' => '', // 数据库名
+	'DB_USER' => '', // 用户名
+	'DB_PWD' => '', // 密码
+	'DB_PORT' => 3306, // 端口
+	'DB_PREFIX' => '', // 数据库表前缀
+	'DB_CHARSET' => 'utf8mb4', // 字符集
+	'DB_DEBUG' => TRUE, // 数据库调试模式 开启后可以记录SQL日志
+	'DB_BACKUP_DIR' => "./db_backup",
+	'QRCODE_DIR' => "./qrcode",
+	'WECHAT_DEFAULT_RESP' => "您好，付费用户任何问题可以添加客服微信：\nbichonfrise_machao \n客服会给您专业解答哦！\n客服也会邀请您进粉丝群哦~\n记得提供您的ID~\n祝您抓娃娃愉快~",
+	'ACTIVITY_COIN_GET_TMPL_ID' => "ifpPqmOvH201b_tu3ctAOiYallsBdES2_xl8l9O0KvA",
+	'PAY_TMPL_ID' => 'yOELgmWIHq17gjm24p2WWvAmd0UaxOzw7msMNkYl-s8',
+	'PACKAGE_SEND_TMPL_ID' => 'CUo_9YQ1fHpuZsq11pOUskFf7ySFv0kVScMrwuLSwQc',
+	'NOTICE_SEND_TMPL_ID' => 'Fl-iSeCnu96VEFL_bRcq2Vkf4rEBSPvKjVVTURIN0ic',
+	'LOTTERY_SEND_TMPL_ID' => 'tuqyhZyqDKpyhgoSqQBm9ThXinThO7SDfNXCc_-Mf0w',
+	'VIP_EXPIRE_TMPL_ID' => 'DgbMJwN7g5vMnU40A9gcBvx3mHixLnZCrXKIb69DATc',
+	'FREE_POST_WAWA_COUNT' => 2,
+	'AGENT_GOOD' => 1,
+	'AGENT_VIP' => 0.5,
+	'ORDINARY_GOOD' => 1,
+	'ORDINARY_VIP' => 0.2,
+	'ADD_USER_GET_COIN' => 10,
+	'WITHDRAW_NUM' => 10,
+	'BANK_USER_COIN' => 100,
+	'BANK_USER_COIN_MORE' => 2,
+	'TIEZI_COIN_NUM' => 2,
+	'TIEZI_COIN_NUM_BY_SHARE' => 3,
+	'BOX_HIT_TIMES' => 3, //宝箱抽奖  每个时间段可中奖次数
+	'BOX_HIT_CHANCE' => 0.1, //宝箱抽奖单次 可中奖概率
+	'BOX_LARGESS_TIMES' => 2, //宝箱邀请好友每个阶段可得钥匙个数
+	'BOX_TIMES' => 3, //宝箱抽奖  每个时间段每个用户免费抽奖次数
+	'FREE_USER_SAVE_DAYS' => 3, //普通用户中奖记录清空时间
+	'PAY_USER_SAVE_DAYS' => 30, //付费用户中奖记录清空时间
+	'IS_PAY_PARENT_USER_DIRECT' => 1, //1:佣金直接发送到用户账户，0：佣金储存在用户余额里
+	'BOX_OPEN_ONE_DAY_HIT' => 0, //是否开启时间限制  0:不限制，1：限制
+	'GRADE_ADOPT_PAY_MONEY' => 5, //成长值购买金额
+	'GRADE_FRUIT_PAY_MONEY' => 5, //能量值购买金额
+	'MERCHANT_VIP_MAID' => 0.3, //用户购买会员分佣到商户的比例
+	'PAY_VIP_GIVE_COIN_HUANGJIN' => 0, //用户购买会员赠送用户糖豆数   0表示不赠送（黄金会员）
+	'PAY_VIP_GIVE_COIN_ZUANSHI' => 0, //用户购买会员赠送用户糖豆数   0表示不赠送（钻石会员）
+);

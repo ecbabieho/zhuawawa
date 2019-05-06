@@ -1,0 +1,308 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<!--<div class="layui-inline">
+					<label class="layui-form-label">名称</label>
+					<div class="layui-input-block">
+						<input type="text" id="name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+					</div>
+				</div>-->
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-add-circle layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="logs">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="coverImageTpl">
+	<img src="{{d.image}}" title="{{d.image}}" style="width:100%;">
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Shop/ajax_get_merchant_category")}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'image', title: '图片', width:180, sort: true,templet:"#coverImageTpl"},
+					{field: 'name', title: '名称', width:300, sort: true},
+					{field: 'sort', title: '排序', width:300, sort: true},
+					{field: 'add_time', title: '配置时间', width:200},
+					{field: 'right',title:'操作', width:150, align:'center', toolbar: '#barDemo', fixed: 'right'} 
+					]
+					]
+				});
+
+	});
+	table.on('tool(logs)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+	  if(layEvent === 'detail'){ //查看
+	  	console.log(data['name']);
+		//do somehing
+	  } else if(layEvent === 'del'){ //删除
+	  	layer.confirm('确定要删除此分类吗？', function(index){
+		  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+		  layer.close(index);
+		  //向服务端发送删除指令
+		  var sub_data = {
+		  	id:data['id']
+		  };
+		  $.post("{:U('Shop/ajax_delete_merchant_category')}",sub_data,function(ret){
+		  	if(ret['code'] == 0){
+		  		layer.msg('删除成功',function(){
+		  			window.location.reload();
+		  		})
+		  	}else{
+		  		layer.msg(ret['msg']);
+		  	}
+
+		  });
+		});
+	  } else if(layEvent === 'edit'){ //编辑
+	  	edit_view(data);
+	  }
+	});
+	function edit_view(data){
+	
+		var type_one_str = '';
+		var type_day_str = '';
+		if(data['type'] == 0){
+			type_one_str = ' selected ';
+		}
+		if(data['type'] == 1){
+			type_day_str = ' selected ';
+		}
+		var open_shi_str = '';
+		var open_fou_str = '';
+		if(data['is_open'] == 0){
+			open_fou_str = ' selected ';
+		}
+		if(data['is_open'] == 1){
+			open_shi_str = ' selected ';
+		}
+		$('body').append("<div id='edit_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>名称</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='name'  required  lay-verify='required' placeholder='请输入名称' autocomplete='off' class='layui-input' value='"+data['name']+"'>"+
+				"</div>"+
+			"</div>"+
+			'<div class="layui-form-item">'+
+				'<label class="layui-form-label">图片</label>'+
+				'<div class="layui-input-block">'+
+					'<div class="layui-upload" style="text-align:left">'+
+						'<blockquote class="layui-elem-quote">图片请上传750px*726px的图片</blockquote>'+
+						'<div class="layui-upload-list">'+
+							'<img class="layui-upload-img" id="cover_image" style="width:187px;height:181px;border:1px solid #CCC;" src="'+data['image']+'">'+
+						'</div>'+
+					'</div>'+
+				'</div>'+
+			'</div>'+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>排序</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='sort'  required  lay-verify='required' placeholder='请输入排序' autocomplete='off' class='layui-input' value='"+data['sort']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+			//单图片上传
+	layui.use('upload', function () {
+		var upload = layui.upload;
+		var uploadInst = upload.render({
+			elem: '#cover_image',//绑定元素
+			url: '{:U("Index/upload_image")}',//上传接口
+			before: function (obj){
+				//预读图片
+				obj.preview(function (index, file, result) {
+					$('#cover_image').attr('src', result);
+				});
+			},
+			done: function (res) {
+				$('#cover_image').attr('src', res['data']['path']);
+			},
+			error: function () {
+				//请求异常回调
+			}
+		});
+	});
+		layer.open({
+			type:1,
+			title:'编辑活动',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['650px', '520px'],
+            content: $("#edit_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var name = $("#name").val();
+            	var sort = $("#sort").val();
+            	var type_id = $("#type_id").val();
+				var image = $("#cover_image").attr('src');
+            	if(name == ''){
+            		layer.msg('请输入名称');
+            		return;
+            	}
+            	if(sort == ''){
+            		layer.msg('请输入排序');
+            		return;
+            	}
+            	if(image == ''){
+            		layer.msg('请上传图片');
+            		return;
+            	}
+            	var sub_data = {
+            		id:type_id,
+            		name:name,
+            		sort:sort,
+            		image:image,
+            	}
+				
+            	$.post("{:U('Shop/ajax_edit_merchant_category')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('编辑成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal").remove()
+			}
+		});
+	}
+		
+	function sub(){
+		var temp_image_url = '';
+		$('body').append("<div id='add_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>名称</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='add_name'  required  lay-verify='required' placeholder='请输入名称' autocomplete='off' class='layui-input'>"+
+				"</div>"+
+			"</div>"+
+			'<div class="layui-form-item">'+
+				'<label class="layui-form-label">图片</label>'+
+				'<div class="layui-input-block">'+
+					'<div class="layui-upload" style="text-align:left">'+
+						'<blockquote class="layui-elem-quote">图片请上传750px*726px的图片</blockquote>'+
+						'<div class="layui-upload-list">'+
+							'<img class="layui-upload-img" id="add_cover_image" style="width:187px;height:181px;border:1px solid #CCC;" src="<?php echo 'https://' . $_SERVER['SERVER_NAME'];?>__PUBLIC__/resources/images/upload_holder_good.png">'+
+						'</div>'+
+					'</div>'+
+				'</div>'+
+			'</div>'+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>排序</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='add_sort'  required  lay-verify='required' placeholder='请输入排序' autocomplete='off' class='layui-input'>"+
+				"</div>"+
+			"</div>"+
+			"</form>"+
+			"</div>"
+			);
+			//单图片上传
+	layui.use('upload', function () {
+		var upload = layui.upload;
+		var uploadInst = upload.render({
+			elem: '#add_cover_image',//绑定元素
+			url: '{:U("Index/upload_image")}',//上传接口
+			before: function (obj){
+				//预读图片
+				obj.preview(function (index, file, result) {
+					$('#add_cover_image').attr('src', result);
+				});
+			},
+			done: function (res) {
+				$('#add_cover_image').attr('src', res['data']['path']);
+			},
+			error: function () {
+				//请求异常回调
+			}
+		});
+	});
+		layer.open({
+			type:1,
+			title:'添加活动',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['650px', '520px'],
+            content: $("#add_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var add_name = $("#add_name").val();
+            	var add_sort = $("#add_sort").val();
+				var add_cover_image = $("#add_cover_image").attr('src');
+            	if(add_name == ''){
+            		layer.msg('请输入名称');
+            		return;
+            	}
+            	if(add_cover_image == ''){
+            		layer.msg('请上传图片');
+            		return;
+            	}
+            	if(add_sort == ''){
+            		layer.msg('请输入排序');
+            		return;
+            	}
+            	var sub_data = {
+            		name:add_name,
+            		image:add_cover_image,
+					sort:add_sort
+            	}
+            	$.post("{:U('Shop/ajax_add_merchant_category')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('添加成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#add_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#add_modal").remove()
+			}
+		});
+	}
+
+</script>

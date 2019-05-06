@@ -1,0 +1,44 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-card-body layui-row layui-col-space10">
+			<div class="layui-col-md12">
+				<textarea id="content" placeholder="如您在使用过程中有什么建议或意见，请反馈给我们。以便我们为您更好的服务!" class="layui-textarea"></textarea>
+            </div>
+			<div class="layui-col-md12">
+            	<input type="text" id="tel" placeholder="请输入您的联系电话" autocomplete="off" class="layui-input">
+            </div>
+			<div class="layui-col-md12">
+				<a class="layui-btn" href="javascript:;" onclick="sub()">立即提交</a>
+			</div>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	function sub(){
+		var tel = $("#tel").val();
+		var content = $("#content").val();
+		if (tel == ""
+			|| content == "") {
+			layer.msg("请将信息填写完整");
+			return;
+		}
+		var data = {
+			content:content,
+			tel:tel
+		}
+		$.post("{:U('Sys/ajax_feedback')}",data,function(ret){
+			if (ret['code'] != 0) {
+				layer.msg(ret['msg']);
+			}
+			else{
+				layer.msg('感谢您的反馈',function(){
+					window.location.reload();
+				})
+			}
+		})
+	}
+</script>

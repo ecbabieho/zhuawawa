@@ -1,0 +1,206 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">名称</label>
+					<div class="layui-input-block">
+						<input type="text" id="add_card_name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">金额</label>
+					<div class="layui-input-block">
+						<input type="number" id="add_money" placeholder="请输入金额" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">天数</label>
+					<div class="layui-input-block">
+						<input type="number" id="add_days" placeholder="请输入天数" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-add-circle layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="logs">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Index/ajax_get_postal_card")}', //数据接口
+			page: false, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'card_name', title: '名称', width:300, sort: true},
+					{field: 'money', title: '金额', width:200},
+					{field: 'days', title: '天数', width:200},
+					{field: 'add_time', title: '配置时间', width:200},
+					{fixed: 'right',title:'操作', width:150, align:'center', toolbar: '#barDemo'} 
+					]
+					]
+				});
+
+	});
+	table.on('tool(logs)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+	  if(layEvent === 'detail'){ //查看
+	  	console.log(data['name']);
+		//do somehing
+	  } else if(layEvent === 'del'){ //删除
+	  	layer.confirm('确定要删除此分类吗？', function(index){
+		  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+		  layer.close(index);
+		  //向服务端发送删除指令
+		  var sub_data = {
+		  	id:data['id']
+		  };
+		  $.post("{:U('Index/ajax_delete_postal_card')}",sub_data,function(ret){
+		  	if(ret['code'] == 0){
+		  		layer.msg('删除成功',function(){
+		  			window.location.reload();
+		  		})
+		  	}else{
+		  		layer.msg(ret['msg']);
+		  	}
+
+		  });
+		});
+	  } else if(layEvent === 'edit'){ //编辑
+	  	edit_view(data);
+	  }
+	});
+	function edit_view(data){
+		$('body').append("<div id='edit_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+				"<div class='layui-form-item'>"+
+					"<label class='layui-form-label'>名称</label>"+
+					"<div class='layui-input-block'>"+
+						"<input type='text' id='edit_card_name'  required  lay-verify='required' placeholder='请输入名称' autocomplete='off' class='layui-input' value='"+data['card_name']+"'>"+
+					"</div>"+
+				"</div>"+
+				"<div class='layui-form-item'>"+
+					"<label class='layui-form-label'>金额</label>"+
+					"<div class='layui-input-block'>"+
+						"<input type='number' id='edit_money'  required  lay-verify='required' placeholder='请输入金额' autocomplete='off' class='layui-input' value='"+data['money']+"'>"+
+					"</div>"+
+				"</div>"+
+				"<div class='layui-form-item'>"+
+					"<label class='layui-form-label'>天数</label>"+
+					"<div class='layui-input-block'>"+
+						"<input type='number' id='edit_days'  required  lay-verify='required' placeholder='请输入天数' autocomplete='off' class='layui-input' value='"+data['days']+"'>"+
+					"</div>"+
+				"</div>"+
+			"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'编辑配置',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['450px', '250px'],
+            content: $("#edit_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var card_name = $("#edit_card_name").val();
+            	var money = $('#edit_money').val();
+            	var days = $('#edit_days').val();
+            	var type_id = $('#type_id').val();
+            	if(card_name == ''){
+            		layer.msg('请输入名称');
+            		return;
+            	}
+            	if(money == ''){
+            		layer.msg('请输入金额');
+            		return;
+            	}
+            	if(days == ''){
+            		layer.msg('请输入天数');
+            		return;
+            	}
+            	var sub_data = {
+            		id:type_id,
+            		card_name:card_name,
+            		money:money,
+            		days:days,
+            	}
+            	$.post("{:U('Index/ajax_edit_postal_card')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('编辑成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal").remove()
+			}
+		});
+	}
+	function sub(){
+		var card_name = $("#add_card_name").val();
+		var money = $("#add_money").val();
+		var days = $("#add_days").val();
+		if(card_name == ''){
+			layer.msg('请输入名称');
+			return;
+		}
+		if(money == ''){
+			layer.msg('请输入金额');
+			return;
+		}
+		if(days == ''){
+			layer.msg('请输入天数');
+			return;
+		}
+		var data = {
+			card_name:card_name,
+			money:money,
+			days:days,
+		}
+		$.post("{:U('Index/ajax_add_postal_card')}",data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('配置成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		})
+	}
+
+</script>

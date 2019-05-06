@@ -1,0 +1,109 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">电话/ID</label>
+					<div class="layui-input-block">
+						<input type="text" id="name" placeholder="请输入电话/ID" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">状态</label>
+					<div class="layui-input-block">
+						<select id="search_status">
+							<option value="">全部分类</option>
+							<option value="0">未处理</option>
+							<option value="1">已处理</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+
+<script type="text/html" id="testTpl">
+	{{#  if(d.status === '0'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="ceshi({{d.id}},1)">未处理</span>
+	{{#  } }}
+	{{#  if(d.status === '1'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="ceshi({{d.id}},0)">已处理</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="headTpl">
+	<img src="{{d.headimgurl}}" title="{{d.headimgurl}}" style="width:100%;border-radius:50%;">
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Withdraw/ajax_get_withdraw_list")}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+				[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'user_id', title: '用户ID', width:120, sort: true},
+					{field: 'nickname', title: '用户昵称', width:120, sort: true},
+					{field: 'headimgurl', title: '头像', width:120,templet:"#headTpl"},
+					{field: 'tel', title: '电话', width:120,templet:"#sexTpl"},
+					{field: 'money', title: '金额', width:120},
+					{field: 'ago_money', title: '申请前余额', width:120},
+					{field: 'after_money', title: '申请后余额', width:120},
+					{field: 'add_time', title: '申请时间', sort: true, width:180},
+					{field: 'status', title: '状态', width:120, sort: false,templet:"#testTpl",fixed: 'right'},
+				]
+			]
+		});
+
+	});
+	
+	
+	function sub(){
+		var name = $("#name").val();
+		var status = $("#search_status").val();
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				name:name,
+				status:status,
+			}
+		})
+	}
+	
+	function ceshi(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('Withdraw/ajax_edit_withdraw')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+</script>

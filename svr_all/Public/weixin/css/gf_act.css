@@ -1,0 +1,100 @@
+.gf_act{
+	background-color:#fde449;
+}
+.gf_act .logo{
+	position: fixed;
+	top:0px;
+	right: 0px;
+	left: 0px;
+	margin:auto;
+	width: 231px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+}
+.gf_act .logo .img{
+	width: 100%;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.gf_act .bg{
+	width: 100%;
+}
+.gf_act .bg .img{
+	width: 100%;
+}
+.gf_act .show_list{
+	width: 336px;
+	height: 106px;
+	margin:0px auto;
+}
+.gf_act .show_list li{
+	width: 50%;
+	background-image: url(../image/gf_act/act_cube.png);
+	background-size: 168px 106px;
+	background-repeat: no-repeat;
+	height: 106px;
+	float: left;
+}
+.gf_act .show_list li .title{
+	color:#614427;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	margin-top:5px;
+}
+.gf_act .show_list li .num{
+	color:#614427;
+	font-size: 40px;
+	text-align: center;
+	font-weight: bold;
+
+}
+.gf_act .act_con{
+	height: 216px;
+	width: 336px;
+	background-image: url(../image/gf_act/act_con.png);
+	background-size: 336px 216px;
+	background-repeat: no-repeat;
+	margin:0px auto;
+	margin-top:10px;
+}
+.gf_act .act_con .text{
+	text-indent: 2em;
+	padding-top:65px;
+	padding-left: 20px;
+	padding-right:20px;
+	font-size: 16px;
+	color:#000;
+}
+.gf_act .apply_btn{
+	background-image: url(../image/gf_act/banka.png);
+	width: 173px;
+	height: 47px;
+	background-size: 173px 47px;
+	margin:10px auto;
+	display: block;
+}
+.gf_act .act_rules_t{
+	width: 100%;
+	display: block;
+	margin-top:20px;
+	margin-bottom:10px;
+}
+.gf_act .act_rules_t .img{
+	width: 100%;
+}
+.gf_act .act_rule{
+	padding-left: 40px;
+	padding-right: 20px;
+	color:#550701;
+}
+.gf_act .act_rule li{
+	list-style: decimal;
+}
+.gf_act .cjwt li{
+	margin-bottom: 20px;
+}
+.gf_act .cjwt li .ans{
+	color:#0f8fe1;
+}

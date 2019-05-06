@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/wawa.css">
+	<title>哐糖抓抓-领养娃娃</title>
+</head>
+<style type="text/css" media="screen">
+*{
+
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+	.lingyang_shuoming{
+		display: block;
+		margin-top:20px;
+	}
+	.lingyang_shuoming .img{
+		width: 100%;
+	}
+	.lingyang_list{
+		display: block;
+	}
+	.lingyang_list .title{
+		background-image: url(__PUBLIC__/weixin/image/wawa_page/title-lingyang.png);
+		background-position: center;
+		background-size: 50%;
+		height: 50px;
+		background-repeat: no-repeat;
+		position: relative;
+	}
+	.lingyang_list .wawa_list{
+		display: block;
+		overflow: hidden;
+		list-style: none;
+		background-color: #fef7fa;
+		border-radius: 10px;
+		margin:10px;
+		padding:30px 10px;
+		margin-top:-23px;
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+	.lingyang_list .wawa_list li{
+		display: flex;
+		border-bottom: 1px solid #eee;
+		margin:10px;
+		padding-bottom: 10px;
+	}
+
+	.lingyang_list .wawa_list li .img{
+		width: 70px;
+		height: 70px;
+		border-radius: 8px;
+		border:3px solid #f7d04d;
+		position: relative;
+	}
+	.lingyang_list .wawa_list li .img .pic{
+		width: 70px;
+		height: 70px;
+	}
+	.lingyang_list .wawa_list li .img .cover{
+		width: 70px;
+		height: 70px;
+		position: absolute;
+		background-image: url(__PUBLIC__/weixin/wawa_page/wawa_cover.png);
+		background-size: 100%;
+		background-repeat: no-repeat;
+		top:0px;
+		left: 0px;
+	}
+
+	.lingyang_list .wawa_list li .content{
+		border-radius: 5px;
+		margin-left: 10px;
+		flex:1;
+	}
+	.lingyang_list .wawa_list li .btn{
+		font-size: 13px;
+		color:#FFF;
+		width: 80px;
+		height: 49px;
+		background-image: url(__PUBLIC__/weixin/image/wawa_page/btn-yellow.png);
+		background-position: center;
+		background-size: 100%;
+		text-align: center;
+		text-decoration: none;
+		line-height: 49px;
+		margin-left: 10px;
+		background-repeat: no-repeat;
+		margin-top:20px;
+	}
+	.lingyang_list .wawa_list li .content .name{
+		color:#4d4d4d;
+		font-size: 14px;
+		margin:0px;
+
+	}
+	.lingyang_list .wawa_list li .content .chengzhang_num{
+		color:#999;
+		font-size: 12px;
+		margin-top:2px;
+		margin-bottom:0px;
+	}
+	.lingyang_list .wawa_list li .content .num{
+		color:#999;
+		font-size: 12px;
+		margin-top:2px;
+		margin-bottom:0px;
+	}
+	
+</style>
+<body class="body_back">
+	<div class="lingyang_shuoming">
+		<img src="__PUBLIC__/weixin/image/wawa_page/help.png" class="img">
+	</div>
+	<div class="lingyang_list">
+		<div class="title"></div>
+		<ul class="wawa_list">
+			<volist name="adopt_configs" id="vo">
+			<li>
+				<div class="img">
+					<img src="{$vo.lottery_good.img_url}" class="pic">
+				</div>
+				<div class="content">
+					<p class="name">{$vo.lottery_good.name}</p>
+					<p class="chengzhang_num">所需成长值：{$vo.adopt_val}</p>
+					<p class="num">{$vo.adopt_num}人领养</p>
+				</div>
+				<a href="javascript:;" class="btn" onclick="adopt({$vo.id})">领养</a>
+			</li>
+			</volist>
+		</ul>
+	</div>
+	<!-- 领养娃娃 -->
+	<div class="baoxiang_boxs">
+		<a href="{:U("Index/article",array('id'=>7))}" title="领养娃娃游戏">
+			<img src="__PUBLIC__/weixin/image/wawa_page/adopt-icon.png" alt="领养娃娃游戏" class="img">
+		</a>
+	</div>
+</body>
+</html>
+
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	function adopt(id){
+		var data = {
+			id:id,
+		}
+		$.post("{:U("Index/ajax_adopt_good")}",data,function(ret){
+			if (ret['code'] == 0) {
+				alert("主人，终于来到了你的身边，记得悉心照料我哦~");
+				window.location.href = "{:U("Index/my_wawa",array('user_id'=>$user['id']))}";
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+</script>

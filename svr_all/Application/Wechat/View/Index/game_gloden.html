@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>哐糖</title>
+
+  <!--http://www.html5rocks.com/en/mobile/mobifying/-->
+  <meta name="viewport"
+		content="width=device-width,user-scalable=no,initial-scale=1, minimum-scale=1,maximum-scale=1"/>
+
+  <!--https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- force webkit on 360 -->
+  <meta name="renderer" content="webkit"/>
+  <meta name="force-rendering" content="webkit"/>
+  <!-- force edge on IE -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- force full screen on some browser -->
+  <meta name="full-screen" content="yes"/>
+  <meta name="x5-fullscreen" content="true"/>
+  <meta name="360-fullscreen" content="true"/>
+  
+  <!-- force screen orientation on some browser -->
+  <meta name="screen-orientation" content="portrait"/>
+  <meta name="x5-orientation" content="portrait">
+
+  <!--fix fireball/issues/3568 -->
+  <!--<meta name="browsermode" content="application">-->
+<meta name="x5-page-mode" content="app">
+
+  <!--<link rel="apple-touch-icon" href=".png" />-->
+  <!--<link rel="apple-touch-icon-precomposed" href=".png" />-->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/game_gloden/style-mobile.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+<style type="text/css">
+
+.swiper_dingwei{width: 260px;height:320px;background-color: #fffbea;border: 4px solid #cc7f3e;border-radius: 20px;position: absolute;top: 0;left: 0;right: 0;bottom: 0;margin:auto;z-index: 9999;opacity: 0;z-index: -20;}
+.colseBox{height: 20px;padding: 12px 0px;}
+.colse_icon{width: 20px;height: 20px;float: right;margin-right: 15px;}
+.swiperBox{width: 100%;height: 100%;}
+.swiperText{padding:0px 20px;color: #ae591a;font-size: 16px;font-weight: bold;margin-top: 15px;}
+.swiper-slide img{display: block;width: 140px;height: 140px;margin:0 auto;}
+.mask_button{margin-top: 18px;font-weight: normal;}
+.display{opacity: 1;z-index:999; }
+.textboxTwo{font-weight: normal;}
+.textboxOne{margin-bottom: 5px;}	
+</style>
+</head>
+<body>
+	<canvas id="GameCanvas" oncontextmenu="event.preventDefault()" tabindex="0"></canvas>
+	<a class="game_charge_btn_gloden" href="javascript:;" title="充值" onclick="jump_charge()"></a>
+	<a  class="game_detail_btn" title="奖品详情" onclick="show_prize()" href="javascript:;"></a>
+	<!-- <div class="game_bag" id="maskBox">
+		<img src="__PUBLIC__/weixin/image/game_bag.png" title="娃娃背包" class="img">
+		<p class="text">娃娃背包</p>
+	</div> -->
+	<a class="game_bag"  style="display: block" href="{:U("Index/bag")}">
+		<img src="__PUBLIC__/weixin/image/game_bag.png" title="娃娃背包" class="img">
+		<p class="text">娃娃背包</p>
+	</a>
+	<div class="game_collect" onclick="collect_game({$Think.get.id})">
+		<if condition="$is_collection eq 0">
+		<img src="__PUBLIC__/weixin/image/detail_collect.png" title="收藏" class="img" id="collect">
+		</if>
+		<if condition="$is_collection eq 1">
+		<img src="__PUBLIC__/weixin/image/detail_collected.png" title="收藏" class="img" id="collect">
+		</if>
+		<p class="text">收藏</p>
+	</div>
+	<a href="javascript:;" class="zhua_num">{$lottery_config['zhua_num']}人正在抓</a>
+	<div id="splash">
+		 <img src="__PUBLIC__/game/splash.png" class="splash_image">
+		 <div class="progress-bar">
+			<span></span>
+		</div>
+	</div>
+   <div class="swiper_dingwei">
+		<div class="swiperBox">
+			<div class="colseBox">
+				<div class="colse_icon"></div>
+			</div>
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+					<foreach name="goods_list" item="vo" >
+						<div class="swiper-slide">
+							<img src="{$vo['img_url']}" alt="">
+							<div class="swiperText">
+								<p class="textbox textboxOne">{$vo['name']}</p>
+								<if condition="$vo['remarks'] neq '' "> 
+									<p class="textbox textboxTwo">备注：{$vo['remarks']}</p>
+								</if>
+								<if condition="$vo['remarks'] eq '' "> 
+									<p class="textbox textboxTwo">备注：暂无</p>
+								</if>
+							</div>   
+						</div>
+					</foreach>
+				</div>
+				<div class="swiper-button-prev" style="background-image: url(__PUBLIC__/weixin/image/leftbtn.png);width: 28px;height: 73px;background-size: 80%;margin-top:-40px;"></div>
+				<div class="swiper-button-next" style="background-image: url(__PUBLIC__/weixin/image/right_btn.png);width: 28px;height: 73px;background-size: 80%;margin-top:-40px;"></div>
+			</div>
+			<div class="mask_button" onclick="hide()">好的</div>
+		</div>
+	</div>
+	<!-- mask -->
+	<div class="maskBox">
+		<div class="mask">
+			<div class="mask_back">
+				<img src="__PUBLIC__/weixin/image/qrcode.jpg" alt="" class="qrocdeImg">
+				<p class="mask_text">记得长按扫描上方二维码</p>
+				<p class="mask_text">关注微信公众号,或搜索“哐糖”<br>填写收货地址哦~</p>
+				<div class="mask_button" id="mask_button">我知道了</div>
+			</div>
+		</div>
+	</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+<script src="__PUBLIC__/weixin/js/jquery.min.js"></script>
+<script type="text/javascript">
+		var mySwiper = new Swiper ('.swiper-container', {
+			direction: 'horizontal',
+			loop: true,
+			autoplay:true,
+			// 如果需要前进后退按钮
+			navigation: {
+				nextEl: '.swiper-button-next',
+				 prevEl: '.swiper-button-prev',
+			},
+		})
+</script> 
+<script src="__PUBLIC__/game_gloden/src/settings.js" charset="utf-8"></script>
+<script src="__PUBLIC__/game_gloden/main.js" charset="utf-8"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script>
+	$("#maskBox").click(function(){
+		$(".maskBox").addClass('active')
+	})
+	$("#mask_button").click(function(){
+		$(".maskBox").removeClass('active')
+	})
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src='https://code.createjs.com/1.0.0/createjs.min.js'></script>
+<script type="text/javascript">
+	function jump_charge() {
+		window.location.href = "{:U("Index/charge")}";
+	}
+	function show_prize(){
+		$(".swiper_dingwei").addClass('display');
+	}
+	function hide(){
+		$(".swiper_dingwei").removeClass('display');
+	}
+
+	function collect_game(id){
+		var data = {
+			lottery_config_id:id,
+		}
+		$.post("{:U("Index/ajax_collection")}",data,function(ret){
+			if (ret['code'] == 0) {
+				if (ret['data'] == "取消成功~") {
+					$("#collect").attr("src","/Public/weixin/image/detail_collect.png");
+				}
+				else{
+					$("#collect").attr("src","/Public/weixin/image/detail_collected.png");
+				}
+				alert(ret['data']);
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	fly.init();
+</script>

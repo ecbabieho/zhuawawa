@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>我邀请的好友</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="index-bg">
+	<div class="index-list-container" style="border-bottom: none;">
+		<div class="header" style="border-bottom:none">
+			<ul>
+				<li class="active">
+					<a href="javascript:;" title="全部">全部</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+<ul class="users_list">
+	<volist name="users" id="vo">
+		<li>
+			<div class="cover_image" style="background-image: url({$vo['headimgurl']})">
+				<if condition="$vo['level'] eq 1">
+					<img src="__PUBLIC__/weixin/image/putong.png" class="img">
+				</if>
+				<if condition="$vo['level'] eq 2">
+					<img src="__PUBLIC__/weixin/image/huangjin.png" class="img">
+				</if>
+				<if condition="$vo['level'] eq 3">
+					<img src="__PUBLIC__/weixin/image/zuanshi.png" class="img">
+				</if>
+			</div>
+			<div class="mid">
+				<p class="top">
+					<span class="nickname">{$vo['nickname']}</span>
+					<span class="time">邀请时间：{$vo['add_time']|substr=0,10}</span>
+				</p>
+				<p class="bottom" style="margin-top:10px;">
+					<span class="text">累计充值：</span>
+					<span class="charge_num">￥{$vo['charge_num']}</span>
+				</p>
+				<p class="bottom">
+					<span class="text">累计抓到娃娃（个）：</span>
+					<span class="prize_num">{$vo['record_total']}</span>
+				</p>
+			</div>
+		</li>
+	</volist>
+</ul>
+
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	fly.init();
+</script>

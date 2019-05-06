@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>美喵会员-一卡在手，全城聚惠！</title>
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/sign.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+<!--     <div class="mask">
+        <div class="maskbox">
+            <div class="mask_box">
+                <div class="mask_boxone">
+                    <p class="signText">签到可领取5个糖豆</p>
+                    <a class="maskBtn" href="javascript:;">签到</a>
+                </div>
+                <div class="mask_cancel"></div>
+            </div>
+        </div>
+    </div> -->
+    <div class="main">
+        <div class="swiper_ban"></div>
+        <ul class="sign_item">
+		<if condition="$times gt 1">
+            <li class="sign_list">
+                <img src="__PUBLIC__/weixin/image/vip/sign_yes.png" alt="" class="sign_img">
+                <p class="sign_week">第1天</p>           
+            </li>
+		<else />
+            <li class="sign_list" <if condition="$is_set eq 1">onclick="sign(1)"<else />onclick="sign(0)"</if>>
+                <img src="__PUBLIC__/weixin/image/vip/sign_no.png" alt="" class="sign_img">
+                <p class="sign_week">第1天</p>           
+            </li>
+		</if>
+		<if condition="$times gt 2">
+             <li class="sign_list">
+                <img src="__PUBLIC__/weixin/image/vip/sign_yes.png" alt="" class="sign_img">
+                <p class="sign_week">第2天</p>           
+            </li>
+		<else />
+             <li class="sign_list" <if condition="$is_set eq 2">onclick="sign(2)"<else />onclick="sign(0)"</if>>
+                <img src="__PUBLIC__/weixin/image/vip/sign_no.png" alt="" class="sign_img">
+                <p class="sign_week">第2天</p>           
+            </li>
+		</if>
+		<if condition="$times gt 3">
+             <li class="sign_list">
+                <img src="__PUBLIC__/weixin/image/vip/sign_yes.png" alt="" class="sign_img">
+                <p class="sign_week">第3天</p>           
+            </li>
+		<else />
+             <li class="sign_list" <if condition="$is_set eq 3">onclick="sign(3)"<else />onclick="sign(0)"</if>>
+                <img src="__PUBLIC__/weixin/image/vip/sign_no.png" alt="" class="sign_img">
+                <p class="sign_week">第3天</p>           
+            </li>
+		</if>
+		<if condition="$times gt 4">
+             <li class="sign_list">
+                <img src="__PUBLIC__/weixin/image/vip/sign_yes.png" alt="" class="sign_img">
+                <p class="sign_week">第4天</p>           
+            </li>
+		<else />
+             <li class="sign_list" <if condition="$is_set eq 4">onclick="sign(4)"<else />onclick="sign(0)"</if>>
+                <img src="__PUBLIC__/weixin/image/vip/sign_no.png" alt="" class="sign_img">
+                <p class="sign_week">第4天</p>           
+            </li>
+		</if>
+		<if condition="$times gt 5">
+             <li class="sign_list">
+                <img src="__PUBLIC__/weixin/image/vip/sign_yes.png" alt="" class="sign_img">
+                <p class="sign_week">第5天</p>           
+            </li>
+		<else />
+             <li class="sign_list" <if condition="$is_set eq 5">onclick="sign(5)"<else />onclick="sign(0)"</if>>
+                <img src="__PUBLIC__/weixin/image/vip/sign_no.png" alt="" class="sign_img">
+                <p class="sign_week">第5天</p>           
+            </li>
+		</if>
+		<if condition="$times gt 6">
+             <li class="sign_list">
+                <img src="__PUBLIC__/weixin/image/vip/sign_yes.png" alt="" class="sign_img">
+                <p class="sign_week">第6天</p>           
+            </li>
+		<else />
+             <li class="sign_list" <if condition="$is_set eq 6">onclick="sign(6)"<else />onclick="sign(0)"</if>>
+                <img src="__PUBLIC__/weixin/image/vip/sign_no.png" alt="" class="sign_img">
+                <p class="sign_week">第6天</p>           
+            </li>
+		</if>
+		<if condition="$times gt 7">
+             <li class="sign_list">
+                <img src="__PUBLIC__/weixin/image/vip/sign_nob.png" alt="" class="sign_img">
+                <p class="sign_week">第7天</p>           
+            </li>
+		<else />
+             <li class="sign_list" <if condition="$is_set eq 7">onclick="sign(7)"<else />onclick="sign(0)"</if>>
+                <img src="__PUBLIC__/weixin/image/vip/sign_yesn.png" alt="" class="sign_img">
+                <p class="sign_week">第7天</p>           
+            </li>
+		</if>
+        </ul>
+        <!--<div class="sign_botton">充点小钱签到翻倍</div>
+        <p class="botton_text">充值任意金额获得高级签到，签到永久翻倍，<br> 宝箱惊喜也翻倍（仅限1次）</p>-->
+    </div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script>
+function sign(times){
+	if(times == 0){
+		alert('还没到时间哦~');
+		return false;
+	}
+	var sub_data = {
+			times:times,
+		}
+				
+	$.post("{:U('Vip/ajax_sign')}",sub_data,function(ret){
+		if(ret['code'] == 0){
+			alert('签到成功哦，'+ret['data']['num']+'个糖豆已经存入您的账户~');
+			window.location.reload();
+		}else{
+			alert(ret['msg']);
+		}
+
+	})
+}
+</script>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>好友充值</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="index-bg">
+	<div class="index-list-container" style="border-bottom: none;">
+		<div class="header" style="border-bottom:none">
+			<ul>
+				<li class="
+				<if condition= '$Think.get.type eq ""
+				or $Think.get.type eq "0"'>
+				active
+			</if>">
+				<a href="{:U("Agent/charge",array('type'=>0))}" title="">全部</a>
+				</li>
+			<foreach name="types" item="vo" >
+				<li class="
+				<if condition= '$Think.get.type eq $vo["type"]'>
+					active
+				</if>">
+					<a href="{:U("Agent/charge",array('type'=>$vo['type']))}" title="{$vo['name']}">{$vo['name']}</a>
+				</li>
+			</foreach>
+		</ul>
+	</div>
+</div>
+
+<ul class="users_list">
+	<volist name="maid_logs" id="vo">
+		<li>
+			<div class="cover_image" style="background-image: url({$vo['user_info']['headimgurl']})">
+				<if condition="$vo['user_info']['level'] eq 1">
+					<img src="__PUBLIC__/weixin/image/putong.png" class="img">
+				</if>
+				<if condition="$vo['user_info']['level'] eq 2">
+					<img src="__PUBLIC__/weixin/image/huangjin.png" class="img">
+				</if>
+				<if condition="$vo['user_info']['level'] eq 3">
+					<img src="__PUBLIC__/weixin/image/zuanshi.png" class="img">
+				</if>
+			</div>
+			<div class="mid">
+				<p class="top">
+					<span class="nickname">{$vo['user_info']['nickname']}</span>
+					<span class="time">充值时间：{$vo['add_time']|substr=0,10}</span>
+				</p>
+				<p class="bottom" style="margin-top:10px;">
+					<span class="text">补贴金额：</span>
+					<span class="charge_num">{$vo['money']}元</span>
+				</p>
+			</div>
+		</li>
+	</volist>
+</ul>
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	fly.init();
+</script>

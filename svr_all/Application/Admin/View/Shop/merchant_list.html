@@ -1,0 +1,267 @@
+<style type="text/css">
+	.menu_pid{
+		display:block;
+		height:36px;
+		line-height:36px;
+		width:100%;
+		padding-left:10px;
+		border-color: #D2D2D2!important;
+	}
+</style>
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">商家名称</label>
+					<div class="layui-input-block">
+						<input type="text" id="search_name" placeholder="请输入商家名称" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="search_lottery()">
+						<i class="layui-icon layui-icon-search  layuiadmin-button-btn"></i>
+					</a>
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-add-1 layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+
+<script type="text/html" id="publicTpl">
+	{{#  if(d.is_fabu === '0'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="fabu({{d.id}},1)">已隐藏</span>
+	{{#  } }}
+	{{#  if(d.is_fabu === '1'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="fabu({{d.id}},0)">已上架</span>
+
+	{{#  } }}
+</script>
+
+<script type="text/html" id="publicCardTpl">
+	{{#  if(d.is_open_card === '0'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="opencard({{d.id}},1)">关闭</span>
+	{{#  } }}
+	{{#  if(d.is_open_card === '1'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="opencard({{d.id}},0)">开启</span>
+
+	{{#  } }}
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/html" id="coverImageTpl">
+	<img src="{{d.image}}" title="{{d.image}}" style="width:100%;">
+</script>
+<script type="text/html" id="qrcodeImageTpl">
+	<img src="{{d.qrcode}}" title="{{d.qrcode}}" style="width:100%;">
+</script>
+<script type="text/html" id="qrcodeUseImageTpl">
+	<img src="{{d.use_qrcode}}" title="{{d.use_qrcode}}" style="width:100%;">
+</script>
+<script type="text/html" id="barDemo">
+	<!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>-->
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-xs" lay-event="activity">商家活动</a>
+	<a class="layui-btn layui-btn-xs" lay-event="card">商家卡卷</a>
+	<a class="layui-btn layui-btn-xs" lay-event="merchant_label">商家标签</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Shop/ajax_get_merchant")}', //数据接口
+			page: true, //开启分页
+			limit:10,
+			limits:[10,20,30,40,50,60,70,80,90,200],
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'image', title: '图片', width:180,templet:"#coverImageTpl"},
+					{field: 'qrcode', title: '二维码', width:180,templet:"#qrcodeImageTpl"},
+					{field: 'use_qrcode', title: '核销二维码', width:180,templet:"#qrcodeUseImageTpl"},
+					{field: 'name', title: '名称', width:200},
+					{field: 'merchant_category_name', title: '分类', width:150},
+					{field: 'bind_user_id', title: '绑定用户ID', width:80},
+					{field: 'trading_area', title: '所属商圈', width:150},
+					{field: 'main_camp', title: '主营项目', width:150},
+					{field: 'business_time', title: '营业时间', width:150},
+					{field: 'vip_discount', title: '会员优惠', width:150},
+					{field: 'recommend', title: '推荐', width:150},
+					{field: 'address', title: '地址', width:300},
+					{field: 'link_name', title: '联系人', width:150, sort: true},
+					{field: 'link_tel', title: '联系电话', width:150, sort: true},
+					{field: 'add_time', title: '添加时间', sort: true, width:180},
+					{field: 'arrive_num', title: '被扫码次数', width:180},
+					{field: 'is_fabu', title: '状态', width:120, sort: true,templet:"#publicTpl",fixed:"right"},
+					{field: 'is_open_card', title: '卡卷状态', width:120, sort: true,templet:"#publicCardTpl",fixed:"right"},
+					{fixed: 'right',title:'操作',  align:'center', toolbar: '#barDemo',fixed: 'right', width:320} 
+					]
+					]
+				});
+
+	});
+	table.on('tool(users)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+	  if(layEvent === 'del'){ //删除
+		layer.confirm('确定删除此选项吗？', function(index){
+		  layer.close(index);
+		  
+		  //向服务端发送删除指令
+		  var sub_data = {
+			id:data['id']
+		  };
+		  $.post("{:U('Shop/ajax_delete_merchant')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('删除成功',function(){
+					//window.location.reload();
+				})
+				obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		  });
+		});
+	  } else if(layEvent === 'edit'){ //编辑
+		//window.location.href = "{:U('Lottery/edit_lottery_config_view')}"+'?id='+data['id'];
+		window.open("{:U('Shop/edit_merchant_view')}"+'?id='+data['id']);
+	  } else if(layEvent === 'activity'){ //商家活动
+		//window.location.href = "{:U('Lottery/edit_lottery_config_view')}"+'?id='+data['id'];
+		window.open("{:U('Shop/merchant_activity')}"+'?id='+data['id']);
+	  }  else if(layEvent === 'card'){ //商家卡卷
+		edit_card_view(data);
+	  
+	  } else if(layEvent === 'merchant_label'){ //商家活动
+		//window.location.href = "{:U('Lottery/edit_lottery_config_view')}"+'?id='+data['id'];
+		window.open("{:U('Shop/merchant_label')}"+'?id='+data['id']);
+	  }
+	});
+	
+	
+	function edit_card_view(data){
+	
+		$('body').append("<div id='edit_card_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>卡卷名称</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='edit_card_name'  required  lay-verify='required' placeholder='请输入卡卷名称' autocomplete='off' class='layui-input' value='"+data['card_name']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>卡卷简介</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='edit_card_detail'  required  lay-verify='required' placeholder='请输入卡卷简介' autocomplete='off' class='layui-input' value='"+data['card_detail']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'编辑活动',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['650px', '250px'],
+            content: $("#edit_card_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var edit_card_name = $("#edit_card_name").val();
+            	var edit_card_detail = $("#edit_card_detail").val();
+            	var type_id = $("#type_id").val();
+            	if(edit_card_name == ''){
+            		layer.msg('请输入卡卷名称');
+            		return;
+            	}
+            	var sub_data = {
+            		id:type_id,
+            		card_name:edit_card_name,
+            		card_detail:edit_card_detail,
+            	}
+				
+            	$.post("{:U('Shop/ajax_edit_merchant_card')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('编辑成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_card_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_card_modal").remove()
+			}
+		});
+	}
+	
+	function search_lottery(){
+		var name = $("#search_name").val();
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				name:name,
+			}
+		})
+	}
+	function sub(){
+		//window.location.href = "{:U('Lottery/add_lottery_config_view')}";
+		window.open("{:U('Shop/add_merchant_view')}");
+	}
+	
+	function fabu(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('Shop/ajax_public_config')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+	
+	function opencard(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('Shop/ajax_public_open_card')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+</script>

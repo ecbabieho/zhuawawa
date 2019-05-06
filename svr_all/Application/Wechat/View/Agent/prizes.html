@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>好友娃娃</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="index-bg">
+	<div class="index-list-container" style="border-bottom: none;">
+		<div class="header" style="border-bottom:none">
+			<ul>
+				<li class="
+				<if condition= '$Think.get.lottery_type_id eq ""
+				or $Think.get.lottery_type_id eq 0'>
+				active
+			</if>">
+				<a href="{:U("Agent/prizes",array('lottery_type_id'=>0))}" title="">全部</a>
+				</li>
+			<foreach name="lottery_types" item="vo" >
+				<li class="
+				<if condition= '$Think.get.lottery_type_id eq $vo["id"]'>
+					active
+				</if>">
+					<a href="{:U("Agent/prizes",array('lottery_type_id'=>$vo['id']))}" title="{$vo['name']}">{$vo['name']}</a>
+				</li>
+			</foreach>
+		</ul>
+	</div>
+</div>
+<ul class="prize_list">
+	<volist name="lottery_records" id="vo">
+		<li>
+			<img src="{$vo['lottery_good']['img_url']}" class="cover_image">
+			<div class="mid">
+				<p class="name">{$vo['lottery_good']['name']}</p>
+				<p class="time">{$vo['add_time']}</p>
+				<span class="cost">补贴：{$vo['money']}元</span>
+			</div>
+			<div class="right">
+				<img src="{$vo['user_info']['headimgurl']}" class="head_img">
+				<p class="nickname">{$vo['user_info']['nickname']}</p>
+			</div>
+		</li>
+	</volist>
+</ul>
+
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	fly.init();
+</script>

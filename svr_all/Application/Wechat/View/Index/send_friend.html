@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>赠送好友</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="index-bg">
+	<ul class="address_list">
+		<li>
+			<span class="title">接收人ID</span>
+			<input type="tel" id="to_user_id" class="input" placeholder="请输入好友ID" >
+		</li>
+	</ul>
+	<p class="charge_notice" style="display: block;overflow: hidden; ">
+		<span class="icon"></span>
+		<span class="text">您和接收人都必须是会员才可以赠送哦~</span>
+	</p>
+	<a href="javascript:sub();" class="address_save_btn">立即赠送</a>
+	
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	function sub(){
+		var to_user_id = $("#to_user_id").val();
+		if (to_user_id == "") {
+			alert("请输入接收礼物好友ID~");
+			return;
+		}
+		var data = {
+			to_user_id:to_user_id,
+			lottery_record_id:{$lottery_record['id']},
+		}
+		$.post('{:U("Index/ajax_give_good")}',data,function(ret){
+			if(ret['code'] == 0){
+				alert("赠送成功，赠人玫瑰，手留余香哦~");
+				window.history.back();
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	fly.init();
+</script>

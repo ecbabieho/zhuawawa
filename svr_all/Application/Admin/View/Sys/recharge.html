@@ -1,0 +1,307 @@
+<style>
+.layui-form-label{
+	width: 98px;
+}
+.layui-input-block{
+	margin-left: 128px;
+}
+	.menu_pid{
+		display:block;
+		height:36px;
+		line-height:36px;
+		width:100%;
+		padding-left:10px;
+		border-color: #D2D2D2!important;
+	}
+</style>
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">糖豆数量</label>
+					<div class="layui-input-block">
+						<input type="text" id="add_coin_num" placeholder="请输入赠送糖豆" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">糖豆金额</label>
+					<div class="layui-input-block">
+						<input type="text" id="add_pay_num" placeholder="请输入糖豆金额" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">会员等级</label>
+					<div class="layui-input-block">
+						<select id="add_level">
+							<option value="1" selected>普通用户</option>
+							<volist name="vip_grades" id="vo">
+							<option value="{$vo['level']}">{$vo['name']}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">赠送会员金额</label>
+					<div class="layui-input-block">
+						<input type="text" id="add_vip_pay_num" placeholder="请输入赠送会员金额" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">赠送会员天数</label>
+					<div class="layui-input-block">
+						<input type="text" id="add_vip_day_num" placeholder="请输入赠送会员天数" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-add-1 layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="rules" lay-filter="rules">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/html" id="barDemo">
+	<!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>-->
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="level_tpl">
+	{{#  if(d.level === '1'){ }}
+	普通用户
+	{{#  } }}
+	{{#  if(d.level === '2'){ }}
+	黄金会员
+	{{#  } }}
+	{{#  if(d.level === '3'){ }}
+	钻石会员
+	{{#  } }}
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#rules',
+			height: 500,
+			url: '{:U("Sys/ajax_get_charge_rules")}', //数据接口
+			page: true, //开启分页
+			id:'rules',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:180, sort: true, fixed: 'left'},
+					{field: 'coin_num', title: '糖豆数量', width:180, sort: true},
+					{field: 'pay_num', title: '糖豆金额', width:180, sort: true},
+					{field: 'level', title: '会员等级', width:180, sort: true,templet:'#level_tpl'},
+					{field: 'vip_day_num', title: '会员天数',width:180, sort: true},
+					{field: 'vip_pay_num', title: '会员金额',width:180, sort: true},
+					{field: 'add_time', title: '配置时间',width:180, sort: true},
+					{fixed: 'right',title:'操作',  align:'center', toolbar: '#barDemo',fixed: 'right',width:150} 
+					]
+					]
+				});
+
+	});
+	table.on('tool(rules)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+	  if(layEvent === 'detail'){ //查看
+		console.log(data['name']);
+		//do somehing
+	  } else if(layEvent === 'del'){ //删除
+		layer.confirm('确定删除此配置吗？', function(index){
+		  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+		  layer.close(index);
+		  
+		  //向服务端发送删除指令
+		  var sub_data = {
+			id:data['id']
+		  };
+		  $.post("{:U('Sys/ajax_delete_charge')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('删除成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		  });
+		});
+	  } else if(layEvent === 'edit'){ //编辑
+		edit_view(data);
+	  }
+	});
+	function edit_view(data){
+		var vip_select_str = ""; 
+		if(data['level'] == 1){
+			vip_select_str += "<select id='edit_level'  class='menu_pid' style='display:inline-block;'><option value='1' selected>普通用户</option>";	
+		}
+		else{
+			vip_select_str += "<select id='edit_level'  class='menu_pid' style='display:inline-block;'><option value='1'>普通用户</option>";
+		}
+		var vip_all_data = {$vip_grades|json_encode};
+		for (var i = 0; i < vip_all_data.length; i++) {
+			if (data['level'] == vip_all_data[i]['level']) {
+				vip_select_str += "<option value='" + vip_all_data[i]['level'] + "' selected>" + vip_all_data[i]['name'] + "</option>";
+			}
+			else{
+
+				vip_select_str += "<option value='" + vip_all_data[i]['level'] + "'>" + vip_all_data[i]['name'] + "</option>";
+			}
+		}
+		vip_select_str += "</select>";
+		$('body').append("<div id='edit_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>糖豆数量</label>"+
+				"<div class='layui-input-block'>"+
+					"<input type='text' id='coin_num' required  lay-verify='required' placeholder='请输入赠送糖豆' autocomplete='off' class='layui-input' value='"+data['coin_num']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+			"<label class='layui-form-label'>糖豆金额</label>"+
+			"<div class='layui-input-block'>"+
+			"<input type='text' id='pay_num'  required  lay-verify='required' placeholder='请输入充值金额' autocomplete='off' class='layui-input' value='"+data['pay_num']+"'>"+
+			"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>会员金额</label>"+
+				"<div class='layui-input-block'>"+
+					"<input type='text' id='vip_pay_num' required  lay-verify='required' placeholder='请输入赠送会员金额' autocomplete='off' class='layui-input' value='"+data['vip_pay_num']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>会员天数</label>"+
+				"<div class='layui-input-block'>"+
+					"<input type='text' id='vip_day_num' required  lay-verify='required' placeholder='请输入赠送会员天数' autocomplete='off' class='layui-input' value='"+data['vip_day_num']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>会员等级</label>" + 
+				"<div class='layui-input-block'>"+
+					vip_select_str+
+				"</div>"+
+			"</div>"+
+			"<input type='hidden' id='charge_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'编辑规则',
+			area: ['450px', '400px'],
+			content: $("#edit_modal"),
+			btn: ['确认','取消'],
+			yes: function(index, layero){
+				var charge_id = $('#charge_id').val();
+				var pay_num = $("#pay_num").val();
+				var coin_num = $("#coin_num").val();
+				var vip_pay_num = $('#vip_pay_num').val();
+				var vip_day_num = $('#vip_day_num').val();
+				var level = $("#edit_level").val();
+				if (level == "") {
+					layer.msg("请选择会员等级");
+					return;
+				}
+				if(pay_num == ''){
+					layer.msg('请输入充值金额');
+					return;
+				}
+				if(coin_num == ''){
+					layer.msg('请输入糖豆数量');
+					return;
+				}
+				if(vip_pay_num == ''){
+					layer.msg('请输入赠送会员金额');
+					return;
+				}
+				if(vip_day_num == ''){
+					layer.msg('请输入赠送会员天数');
+					return;
+				}
+				var data = {
+					id:charge_id,
+					pay_num:pay_num,
+					coin_num:coin_num,
+					vip_pay_num:vip_pay_num,
+					vip_day_num:vip_day_num,
+					level:level,
+				}
+				$.post("{:U('Sys/ajax_edit_charge')}",data,function(ret){
+					if(ret['code'] == 0){
+						layer.msg('配置成功',function(){
+							window.location.reload();
+						})
+					}else{
+						layer.msg(ret['msg']);
+					}
+
+				})
+			},
+			btn2: function(index, layero){
+				//取消按钮
+				$("#edit_modal").hide();
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal").hide();
+			}
+		});
+		$("#edit_level").val(data['level']);
+	}
+	function sub(){
+		var pay_num = $("#add_pay_num").val();
+		var coin_num = $("#add_coin_num").val();
+		var vip_pay_num = $('#add_vip_pay_num').val();
+		var vip_day_num = $('#add_vip_day_num').val();
+		var level = $("#add_level").val();
+		if (level == "") {
+			layer.msg("请选择会员等级");
+			return;
+		}
+		if(pay_num == ''){
+			layer.msg('请输入充值金额');
+			return;
+		}
+		if(coin_num == ''){
+			layer.msg('请输入糖豆数量');
+			return;
+		}
+		if(vip_pay_num == ''){
+			layer.msg('请输入赠送会员金额');
+			return;
+		}
+		if(vip_day_num == ''){
+			layer.msg('请输入赠送会员天数');
+			return;
+		}
+		var data = {
+			pay_num:pay_num,
+			coin_num:coin_num,
+			vip_pay_num:vip_pay_num,
+			vip_day_num:vip_day_num,
+			level:level,
+		}
+		$.post("{:U('Sys/ajax_add_charge')}",data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('配置成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		})
+	}
+</script>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+    <title>{$merchant['name']}</title>
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/vip.css">
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+    <!-- 判断是否为会员 -->
+<if condition="( $user['level'] neq 2 ) AND ( $user['level'] neq 3 )">
+     <div class="MASK" id="MASK_MAIN">
+        <div class="MASK_main">
+            <div class="MASK_alert">
+                <p class="action_one">您暂时不可享受此权益哦</p>
+                <p class="action_two">会员可享受全城商铺的无门槛永久消费优惠</p>
+                <p class="action_two">1元开通即可体验全城优惠</p>
+                <span class="button" onclick="tiyan()">1元立即体验</span>
+                <div class="main_close" onclick="MASK_HIDE()"></div>
+            </div>
+        </div>
+    </div>
+</if>
+    <header class="navbar">
+        <div class="nav-wrap-left">
+            <a href="javascript:;" class="react back" onclick="back()">
+                <i class="text-icon icon-back"></i>
+            </a>
+        </div>
+        <div class="nav-header">商家详情</div>
+        <div class="nav-wrap-right">
+                    <if condition="$is_collection eq 0">
+            <a href="javascript:;" class="" onclick="collect(this)">
+                <span class="nav-btn">
+                    <i class="text-icon icon-sp icon-collect"></i>
+                    收藏
+                </span>
+            </a>
+                    </if>
+                    <if condition="$is_collection eq 1">
+            <a href="javascript:;" class="" onclick="collect(this)">
+                <span class="nav-btn">
+                    <i class="text-icon icon-sp icon-collects"></i>
+                    收藏
+                </span>
+            </a>
+                    </if>
+        </div>  
+    </header>
+    <div class="content-wrapper">
+        <div class="block">
+            <div class="imgbox" style="height: 3.2rem; width: 7.5rem;background-image: url({$merchant['info_image']});"></div>
+            <div class="poiinfo-wrap">
+                <div class="name">
+                    <p class="poi-brand">{$merchant['name']}</p>
+                </div>
+                <div class="addr">
+                    <div href="" class="react">
+                        <i class="icon-sp icon-location"></i>
+                        <div class="poi-address" onclick="openLocation('{$merchant['name']}','{$merchant['address']}','{$merchant['lat_lng']}')">{$merchant['address']} <span style="color: #999999;font-size: .24rem;">|&nbsp;<label id="time_str"></label></span></div>
+                    </div>
+                    <p class="phone">
+                        <a href="tel:{$merchant['link_tel']}" class="poi-phone">
+                            <i class="icon-sp icon-tel"></i>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div> 
+        <div class="voucher-deal">
+            <div class="blocks">
+                <p class="block-title mag-left">
+                    <i class="icon-VIP"></i>
+                    会员特权
+                </p>
+            </div>
+            <div class="blocks" style="margin-top: 0;border: none;">
+                <volist name="merchant.vip_discount_arr" id="vovd">
+                <p class="block-title mag-left" style="margin-left: .5rem;border: none;padding-bottom: 0rem;">{$key+1} . {$vovd}</p>
+                </volist>
+                <div class="block-title mag-left service-tags"  style="margin-top: 0rem;margin-left: .5rem;border: none;">
+                     <img class="icon" src="/Public/weixin/image/vip/icon_notice.png">
+                     <span class="service-tag index-0" style="color: rgb(108, 186, 178);">到店扫描商家专属二维码，即可享受会员特权哦~</span>
+                </div>
+            </div>
+        </div>
+        <div class="voucher-deal">
+            <div class="blocks">
+                <p class="block-title mag-left">
+                    商家推荐
+                </p>
+                <div class="recommond-wrapper">
+                    <if condition="count($merchant.recommend_arr) eq 0">
+                    <span class="recommond-item">暂无推荐</span>
+                    </if>
+                    <volist name="merchant.recommend_arr" id="vo">
+                    <span class="recommond-item">{$vo}</span>
+                    </volist>
+                </div>
+            </div>
+        </div>
+        <div class="nav-bar-wrapper" style="margin-top: .2rem;">
+            <div class="nav" style="color: #333333;">
+                最新活动（{$merchant_activity|count}）
+            </div>
+            <if condition="count($merchant_activity) eq 0">
+                <p style="text-align: center; font-size: .24rem;padding:30px;background-color:#FFF;">暂无活动~</p>
+            </if>
+            <ul class="nav_item">
+                <volist name="merchant_activity" id="vo">
+                <li class="nav_list">
+                    <a href="{:U('Vip/act_detail')}?id={$vo['id']}" class="nav_lk">
+                        <div class="nax_top">
+                            <div class="image-wrappers" style="background-image: url({$vo.cover_image})"></div>
+                            <div class="poi-info">
+                                <div class="poi-name">{$vo.title}</div>
+                                <div class="service-tags">
+                                    <img class="icon" src="__PUBLIC__/weixin/image/vip/icon_notice.png">
+                                    <span class="service-tag index-0" style="color: rgb(108, 186, 178);">{$vo.brief}</span>
+                                </div>
+                                <div class="cate-wrapper">
+                                    <span class="catename">{$vo.activity_time}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                </volist>
+            </ul>
+        </div>
+        <div class="blockes pad-left">
+            <p class="block-title">商家概述</p>
+           <!--  <div class="row">
+                <span class="col-left">WIFI</span>
+                <span class="col-right">支持WIFI</span>
+            </div> -->
+            <div class="row" style="border-bottom: none;">
+                <span class="col-left">营业时间</span>
+                <span class="col-right">{$merchant['business_time']}</span>
+            </div>
+        </div> 
+        <div class="nav-bar-wrapper" style="margin-top: .2rem;">
+            <div class="nav" style="color: #333333;">
+                附近推荐
+            </div>
+            <if condition="count($shop_list) eq 0">
+                <p style="text-align: center; font-size: .24rem;padding:30px;">暂无店铺~</p>
+            </if>
+            <ul class="nav_item">
+                <volist name="shop_list" id="vo">
+            <li class="nav_list">
+                <a href="{:U('Vip/shop_detail')}?id={$vo['id']}" class="nav_lk">
+                    <div class="nax_top">
+                        <div class="image-wrappers" style="background-image: url({$vo['image']})"></div>
+                        <div class="poi-info">
+                            <div class="poi-name">{$vo['name']}</div>
+                            <div class="price-wrapper">
+                                <span class="price" style="max-width: 4rem;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{$vo['main_camp']} {$vo['trading_area']}</span><span class="location"><{$vo['distance']}</span>
+                            </div>
+                            <div class="cate-wrapper">
+                                <span class="catename">{$vo['business_time']}</span>
+                                <!-- <span class="smart-tag" style="color: rgb(190, 158, 77); background-color: rgb(251, 244, 228);">高新路沿线</span> -->
+                            </div>
+                            <div class="service-tags">
+                                <img class="icon" src="__PUBLIC__/weixin/image/vip/icon_notice.png">
+                                <span class="service-tag index-0" style="color: rgb(108, 186, 178);">{$vo['merchant_activity']['title']|default="暂无最新活动"}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="deal-info-wrapper">
+                        <div class="preferential maidan">
+                            <div class="promotion-wrapper"></div>
+                            <img class="icon" src="__PUBLIC__/weixin/image/vip/icon_vip.png">
+                            <span class="discount"></span>
+                            <span class="content">{$vo['vip_discount']}</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+                </volist>
+            </ul>
+        </div>
+        <div class="footer-copy-container" >
+            <div class="footer-copy-right">
+                <div class="hr"></div>
+                <span class="footer-copy-right-text">
+                     ©2018 哐糖
+                 </span>
+            </div>
+        </div>   
+    </div>
+    <a href="javascript:;" class="top-btn top Hide" id="topIcon" onclick="backTop()">
+        <span class="icon icon-top"></span>
+    </a>
+</body>
+</html>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js" apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="__PUBLIC__/weixin/js/sp_share.js"></script>
+<script>
+    function tiyan(){
+        window.location.href = "{:U('Index/vip_charge')}";
+    }
+//https://restapi.amap.com/v3/direction/walking?origin=116.434307,39.90909&destination=116.434446,39.90816&key=ce1d7952bfe7215b1cecb51b69ae04f2
+      $("body").on("touchstart", function() {
+            $(window).scroll(function() {
+                if ($(window).scrollTop() > 200) {
+                    $("#topIcon").removeClass("Hide");
+                } else {
+                    $("#topIcon").addClass("Hide");
+                }
+            });
+        }).on("touchend", function() {
+            $(window).scroll(function() {
+                if ($(window).scrollTop() > 200) {
+                    $("#topIcon").removeClass("Hide");
+                } else {
+                    $("#topIcon").addClass("Hide");
+                }
+            });
+        }).on("touchmove", function() {
+            $("#topIcon").addClass("Hide");
+            if ($(window).scrollTop() > 200) {
+                $("#topIcon").removeClass("Hide");
+            }else{
+                $("#topIcon").addClass("Hide");
+            }
+        })
+
+    var backTop = function(){
+        $("html,body").animate({scrollTop:0},300);
+        $("#topIcon").addClass('Hide');
+        return;
+    }
+    function back(){
+        window.history.back();
+    }
+
+    var openLocation = function(name,address,lat_lng){
+        var latitude = lat_lng.split(',')[1];
+        var longitude = lat_lng.split(',')[0];
+        wx.openLocation({
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            name: name,
+            address: address,
+            scale: 14,
+            infoUrl: window.location.href,
+        });
+    }  
+
+    var collect = function(obj){
+		var data = {
+			merchant_id: '{:I('id')}',
+		};
+		$.post("{:U('Vip/ajax_merchant_collection')}", data, function (ret) { 
+			if (ret['code'] == '0') {
+				if($(obj).children().children('i').hasClass('icon-collects')){
+					$(obj).children().children('i').removeClass('icon-collects');
+					alert("取消收藏")
+				}else{
+					$(obj).children().children('i').addClass('icon-collects');
+					 alert("收藏成功")
+				}
+			} else {
+				alert(ret['msg']);
+			}
+		})
+        
+    } 
+</script>
+<script type="text/javascript">
+    var title = "哐糖会员好物分享，这里的优惠服务超赞，快来看看~";
+    var img_url = "{$merchant['image']}";
+    var desc = "无门槛优惠：" + "{$merchant['vip_discount']}~";
+	function location_call_back(latitude,longitude,speed,accuracy){
+        lat = latitude;
+        lng = longitude;
+		var origin = longitude+','+latitude;
+		var destination = '{$merchant['lat_lng']}';
+		var url = 'https://restapi.amap.com/v3/direction/walking?origin='+origin+'&destination='+destination+'&key=168e5dde1eaec7148b11220b7fc3e115';
+		$.get(url, function (ret) { 
+			//alert(JSON.stringify(ret['route']));
+			var shijian = ret['route']['paths'][0]['duration'];
+			var time_str = formatDuring(parseInt(shijian));
+			$('#time_str').html(time_str);
+		})
+    }
+	function formatDuring(mss) {
+		var days = parseInt(mss / (60 * 60 * 24));
+		var hours = parseInt((mss % (60 * 60 * 24)) / (60 * 60));
+		var minutes = parseInt((mss % (60 * 60)) / (60));
+		var seconds = parseInt((mss % (60)) / 1);
+		var str = '距离步行';
+		if(days>0){
+			str = str + days + "天";
+		}
+		if(hours>0){
+			str = str + hours + "小时";
+		}
+		if(minutes>0){
+			str = str + minutes + "分";
+		}
+		if(seconds>0){
+			str = str + seconds + "秒";
+		}
+		if(str == '距离步行'){
+			str = str + mss + '秒';
+		}
+		return str;
+	}
+    function MASK_HIDE(){
+        $("#MASK_MAIN").hide();
+    }
+</script>

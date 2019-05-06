@@ -1,0 +1,214 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">店名</label>
+					<div class="layui-input-block">
+						<input type="text" id="merchant_name"  disabled="disabled"  placeholder="请输入店名" value="{$merchant['name']}" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">标签名称</label>
+					<div class="layui-input-block">
+						<input type="text" id="name" placeholder="请输入标签名称" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+					</a>
+					<a class="layui-btn layuiadmin-btn-order" onclick="add_a()">
+						<i class="layui-icon layui-icon-add-1 layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script type="text/html" id="barDemo">
+	<!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>-->
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="coverImageTpl">
+	<img src="{{d.cover_image}}" title="{{d.cover_image}}" style="width:100%;">
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Shop/ajax_get_merchant_label")}?id={$id}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+				[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'name', title: '标签名称', width:300,},
+					{field: 'add_time', title: '添加时间', width:300},
+					{fixed: 'right',title:'操作',  align:'center', toolbar: '#barDemo',fixed: 'right',width:150} 
+				]
+			]
+		});
+
+	});
+	table.on('tool(users)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+	  if(layEvent === 'detail'){ //查看
+		console.log(data['name']);
+		//do somehing
+	  } else if(layEvent === 'del'){ //删除
+		layer.confirm('确定删除此选项吗？', function(index){
+		  layer.close(index);
+		  
+		  //向服务端发送删除指令
+		  var sub_data = {
+			id:data['id']
+		  };
+		  $.post("{:U('Shop/ajax_delete_merchant_label')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('删除成功',function(){
+					//window.location.reload();
+				})
+				obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		  });
+		});
+	  } else if(layEvent === 'edit'){ //编辑
+	  	edit_view(data);
+	  }
+	});
+	function edit_view(data){
+		$('body').append("<div id='edit_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>名称</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='edit_name'  required  lay-verify='required' placeholder='请输入名称' autocomplete='off' class='layui-input' value='"+data['name']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'编辑活动',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['650px', '200px'],
+            content: $("#edit_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var name = $("#edit_name").val();
+            	var type_id = $("#type_id").val();
+            	if(name == ''){
+            		layer.msg('请输入名称');
+            		return;
+            	}
+            	var sub_data = {
+            		id:type_id,
+            		name:name,
+            	}
+				
+            	$.post("{:U('Shop/ajax_edit_merchant_label')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('编辑成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal").remove()
+			}
+		});
+	}
+	function sub(){
+		var title = $("#name").val();
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				name:title,
+			}
+		})
+	}
+
+	function add_a(){
+		var temp_image_url = '';
+		$('body').append("<div id='add_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>名称</label>"+
+				"<div class='layui-input-block'>"+
+				"<input type='text' id='add_name'  required  lay-verify='required' placeholder='请输入名称' autocomplete='off' class='layui-input'>"+
+				"</div>"+
+			"</div>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'添加活动',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['650px', '200px'],
+            content: $("#add_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var add_name = $("#add_name").val();
+            	if(add_name == ''){
+            		layer.msg('请输入名称');
+            		return;
+            	}
+            	var sub_data = {
+            		name:add_name,
+            		merchant_id:{$id},
+            	}
+            	$.post("{:U('Shop/ajax_add_merchant_label')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('添加成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#add_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#add_modal").remove()
+			}
+		});
+	}
+</script>

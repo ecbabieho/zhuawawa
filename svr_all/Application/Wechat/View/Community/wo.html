@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>我</title>
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+	<!-- footer -->
+	<div class="weui-panel weui-panel_access">
+		<div class="weui-panel__bd">
+			<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+				<div class="weui-media-box__hd user_head_image" style="background-image: url({$user['headimgurl']});" >
+					<if condition="$user['level'] eq 1">
+					<img class="weui-media-box__thumb user_head_image_img" src="__PUBLIC__/weixin/image/putong.png">
+					</if>
+					<if condition="$user['level'] eq 2">
+					<img class="weui-media-box__thumb user_head_image_img" src="__PUBLIC__/weixin/image/huangjin.png">
+					</if>
+					<if condition="$user['level'] eq 3">
+					<img class="weui-media-box__thumb user_head_image_img" src="__PUBLIC__/weixin/image/zuanshi.png">
+					</if>
+				</div>
+				<div class="weui-media-box__bd">
+					<h4 class="weui-media-box__title">{$user['nickname']}</h4>
+					<p class="weui-media-box__desc" style="margin-top:5px;">娃娃数量：<span style="font-size: 16px;color:#de703e;font-weight: bold">{$user['record_total']}</span>个</p>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div class="weui-panel__bd" style="margin-top:20px;">
+		<div class="weui-media-box weui-media-box_small-appmsg">
+			<div class="weui-cells">
+				<a class="weui-cell weui-cell_access" href='{:U("Community/my_log",array('type'=>'1'))}'>
+					<div class="weui-cell__bd weui-cell_primary">
+					<p>我的帖子</p>
+					</div>
+					<span class="weui-cell__ft"></span>
+				</a>
+				<a class="weui-cell weui-cell_access" href='{:U("Community/my_log",array('type'=>'2'))}'>
+					<div class="weui-cell__bd weui-cell_primary">
+					<p>我的回复</p>
+					</div>
+					<span class="weui-cell__ft"></span>
+				</a>
+				<a class="weui-cell weui-cell_access" href='{:U("Community/my_log",array('type'=>'3'))}'>
+					<div class="weui-cell__bd weui-cell_primary">
+					<p>我的点赞</p>
+					</div>
+					<span class="weui-cell__ft"></span>
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- <div class="weui-panel__bd" style="margin-top:20px;">
+		<div class="weui-media-box weui-media-box_small-appmsg">
+			<div class="weui-cells">
+				<a class="weui-cell weui-cell_access" href="javascript:;">
+					<div class="weui-cell__bd weui-cell_primary">
+					<p>隐私设置</p>
+					</div>
+					<span class="weui-cell__ft"></span>
+				</a>
+			</div>
+		</div>
+	</div> -->
+	<div class="weui-tabbar reset_tabbar">
+		<a href="{:U("Community/index")}" class="weui-tabbar__item">
+			<div class="weui-tabbar__icon icon_index">
+			</div>
+			<p class="weui-tabbar__label">首页</p>
+		</a>
+		<a href="{:U("Community/zhanji")}" class="weui-tabbar__item">
+			<div class="weui-tabbar__icon icon_zhanji">
+			</div>
+			<p class="weui-tabbar__label">战绩</p>
+		</a>
+		<a href="{:U("Community/wo")}" class="weui-tabbar__item  weui-bar__item--on">
+			<div class="weui-tabbar__icon icon_my">
+			</div>
+			<p class="weui-tabbar__label">我</p>
+		</a>
+	</div>
+</div>
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.4/weui.min.js"></script>
+
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+</script>

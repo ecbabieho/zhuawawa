@@ -1,0 +1,153 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">银行</label>
+					<div class="layui-input-block">
+						<select id="search_type">
+							<option value="">全部银行</option>
+							<option value="广发银行">广发银行</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">是否有效</label>
+					<div class="layui-input-block">
+						<select id="search_status">
+							<option value="">全部</option>
+							<option value="1">有效信息</option>
+							<option value="0">无效信息</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">开始时间</label>
+					<div class="layui-input-block">
+						<input type="text" id="start_time" placeholder="开始时间" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">结束时间</label>
+					<div class="layui-input-block">
+						<input type="text" id="end_time" placeholder="结束时间" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="search_lottery()">
+						<i class="layui-icon layui-icon-search  layuiadmin-button-btn"></i>
+					</a>
+					<a class="layui-btn layui-btn-danger" onclick="export_test_record()">导出EXCEL
+						<i class="layui-icon layui-icon-download-circle  layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+
+
+<script type="text/html" id="publicTpl">
+	{{#  if(d.status === '0'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="agent({{d.id}},1)">无效信息</span>
+	{{#  } }}
+	{{#  if(d.status === '1'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="agent({{d.id}},0)">有效信息</span>
+
+	{{#  } }}
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Activity/ajax_get_bank_user")}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'nickname', title: '用户昵称', width:200, sort: true},
+					{field: 'real_name', title: '真实姓名', width:150},
+					{field: 'tel', title: '联系电话', width:200},
+					{field: 'company_name', title: '公司名称', width:250},
+					{field: 'company_tel', title: '公司电话', width:200},
+					{field: 'add_time', title: '添加时间', width:180},
+					{field: 'type', title: '所属银行', width:150},
+					{field: 'status', title: '是否有效', width:150, sort: true,templet:"#publicTpl",fixed: 'right'},
+					]
+					]
+				});
+
+	});
+	
+	layui.use('laydate', function(){
+		var laydate = layui.laydate;
+		laydate.render({
+			elem: '#start_time' //指定元素
+		});
+		laydate.render({
+			elem: '#end_time' //指定元素
+		});
+	});
+	function search_lottery(){
+		var start_time = $("#start_time").val();
+		var end_time = $("#end_time").val();
+		var search_type = $("#search_type").val();
+		var search_status = $("#search_status").val();
+		if (Date.parse(start_time) > Date.parse(end_time)) {
+			layer.msg("开始时间不能大于结束时间");
+			return;
+		}
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				start_time:start_time,
+				end_time:end_time,
+				type:search_type,
+				status:search_status,
+			}
+		})
+	}
+	function export_test_record(){
+		var start_time = $("#start_time").val();
+		var end_time = $("#end_time").val();
+		var search_type = $("#search_type").val();
+		var search_status = $("#search_status").val();
+		if(start_time != '' && end_time != ''){
+			if (Date.parse(start_time) > Date.parse(end_time)) {
+				layer.msg("开始时间不能大于结束时间");
+				return;
+			}
+		}
+		window.location.href = "{:U('Activity/export_test_bank_user')}" + '?start_time=' + start_time + '&end_time=' + end_time + '&type=' + search_type + '&status=' + search_status;
+	}
+	
+	function agent(id,status){	
+		var sub_data = {
+			id:id,
+			status:status
+		  };
+		  $.post("{:U('Activity/ajax_bank_user')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+</script>

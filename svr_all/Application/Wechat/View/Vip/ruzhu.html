@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>商家入驻提交</title>
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+	<div class="page__bd">
+
+        <div class="weui-cells__title">商家资料填写</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">店名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入店名" id='name'>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">联系人</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入联系人" id='link_name'>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="请输入手机号" id='tel'>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">地址</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入店铺地址" id='address'>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">营业时间</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入营业时间" id='business_time'>
+                </div>
+            </div>
+			<div class="weui-cell">
+				<div class="weui-cell__bd">
+					<textarea class="weui-textarea" placeholder="请输入商家推荐" rows="3" id="recommend"></textarea>
+				</div>
+			</div>
+			<div class="weui-cell">
+				<div class="weui-cell__bd">
+					<textarea class="weui-textarea" placeholder="请输入会员优惠" rows="3" id="discount"></textarea>
+				</div>
+			</div>
+			<div class="weui-cells weui-cells_form" id="uploader">
+				<div class="weui-cell">
+					<div class="weui-cell__bd">
+						<div class="weui-uploader">
+							<div class="weui-uploader__hd">
+								<p class="weui-uploader__title">门头照片</p>
+								<!--<div class="weui-uploader__info"><span id="uploadCount">0</span>/5</div>-->
+							</div>
+							<div class="weui-uploader__bd">
+								<ul class="weui-uploader__files" id="uploaderFiles"></ul>
+								<div class="weui-uploader__input-box">
+									<input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+		<a style="font-size:12px;color:#999;display: block;padding:20px;text-decoration: underline;" href="<?php echo 'http://' . $_SERVER['SERVER_NAME'];?>__PUBLIC__/hezuoxieyi.pdf">温馨提示：哐糖合作协议书</a>
+        <div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary" href="javascript:" onclick="sub()">立即提交</a>
+        </div>
+    </div>
+	<!--<a class="community_pub_tiezi" href="{:U("Community/fabu")}">
+		<img src="__PUBLIC__/weixin/image/c_public.png" class="img">
+		<p class="text">入驻</p>
+	</a>-->
+</div>
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.4/weui.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="__PUBLIC__/weixin/js/v_share.js"></script>
+<script type="text/javascript">
+
+	var uploadCount = 0;
+	var images = '';
+	var loading;
+	weui.uploader('#uploader', {
+		url: '{:U("Community/upload_image")}',
+		auto: true,
+		type: 'file',
+		fileVal: 'file',
+		compress: {
+			width: 1600,
+			height: 1600,
+			quality: .8
+		},
+		onBeforeQueued: function(files) {
+			if(["image/jpg", "image/jpeg", "image/png", "image/gif"].indexOf(this.type) < 0){
+				weui.alert('请上传图片文件哦~');
+		   return false; // 阻止文件添加
+		}
+		if(this.size > 10 * 1024 * 1024){
+			weui.alert('请上传不超过10M的图片哦~');
+			return false;
+		}
+	   if (files.length > 1) { // 防止一下子选择过多文件
+	   	weui.alert('最多只能上传1张图片，请重新选择哦~');
+	   	return false;
+	   }
+	   if (uploadCount + 1 > 1) {
+	   	weui.alert('最多只能上传1张图片哦~');
+	   	return false;
+	   }
+
+	   ++uploadCount;
+	},
+	onProgress: function(procent){
+		loading = weui.loading('上传中...');
+		return true; // 阻止默认行为，不使用默认的进度显示
+	},
+	onSuccess: function (ret) {
+		loading.hide();
+		images = ret['data']['path'];
+		var content = $("#content").val();
+		$("#content").val(content);
+		$("#uploadCount").text(1);
+		$(".weui-uploader__file").each(function(){
+			var id = $(this).data('id');
+			$(this).attr('onclick',"show_gallery(" + (parseInt(id)-1)+ ")");
+		})
+	}
+});
+function sub(){
+	var tel = $("#tel").val();
+	var name = $("#name").val();
+	var address = $("#address").val();
+	var link_name = $("#link_name").val();
+	var recommend = $("#recommend").val();
+	var discount = $("#discount").val();
+	var business_time = $("#business_time").val();
+	if (tel == ""
+		|| name == "") {
+		alert('请将信息填写完整！');
+		return;
+	}
+	if(!(/^1(3|4|5|7|8|9)\d{9}$/.test(tel))){ 
+        alert("手机号码填写有误，请重新填写~");  
+        return false; 
+    }
+	var data = {
+		name:name,
+		tel:tel,
+		address:address,
+		link_name:link_name,
+		recommend:recommend,
+		cover_image:images,
+		business_time:business_time,
+		discount:discount,
+	};
+	$.post("{:U("Vip/ajax_ruzhu")}",data,function(ret){
+		if (ret['code'] == 0) {
+			alert('您的申请已提交成功，请耐心等待，客服会在3个工作日内与您联系哦~');
+		}
+		else{
+			alert(ret['msg']);
+		}
+	})
+}
+function location_call_back(latitude,longitude,speed,accuracy){
+}
+
+</script>

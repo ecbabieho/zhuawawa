@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>回复帖子</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weui/1.1.3/style/weui.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-weui/1.2.1/css/jquery-weui.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+	<div class="weui-cells weui-cells_form">
+		<div class="weui-cell">
+			<div class="weui-cell__bd">
+				<input class="weui-input" type="text" value="回复：{$tiezi['title']}" disabled="">
+			</div>
+		</div>
+		<div class="weui-cell">
+			<div class="weui-cell__bd">
+				<textarea class="weui-textarea" placeholder="请至少输入5个字" rows="3" id="content"></textarea>
+			</div>
+		</div>
+	</div>
+	<a href="javascript:;" class="weui-btn weui-btn_primary" style="margin:10px;" onclick="sub()">回复</a>
+
+	<script>
+		var _mtac = {};
+		(function() {
+			var mta = document.createElement("script");
+			mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+			mta.setAttribute("name", "MTAH5");
+			mta.setAttribute("sid", "500627254");
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(mta, s);
+		})();
+	</script>
+</body>
+</html>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.4/weui.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	function sub(){
+		var content = $("#content").val();
+		if (content.length < 5) {
+			alert("内容最少五个字哦~");
+			return;
+		}
+		var data = {
+			content:content,
+			tiezi_id:{$tiezi['id']}
+		}
+		$.post("{:U("Community/ajax_tiezi_back")}",data,function(ret){
+			if (ret['code'] == 0) {
+				alert("回复成功~");
+				var url = "{:U("Community/detail",array('id'=>'-'))}";
+				url = url.replace('-',{$tiezi['id']} + '');
+				window.location.href = url;
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	function show_gallery(id){
+		var gallery = weui.gallery(images[id], {
+			onDelete: function(){
+				if(confirm('您确定删除此图片吗？')){ 
+					uploadCount--;
+					var content = $("#content").val();
+					content = content.replace("[图片" + (id + 1)+ "]\n","");
+					$("#content").val(content);
+					$("#uploadCount").text(uploadCount);
+					gallery.hide();
+					$(".weui-uploader__file").eq(id).remove();
+				}
+			}
+		});
+	}
+	
+	
+</script>

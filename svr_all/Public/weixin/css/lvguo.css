@@ -1,0 +1,894 @@
+input,button{
+	outline: 0;
+	border: 0;
+}
+.hide{
+	display: none;
+}
+body,html{
+	width: 100%;
+	height: 100%;	
+	overflow: hidden;
+}
+.body{
+	width: 100%;
+	height: 100%;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	position: fixed;
+	top: 0;
+	z-index: 0;
+	background-image: url('../image/guoyuan/bg.jpg');
+}
+.tree_img{
+	width: 5rem;
+    height: 5rem;
+    top: -1.5rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    position: absolute;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/tree.png');
+}
+.tree_box{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+.tree_shan{
+	width: 4.1rem;
+	height: 0.7rem;
+	padding: 0.1rem 0.2rem 0.3rem;
+	position: absolute;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/tree_shan.png');
+    top: -0.55rem;
+    left: 0.3rem;
+    text-align: center;
+    font-size: 0.25rem;
+    color: #873800;
+	-webkit-animation-name: change; /*关键帧名称*/
+    -webkit-animation-timing-function: ease-in-out; /*动画的速度曲线*/
+    -webkit-animation-iteration-count: infinite;  /*动画播放的次数*/
+    -webkit-animation-duration: 5s; /*动画所花费的时间*/
+    -webkit-animation-direction:alternate;
+
+}
+.main{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background-color: rgba(0, 0, 0, .5);
+	top: 0;
+	left: 0;
+	z-index: 100000;
+}
+.main_content{
+	position: relative;
+}
+.author_box{
+	padding-top: 0.97rem;
+	text-align: center;
+}
+.author_img{
+	width: 1rem;
+	height: 1rem;
+	margin: 0 auto;
+	overflow: hidden;
+}
+.author_img img{
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+	border-radius: 50%;
+}
+.author_text{
+	padding-top: 0.3rem;
+	padding-bottom: .35rem;
+	font-size: 0.3rem;
+	color: #faeeb7;
+}
+.send_shuiguo{
+	display: flex;
+	height: 0.66rem;
+	align-items: center;
+	justify-content: center;
+}
+.send_icon{
+	width: 0.8rem;
+	height: 0.66rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.send_l{
+	background-image: url('../image/guoyuan/ye_l.png');
+}
+.send_r{
+	background-image: url('../image/guoyuan/ye_r.png');
+}
+.send_text{
+	margin: 0 0.1rem;
+	font-size: 0.44rem;
+	color: #ee8654;
+	margin-bottom: 0.1rem;
+}
+.zhong_text{
+	font-size: 0.4rem;
+	color: #fbeeb7;
+	text-align: center;
+}
+.guoyuan_item{
+	display: flex;
+	padding:0.4rem 1.34rem;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+.guoyuan_list{
+	width: 2rem;
+	height: 2.22rem;
+}
+.guoyuan_yuan{
+	width: 2rem;
+	height: 2rem;
+	position: relative;
+	border-radius: 50%;
+	border: 1px solid #fceeb1;
+	box-sizing: border-box;
+}
+.guoyuan_img{
+	width: 1.6rem;
+	height: 1.6rem;
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	z-index: 99;
+}
+.guoshu_box{
+	width: 2rem;
+	height: 0.5rem;
+	line-height: 0.5rem;
+	text-align: center;
+	font-size: 0.3rem;
+	border-radius: 20px;
+	color: #ffffff;
+	position: absolute;
+	bottom: -0.2rem;
+	left: 0;
+	z-index: 90;
+	background-color: #cccccc;
+}
+/* .guoyuan_list_active .guoyuan_yuan{
+	background-color: #7ab63a;
+	border-color: #7ab63a
+} */
+.guoyuan_list_active .guoshu_box{
+	color: #873800;
+	background-color:#fceeb1;
+}
+.guoyuan_list_active .guoyuan_img{
+	-webkit-animation-name: scaleDraw; /*关键帧名称*/
+    -webkit-animation-timing-function: ease-in-out; /*动画的速度曲线*/
+    -webkit-animation-iteration-count: infinite;  /*动画播放的次数*/
+    -webkit-animation-duration: 2s; /*动画所花费的时间*/
+}
+
+.sure_btn{
+	background-color: #cccccc;
+	color: #ffffff;
+	text-align: center;
+	margin: 0 auto;
+	display: block;
+	width: 5.2rem;
+	font-size: 0.36rem;
+	height: 1.07rem;
+	line-height: 1.07rem;
+	border-radius: 5px;
+}
+.sure_btn_active{
+	background-color: #7ab63a;
+}
+
+.main_box{
+	width: 5.7rem;
+	height: 4.94rem;
+	background-color: #ffffff;
+	border-radius: 5px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+}
+.main_content{
+	padding: 0.4rem;
+	margin-bottom: 0.2rem;
+	text-align: center;
+}
+.phone_text{
+	font-size: 0.3rem;
+	color: #3d3d3d;
+	height: .85rem;
+	line-height: .85rem;
+}
+.input_box{
+	margin-top: 0.2rem;
+	height: 0.9rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.phone{
+	flex: 1;
+	height: 100%;
+	border-radius: 5px;
+	background-color: #eeeeee;
+	padding: 0 0.22rem;
+	color: #3d3d3d;
+	font-size: 0.26rem;
+}
+input::-webkit-input-placeholder{
+    color:#a9a9a9;
+}
+input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+    color:#a9a9a9;
+}
+input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+    color:#a9a9a9;
+}
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+    color:#a9a9a9;
+}
+.input_box .code{
+	width: 2.64rem;
+	height: 100%;
+	padding: 0 0.22rem;
+	background-color: #eeeeee;
+	border-radius: 5px;
+	color: #3d3d3d;
+	font-size: 0.26rem;
+}
+.get_code{
+	padding: 0 0.22rem;
+	height: 100%;
+	color: #FFFFFF;
+	background-color: #d0323d;
+	border-radius: 5px;
+	font-size: 0.26rem;
+}
+.main_control{
+	border-top: 1px solid #ebebeb;
+	display: flex;
+	height: 0.88rem;
+	align-items: center;
+	box-sizing: border-box;
+	justify-content: space-between;
+}
+.cancel_box,.cancel_sure{
+	font-size: 0.3rem;
+	text-align: center;
+	flex: 1;
+	height: 100%;
+	line-height: 0.88rem;
+}
+.line{
+	width: 1px;
+	height: 100%;
+	background-color: #fafafa;
+}
+.cancel_box{
+	color: #000000;
+}
+.cancel_sure{
+	color: #d0323d;
+}
+.dibu_info{
+	height: 1.6rem;
+	background-color: rgba(0, 0, 0, 0.2);
+	position: fixed;
+	left: 0;
+	width: 100%;
+	bottom: 0;
+	display: flex;
+}
+.left_info{
+	width: 1.32rem;
+	padding: 0 0.14rem;
+	height: 100%;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+.right_info{
+    width: 6rem;
+}
+.right_info .left_info{
+	background-color: rgba(0, 0, 0, 0);
+}
+.swiper-slide{
+	width: 1.32rem!important;
+	height: 1.6rem!important;
+}
+.swiper-container {
+    width: 100%;
+    height: 100%;
+/*     -webkit-perspective: 5.9rem;
+    perspective: 5.9rem; */
+}
+.dibu_imgbox{
+	width: 1.04rem;
+	height: 1.04rem;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0.17rem auto 0;
+	position: relative;
+	background: -webkit-linear-gradient(#ffc62d, #ff9b56); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#ffc62d, #ff9b56)); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#ffc62d, #ff9b56)); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#ffc62d, #ff9b56)); /* 标准的语法（必须放在最后） */
+}
+.dibu_autor_img{
+	width: 0.92rem;
+	height: 0.92rem;
+	border-radius: 50%;
+	display: block;
+}
+.shuiguo_box{
+	position: absolute;
+	width: 0.5rem;
+	height: 0.5rem;
+	bottom: -0.05rem;
+	right: -0.05rem;
+	background-color: #e5f5d5;
+	border-radius: 50%;
+	background-position: center center;
+	background-size: 90% 90%;
+	background-repeat: no-repeat;
+}
+
+.author_name{
+	width: 100%;
+	font-size: 0.22rem;
+	color: #ff7c4c;
+	overflow: hidden;
+	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-top: 0.08rem;
+}
+.water_di{
+	width: 1.1rem;
+	height: 1.1rem;
+	left: 0.3rem;
+	bottom: 2.1rem;
+	position: fixed;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/shuidi.png');
+}
+.water_box{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+.water_text{
+	width: 0.62rem;
+	height: 0.34rem;
+	line-height: 0.34rem;
+	font-size: 0.16rem;
+	color: #ffffff;
+	background-color: #f85d35;
+	border-radius: 10px;
+	position: absolute;
+	right: -0.1rem;
+	top: -0.02rem;
+	text-align: center;
+}
+.shuidi_box{
+	padding: 0.2rem 0.24rem;
+	background-color: #FFFFFF;
+	border-top-left-radius:5px;
+	border-top-right-radius:5px;
+	overflow: hidden;
+	border-bottom: 1px solid #e5e5e5;
+}
+.sd_top{
+	height: 0.55rem;
+	line-height: 0.55rem;
+	display: flex;
+	justify-content: space-between;	
+	align-items: center;
+}
+.sd_title{
+	font-size: 0.31rem;
+	color: #000000;
+}
+.cancel_tt{
+	width: 0.3rem;
+	height: 0.3rem;
+}
+.cancel_icon{
+	width: 0.3rem;
+	height: 0.3rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/cancel.png');
+}
+.tishi_text{
+	height: 0.42rem;
+	line-height: 0.42rem;
+	text-align: center;
+	font-size: 0.23rem;
+	color: #8f8f8f;
+}
+.sd_item{
+	padding:0.28rem 0rem;
+}
+.sd_list{
+	margin-bottom: 0.2rem;
+	height: 1.4rem;
+	background-color: #fffdf8;
+	border: 1px solid #f5d39a;
+	border-radius: 5px;
+
+}
+.list_main{
+	padding: 0.16rem 0.24rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.sd_r{
+	border-radius: 5px;
+	background-color: #66b812;
+	width: 1.32rem;
+	height: 0.68rem;
+	color: #ffffff;
+	line-height: 0.68rem;
+	text-align: center;
+	font-size: 0.26rem;
+}
+.sd_l{
+	flex: 1;
+	display: flex;
+	align-items: center;
+}
+.sd_icon{
+	width: 1rem;
+	height: 1rem;
+	margin-right: 0.26rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.sd_list:nth-child(1) .sd_icon{
+	background-image: url('../image/guoyuan/sd1.png');
+}
+.sd_list:nth-child(2) .sd_icon{
+	background-image: url('../image/guoyuan/sd2.png');
+}
+.sd_list:nth-child(3) .sd_icon{
+	background-image: url('../image/guoyuan/sd3.png');
+}
+.sd_list:nth-child(4) .sd_icon{
+	background-image: url('../image/guoyuan/sd4.png');
+}
+.sd_list:nth-child(4){
+	margin-bottom: 0rem;
+}
+.content_text{
+	font-size: 0.28rem;
+	color: #000000;
+	padding: 0.1rem 0rem;
+}
+.content_hui{
+	font-size: 0.26rem;
+	color: #8f8f8f;
+}
+.shuidi_icon{
+	width: 0.26rem;
+	height: 0.33rem;
+	display: inline-block;
+	vertical-align: text-top;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/shuidi_icon.png');
+}
+.question{
+	width: 100%;
+	padding-bottom: 1rem;
+	text-align: center;
+}
+.shuidi_content{
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 0;
+	overflow: hidden;
+    opacity: 0;
+    -webkit-transition: all .5s linear;
+    transition: all .5s linear;
+}
+.shuidi_content_active{
+	height: auto;
+    opacity: 1;
+}
+
+.shuidi_lq{
+	width: 1.05rem;
+	height: 1.16rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/200g_sd.png');
+	position: fixed;
+	right: 0.26rem;
+	top: 0.28rem;
+}
+.dingshi{
+	width: 0.98rem;
+	height: 1.1rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/fudai.png');
+	position: fixed;
+	right: 0.26rem;
+	top: 1.72rem;
+	-webkit-animation-name: scaleDraw; /*关键帧名称*/
+    -webkit-animation-timing-function: ease-in-out; /*动画的速度曲线*/
+    -webkit-animation-iteration-count: infinite;  /*动画播放的次数*/
+    -webkit-animation-duration: 3s; /*动画所花费的时间*/
+}
+.signboxs{
+	width: 0.98rem;
+	height: 1.1rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/sign.png');
+	position: fixed;
+	right: 0.26rem;
+	top: 3.08rem;
+	-webkit-animation-name: scaleDraw; /*关键帧名称*/
+    -webkit-animation-timing-function: ease-in-out; /*动画的速度曲线*/
+    -webkit-animation-iteration-count: infinite;  /*动画播放的次数*/
+    -webkit-animation-duration: 3s; /*动画所花费的时间*/
+}
+.shuidi_big{
+	width: 1.05rem;
+	height: 1.16rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/300g_sd.png');
+	position: fixed;
+	right: 0.26rem;
+	top: 4.44rem;
+}
+.fudai_content{
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+.fudai_box{
+	width: 6rem;
+	height: 9.04rem;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom:  0;
+	margin:auto;
+}
+.fudai_main{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+.fudai_toptitle{
+	width: 4.92rem;
+	height: 1.2rem;
+    top: -0.6rem;
+    font-size: 0.36rem;
+    color: #8b572a;
+    font-weight: bold;
+    line-height: 0.8rem;
+    left: 0;
+    right: 0;
+    margin: auto;
+	position: absolute;
+	text-align: center;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/toubu.png');
+}
+.fudai_bg{
+	width: 100%;
+	height: 6.74rem;
+	border-radius: 5px;
+    overflow: hidden;
+	text-align:center;
+	background-color: #FFFFFF;
+}
+.fudai_text{
+	font-size: 0.3rem;
+	color: #000000;
+}
+.fudai_red{
+	color: #e31436;
+}
+.fudai_btn{
+	width: 5.2rem;
+	height: .95rem;
+	line-height: .95rem;
+	font-size: 0.32rem;
+	color: #FFFFFF;
+	text-align: center;
+	margin: 0.6rem auto 0;
+	border-radius: 5px;
+	background-color: #66b812;
+}
+.fudai_img{
+	width: 3.65rem;
+	height: 3.23rem;
+	margin: 0.5rem auto 0;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/fudai_icon.png');
+}
+
+.fudai_cancel{
+	width: 1rem;
+	height: 1rem;
+	margin: 0.8rem auto 0;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/cancel_btn.png');
+}
+.share_wechat{
+	max-width: 5.4rem;
+	margin:0.66rem auto 0;
+	text-align: center;
+	padding: 0.26rem 0.3rem;
+	border: 1px solid #ca9546;
+	border-radius: 5px;
+	background-color: #fffcee;
+}
+.share_text{
+	color: #873800;
+	font-size: 0.28rem;
+}
+.speac_text{
+	color: #f07251;
+	font-size: 0.28rem;
+}
+.jiaoshui{
+	width: 3.52rem;
+	/* height: 0.74rem; */
+	position: fixed;
+    left: 1.92rem;
+    bottom: 2.1rem;
+}
+.jiaoshui_top{
+	display: flex;
+	align-items: center;
+    padding: 0rem 0.1rem;
+	height: 0.37rem;
+	position: relative;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/jiaoshui.png');
+}
+.jiaoshui_top_status{
+	width: 0rem;
+	height: 0.22rem;
+    overflow: hidden;
+    border-radius: 20px;
+    background-color: #00a2ff;
+    border-radius: 20px;
+/* 	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/status.png'); */
+}
+.jiaoshui_text{
+	text-align: center;
+	height: 0.37rem;
+	line-height: 0.37rem;
+	font-size: 0.26rem;
+	color: #ffffff;
+}
+.hu{
+	position: fixed;
+    right: 0.26rem;
+    bottom: 2.1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+.zhuli{
+	position: fixed;
+	width: 1rem;
+	height: 1.11rem;
+	right: 0.3rem;
+    bottom: 2.1rem;
+	background-position: center;
+	background-size: 90% 90%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/zhuli.png');
+}
+.zhuli_box{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+.zhuli_action{
+	width: 0.62rem;
+    height: 0.34rem;
+    line-height: 0.34rem;
+    font-size: 0.20rem;
+    color: #ffffff;
+    background-color: #f85d35;
+    border-radius: 10px;
+    position: absolute;
+    right: -0.1rem;
+    top: -0.02rem;
+    text-align: center;
+}
+.shuidi_img{
+	width: 1.18rem;
+	height: 1.04rem;
+    left: 0.5rem;
+    right: 0;
+    opacity: 0;
+    bottom: 0;
+    top: 1.8rem;
+    margin: auto;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	position: fixed;
+	background-image: url('../image/guoyuan/hu_di.png');
+}
+.shuidi_img_active{
+	-webkit-animation-name: change; /*关键帧名称*/
+    -webkit-animation-timing-function: ease-in-out; /*动画的速度曲线*/
+    -webkit-animation-iteration-count: 2;  /*动画播放的次数*/
+    -webkit-animation-duration: 1s; /*动画所花费的时间*/
+    -webkit-animation-delay: 1s;
+}
+
+.hu_bg{
+	width: 100%;
+	height: 100%;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	position: relative;
+	background-image: url('../image/guoyuan/hu_bg.png');
+}
+.hu_lv{
+	width: 1.5rem;
+	height: 0.99rem;
+	background-position: center;
+	background-size: 90% 90%;
+	position: relative;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/hu1.png');
+}
+.hu_lv_active{
+	-webkit-animation-name: huChange; /*关键帧名称*/
+    -webkit-animation-timing-function: ease-in-out; /*动画的速度曲线*/
+    -webkit-animation-iteration-count: infinite;  /*动画播放的次数*/
+    -webkit-animation-duration: 1s; /*动画所花费的时间*/
+    -webkit-animation-direction:alternate;
+    /* -webkit-animation-delay: -2s; */
+}
+.pause{
+    animation-play-state: paused;
+    -webkit-animation-play-state: paused;
+}
+.running{
+	 animation-play-state: running;
+    -webkit-animation-play-state: running;
+}
+
+.hu_text{
+	font-size: 0.24rem;
+	text-align: center;
+	color: #ffffff;
+	position: absolute;
+    bottom: 0.1rem;
+	width: 100%;
+	height: 0.5rem;
+	line-height: 0.5rem;
+}
+#shuidi .fudai_bg{
+	height: 6.96rem;
+}
+#shuidi .fudai_img{
+	width: 2.2rem;
+	height: 2.2rem;
+	margin: 0.6rem auto 0.52rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/guoyuan/di_icon.png');
+}
+.shuidi_boxs{
+	margin: 0.2rem 0;
+}
+#shuidi .fudai_btn{
+	margin: 0.33rem auto 0;
+}
+#shuidi .fudai_text{
+	font-size: 0.36rem;
+	font-weight: bold;
+}
+#shuidi .shuidi_text{
+	font-size: 0.26rem;
+}
+
+/* 动画 */
+ @keyframes scaleDraw {  /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
+    0%{
+        transform: scale(1);  /*开始为原始大小*/
+    }
+    25%{
+        transform: scale(1.1); /*放大1.1倍*/
+    }
+    50%{
+        transform: scale(1);
+    }
+    75%{
+        transform: scale(1.1);
+    }
+}
+@keyframes change{
+    0%{
+    	opacity: 0;
+        transform: scale(0); 
+    }
+    50% {
+	 	transform: scale(0.5); 
+		opacity: 0; /*中间状态 透明度为0*/
+	}
+    100%{
+    	opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes huChange{
+	0%{
+	 	top:0rem;
+		left: 0rem;
+	 	-webkit-transform:rotate(0deg);
+	 }
+    100%{
+    	top:-2.9rem;
+		left:-1.3rem;
+    	-webkit-transform:rotate(-40deg);
+	}	
+}

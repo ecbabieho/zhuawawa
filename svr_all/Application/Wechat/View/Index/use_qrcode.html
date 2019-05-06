@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>ID:{$merchant['id']}-{$merchant['name']}</title>
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/vip.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<style type="text/css">
+	.main {
+		width: 100%;
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: 0;
+		z-index: 9999999999;
+	    height: 100%;
+		margin: 0 auto;
+		background-color: rgba(0, 0, 0, .6)
+	}
+	.item1 {
+		width: 200px;
+		height: 150px;
+		position: relative;
+		padding-top: 5rem;
+		margin: 0 auto;
+		text-align: center;
+		-webkit-transition: top 1.2s linear;
+		transition: top 1.2s linear;
+	}
+	.item1 .kodai {
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		cursor: pointer;
+	}
+	.item1 .kodai .full {
+		display: block;
+	}
+	.item1 .kodai .empty {
+		display: none;
+	}
+	.kodai img{
+		margin: 0 auto;
+	}
+	.item1 .clipped-box {
+		display: none;
+		position: absolute;
+		bottom: 40px;
+		left: 80px;
+		height: 540px;
+		width: 980px;
+	}
+	.item1 .clipped-box img {
+		position: absolute;
+		top: auto;
+		left: 0;
+		bottom: 0;
+		-webkit-transition: -webkit-transform 1.4s ease-in, background 0.3s ease-in;
+		transition: transform 1.4s ease-in;
+	}
+	.kodai_text{
+		position: absolute;
+		width: 100%;
+		height: 1rem;
+		line-height: 1rem;
+		font-size: .48rem;
+		color: #ffffff;
+		font-weight: bold;
+	    bottom: 0.50rem;
+        text-shadow: 2px 2px 2px #ff3600;
+	    left: 0;
+	}
+</style>
+<body id="body_bf" style="background-color:#f2f2f2;">
+	<div class="top_huiyuan">
+		<div class="vip_level">
+			<div class="vip_level_box" <if condition="$is_over eq 1">style="filter: grayscale(100%);"</if>>
+				<if condition="$user['level'] eq 3">
+				<img src="__PUBLIC__/weixin/image/code_card_zuanshi.png" alt="" class="vip_charge_container_item">
+				</if>
+				<if condition="$user['level'] lt 3">
+				<img src="__PUBLIC__/weixin/image/code_card_huangjin.png" alt="" class="vip_charge_container_item">
+				</if>
+
+				<div class="Thumb_box">
+					<img src="{$user['headimgurl']}" alt="" class="Thumb_img">
+				</div>
+
+				<p class="vip_name">{$user['nickname']}</p>
+				<if condition="$user['level'] gt 1 and $is_over eq 0">
+				<p class="vip_over_time">{$user['over_time']|substr=0,10}到期</p>
+				</if>
+				<if condition="$user['level'] eq 1 and $is_over eq 1">
+				<p class="vip_over_time">暂无资格</p>
+				</if>
+				<if condition="$user['level'] gt 1 and $is_over eq 1">
+				<p class="vip_over_time">已过期</p>
+				</if>
+				<div class="Number">TEL：{$user['phone']|default="未绑定"}</div>
+			</div>
+			<div class="vip_address">
+				<div class="address_top">{$merchant['name']}</div>
+				<div class="address_line"></div>
+				<div class="address_bot">
+					<span class="icon-sp icon-location"></span>
+					<span class="address_text">{$merchant['address']}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="voucher-deal">
+        <div class="blocks" id="blocks">
+            <p class="block-title mag-left">
+                <i class="icon-VIP"></i>
+                会员特权
+            </p>
+        </div>
+        <div class="blocks" style="margin-top: 0;border: none;">
+        	<volist name="merchant.vip_discount_arr" id="vo">
+            <p class="block-title mag-left" style="margin-left: .5rem;border: none;padding-bottom: 0rem;">{$key+1}.{$vo}</p>
+            </volist>
+            <div class="block-title mag-left service-tags" style="margin-top: 0rem;margin-left: .5rem;border: none;">
+                 <img class="icon" src="__PUBLIC__/weixin/image/vip/icon_notice.png">
+                 <span class="service-tag index-0" style="color: rgb(108, 186, 178);">到店扫描商家专属二维码，即可享受会员特权哦~</span>
+            </div>
+        </div>
+    </div> 
+    <if condition = "$merchant.is_open_card eq 1 and $is_over eq 0">
+    <div class="water_box" <if condition= "$card_over eq 1">style="filter: grayscale(100%);"</if>>
+    	<h1 class="water_title">{$merchant.card_name}</h1>
+    	<p class="water_textone">{$merchant.card_detail} </p>
+    	<p class="water_texttwo">领取卡券后24小时内有效 </p>
+    	<if condition = "$card_over eq 0">
+    	<p class="water_texttwo">有效期至：{$over_date}  过期无效</p>
+    	</if>
+    	<if condition = "$card_over eq 1">
+    	<p class="water_texttwo">有效期至：{$over_date} 已过期</p>
+    	</if>
+    </div>
+    </if>
+
+	<if condition="$user.is_subscribe eq 0">
+    <div class="dibu_Main">
+    	<div class="dibu_Box">
+    		<div class="dibu_xiong"></div>
+    		<div class="dibu_main">
+	    		<div class="dibu_Left">
+	    			点击右侧“关注”按钮关注公众号<br>查看附近更多专享优惠！
+	    		</div>
+	    		<div class="dibu_Right" onclick="guanzhu()">关注</div>
+    		</div>
+    	</div>
+    </div>
+    </if>
+
+
+    <if condition="$user.is_subscribe eq 0">
+    <div class="mask" id="Mask" >
+    	<div class="mask_main">
+    		<div class="mask_main_box">
+    			<img src="__PUBLIC__/weixin/image/qrcode/qrcode.png" alt="qrcode">
+    			<div class="main_close" onclick="close_main()"></div>
+    		</div>
+    	</div>
+    </div>
+    </if>
+
+
+    <!-- 判断会员弹窗 -->
+
+<if condition="( $user['level'] neq 2 ) AND ( $user['level'] neq 3 )">
+     <div class="MASK" id="MASK_MAIN">
+        <div class="MASK_main">
+            <div class="MASK_alert">
+                <p class="action_one">您暂时不可享受此权益哦</p>
+                <p class="action_two">会员可享受全城商铺的无门槛永久消费优惠</p>
+                <p class="action_two">1元开通即可体验全城优惠</p>
+                <span class="button" onclick="tiyan()">1元立即体验</span>
+                <div class="main_close" onclick="MASK_HIDE()"></div>
+            </div>
+        </div>
+    </div>
+</if>
+<if condition="( $user['level'] neq 1 ) AND ($user['candy_num'] neq 0)">
+<!-- 糖果袋 -->
+<div class="main">
+	<div class="item1">
+		<div class="kodai">
+			<img src="__PUBLIC__/weixin/image/qrcode/kd2.png" class="full">
+			<img src="__PUBLIC__/weixin/image/qrcode/kd1.png" class="empty Shake">
+		</div>
+		<span class="kodai_text">+{$user['candy_num']}</span>
+		<div class="clipped-box" style="display: block;"></div>
+	</div>
+	<p id="html"></p>
+</div>
+</if>
+
+<if condition="($user['level'] gt 1) and ($is_over eq 1)">
+<div class="MASK" id="action_huiyuan">
+    <div class="MASK_main">
+        <div class="action_alert">
+            <div class="action_bg">
+                <p class="action_h">温馨提示</p>
+                <div class="action_img_box">
+                    <img src="{$user['headimgurl']}" alt="">
+                </div>
+                <div class="action_name">亲爱的{$user['nickname']}</div>
+                <div class="action_xufei">您的会员卡已于{$user['over_time']|substr=0,4}年{$user['over_time']|substr=5,2}月{$user['over_time']|substr=8,2}日到期<br>点击下方按钮<br>继续享受会员权益</div>
+                <a class="action_button" href="{:U('Index/vip_charge')}"></a>
+            </div>
+            <div class="action_hide" onclick="hide_action()"></div>
+        </div>
+    </div>
+</div>
+</if>
+
+
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/sp_share.js"></script>
+<script type="text/javascript">
+    var title = "哐糖会员好物分享，这里的优惠服务超赞，快来看看~";
+    var img_url = "{$merchant['image']}";
+    var desc = "无门槛优惠：" + "{$merchant['vip_discount']}~";
+    /*{$user['candy_num']}*/
+	function guanzhu(){
+		$("#Mask").removeClass('hide');
+	}
+	function close_main(){
+		$("#Mask").addClass('hide');
+	}
+	function MASK_HIDE(){
+        $("#MASK_MAIN").hide();
+    }
+    function tiyan(){
+        window.location.href = "{:U('Index/vip_charge')}";
+    }
+    function hide_action(){
+        $("#action_huiyuan").hide();
+    }
+    $(document).ready(function () {
+    (genClips = function () {
+        $t = $('.item1');
+        var amount = 5;
+        var width = $t.width() / amount;
+        var height = $t.height() / amount;
+        var totalSquares = Math.pow(amount, 2);
+        var y = 0;
+        var index = 1;
+        for (var z = 0; z <= (amount * width) ; z = z + width) {
+            $('<img class="clipped" src="__PUBLIC__/weixin/image/qrcode/jb' + index + '.png" />').appendTo($('.item1 .clipped-box'));
+            if (z === (amount * width) - width) {
+                y = y + height;
+                z = -width;
+            }
+            if (index >= 5) {
+                index = 1;
+            }
+            index++;
+            if (y === (amount * height)) {
+                z = 9999999;
+            }
+        }
+    })();
+    function rand(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    var first = false,
+        clicked = false;
+    // On click
+    
+
+        if (clicked === false) {
+            $('.full').css({
+                'display': 'none'
+            });
+            $('.empty').css({
+                'display': 'block'
+            });
+            clicked = true;
+
+            $('.item1 .clipped-box').css({
+                'display': 'block'
+            });
+            // Apply to each clipped-box div.
+            $('.clipped-box img').each(function () {
+                var v = rand(120, 90),
+                    angle = rand(80, 89), 
+                    theta = (angle * Math.PI) / 180, 
+                    g = -9.8; 
+
+                // $(this) as self
+                var self = $(this);
+                var t = 0,
+                    z, r, nx, ny,
+                    totalt =10;
+                var negate = [1, -1, 0],
+                    direction = negate[Math.floor(Math.random() * negate.length)];
+
+                var randDeg = rand(-5, 10),
+                    randScale = rand(0.9, 1.1),
+                    randDeg2 = rand(30, 5);
+
+                // And apply those
+                $(this).css({
+                    'transform': 'scale(' + randScale + ') skew(' + randDeg + 'deg) rotateZ(' + randDeg2 + 'deg)'
+                });
+
+                // Set an interval
+                z = setInterval(function () {
+                    var ux = (Math.cos(theta) * v) * direction;
+                    var uy = (Math.sin(theta) * v) - ((-g) * t);
+                    nx = (ux * t);
+                    ny = (uy * t) + (0.25 * (g) * Math.pow(t, 2));
+                    if (ny < -40) {
+                        ny = -40;
+                    }
+                    //$("#html").html("g:" + g + "bottom:" + ny + "left:" + nx + "direction:" + direction);
+                    $(self).css({
+                        'bottom': (ny) + 'px',
+                        'left': (nx) + 'px'
+                    });
+                    // Increase the time by 0.10
+                    t = t + 0.10;
+
+                    //跳出循环
+                    if (t > totalt) {
+                        clicked = false;
+                        first = true;
+                        clearInterval(z);
+                    }
+                }, 20);
+            });
+        }
+ 
+    r = setInterval(function () {
+        if (first === true) {
+            $('.empty').addClass("Shake");//晃动空袋子
+            //TODO:空袋子晃动几下 就弹出 奖项框
+            first = false;
+            $(".main").hide();
+        }
+    }, 1000);
+});
+  
+</script>

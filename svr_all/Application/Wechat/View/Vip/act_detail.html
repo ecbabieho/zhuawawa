@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+    <title>{$merchant_activity['title']}-{$merchant['name']}</title>
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/vip.css">
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-wrap-left">
+            <a href="javascript:;" class="react back" onclick="back()">
+                <i class="text-icon icon-back"></i>
+            </a>
+        </div>
+        <div class="nav-header">活动详情</div>
+    </header>
+    <div class="content-wrapper">
+        <div class="block">
+            <div class="imgbox" style="height: 3.2rem; width: 7.5rem;background-image: url({$merchant_activity['cover_image']});"></div>
+            <div class="poiinfo-wrap">
+                <div class="name">
+                    <p class="poi-brand">{$merchant_activity['title']}({$merchant['name']})</p>
+                </div>
+                <div class="addr">
+                    <div href="" class="react">
+                        <i class="icon-sp icon-location"></i>
+                        <div class="poi-address" onclick="openLocation('{$merchant['name']}','{$merchant['address']}','{$merchant['lat_lng']}')">{$merchant['address']} <span style="color: #999999;font-size: .24rem;">|&nbsp;距离步行30分钟</span></div>
+                    </div>
+                    <p class="phone">
+                        <a href="tel:{$merchant['link_tel']}" class="poi-phone">
+                            <i class="icon-sp icon-tel"></i>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div> 
+        <div class="voucher-deal">
+            <div class="blocks">
+                <p class="block-title mag-left">
+                    活动简介
+                </p>
+            </div>
+            <div class="blocks" style="margin-top: 0;border: none;">
+                <p class="block-title mag-left" style="margin-left: .5rem;border: none;">{$merchant_activity['brief']}
+                </p>
+            </div>
+        </div>
+        <div class="voucher-deal">
+            <div class="blocks">
+                <p class="block-title mag-left">
+                    活动详情
+                </p>
+                <div class="recommond-wrapper">
+                {$merchant_activity.content}
+                </div>
+            </div>
+        </div> 
+        <div class="footer-copy-container" >
+            <div class="footer-copy-right">
+                <div class="hr"></div>
+                <span class="footer-copy-right-text">
+                     ©2018 哐糖
+                 </span>
+            </div>
+        </div>   
+    </div>
+    <a href="javascript:;" class="top-btn top Hide" id="topIcon" onclick="backTop()">
+        <span class="icon icon-top"></span>
+    </a>
+</body>
+</html>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js" apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="__PUBLIC__/weixin/js/c_share.js"></script>
+<script>
+      $("body").on("touchstart", function() {
+            $(window).scroll(function() {
+                if ($(window).scrollTop() > 200) {
+                    $("#topIcon").removeClass("Hide");
+                } else {
+                    $("#topIcon").addClass("Hide");
+                }
+            });
+        }).on("touchend", function() {
+            $(window).scroll(function() {
+                if ($(window).scrollTop() > 200) {
+                    $("#topIcon").removeClass("Hide");
+                } else {
+                    $("#topIcon").addClass("Hide");
+                }
+            });
+        }).on("touchmove", function() {
+            $("#topIcon").addClass("Hide");
+            if ($(window).scrollTop() > 200) {
+                $("#topIcon").removeClass("Hide");
+            }else{
+                $("#topIcon").addClass("Hide");
+            }
+        })
+
+    var backTop = function(){
+        $("html,body").animate({scrollTop:0},300);
+        $("#topIcon").addClass('Hide');
+        return;
+    }
+    function back(){
+        window.history.back();
+    }
+	
+    var openLocation = function(name,address,lat_lng){
+        var latitude = lat_lng.split(',')[1];
+        var longitude = lat_lng.split(',')[0];
+        wx.openLocation({
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            name: name,
+            address: address,
+            scale: 14,
+            infoUrl: window.location.href,
+        });
+    }  
+    function location_call_back(latitude,longitude,speed,accuracy){
+    }
+</script>

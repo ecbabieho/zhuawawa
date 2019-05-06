@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>会员充值</title>
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/vip.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body id="body_bf">
+	<div class="top_huiyuan">
+		<div class="vip_level">
+			<div class="vip_level_box">
+				<img src="__PUBLIC__/weixin/image/code_card_zuanshi.png" alt="" class="vip_charge_container_item">
+				<div class="Thumb_box">
+					<img src="__PUBLIC__/weixin/image/charge_icon_b.png" alt="" class="Thumb_img">
+				</div>
+				<p class="vip_name">牵着蜗牛去旅行</p>
+				<p class="vip_over_time">2021-02-02到期</p>
+				<div class="Number">TEL：12345678911</div>
+			</div>
+			<div class="vip_address">
+				<div class="address_top">南二环汽车服务部</div>
+				<div class="address_line"></div>
+				<div class="address_bot">
+					<span class="icon-sp icon-location"></span>
+					<span class="address_text">南二环汽车服务部南二环汽车服务部南二环汽车服务部</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="voucher-deal">
+        <div class="blocks" id="blocks">
+            <p class="block-title mag-left">
+                <i class="icon-VIP"></i>
+                会员特权
+            </p>
+        </div>
+        <div class="blocks" style="margin-top: 0;border: none;">
+            <p class="block-title mag-left" style="margin-left: .5rem;border: none;padding-bottom: 0rem;">1 . 每月1次免费加1.8L零下25度玻璃水</p>
+            <p class="block-title mag-left" style="margin-left: .5rem;border: none;padding-bottom: 0rem;">2 . 洗车会员价：40元 suv50元。</p>
+            <div class="block-title mag-left service-tags" style="margin-top: 0rem;margin-left: .5rem;border: none;">
+                 <img class="icon" src="__PUBLIC__/weixin/image/vip/icon_notice.png">
+                 <span class="service-tag index-0" style="color: rgb(108, 186, 178);">到店扫描商家专属二维码，即可享受会员特权哦~</span>
+            </div>
+        </div>
+    </div> 
+    <div class="water_box">
+    	<h1 class="water_title">免费加水券</h1>
+    	<p class="water_textone">可享受当前店铺免费加玻璃水一次 </p>
+    	<p class="water_texttwo">有效期：领取卡券后24h内  过期无效 </p>
+    </div>
+    <div class="dibu_Main">
+    	<div class="dibu_Box">
+    		<div class="dibu_Left">
+    			点击关注<br>查看附近更多专享优惠
+    		</div>
+    		<div class="dibu_Right" onclick="guanzhu()">关注</div>
+    	</div>
+    </div>
+    <div class="mask hide" id="Mask" >
+    	<div class="mask_main">
+    		<div class="mask_main_box">
+    			<img src="__PUBLIC__/weixin/image/qrcode/qrcode.png" alt="qrcode">
+    			<div class="main_close" onclick="close_main()"></div>
+    		</div>
+    	</div>
+    </div>
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript">
+	function guanzhu(){
+		$("#Mask").removeClass('hide');
+	}
+	function close_main(){
+		$("#Mask").addClass('hide');
+	}
+</script>

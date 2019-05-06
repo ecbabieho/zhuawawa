@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>更新收货地址</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="index-bg">
+	<ul class="address_list">
+		<li class="border_bottom">
+			<span class="title">收货人</span>
+			<input type="text" id="realname" class="input" placeholder="请输入收货人" value="{$address['real_name']}">
+		</li>
+		<li class="border_bottom">
+			<span class="title">手机号码</span>
+			<input type="tel" id="tel" class="input" placeholder="请输入手机号码" value="{$address['tel']}">
+		</li>
+		<li class="border_bottom">
+			<span class="title">详细地址</span>
+			<input type="text" id="address" class="input" placeholder="请填写详细地址" value="{$address['address']}">
+		</li>
+		<li>
+			<span class="title">备注</span>
+			<input type="text" id="memo" class="input" placeholder="备注" value="{$address['remark']}">
+		</li>
+
+	</ul>
+	<a href="javascript:sub();" class="address_save_btn">立即保存</a>
+	
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	function sub(){
+		var realname = $("#realname").val();
+		var tel = $("#tel").val();
+		var address = $("#address").val();
+		var memo = $("#memo").val();
+		if (realname == ""
+			|| tel == ""
+			|| address == "") {
+			alert("请将信息填写完整~");
+			return;
+		}
+		var data = {
+			realname:realname,
+			tel:tel,
+			address:address,
+			remark:memo,
+			id:{$address['id']},
+		}
+		$.post('{:U("Index/ajax_update_address")}',data,function(ret){
+			if(ret['code'] == 0){
+				alert("更新成功~");
+				window.location.href = '{:U("Index/user_address")}';
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	fly.init();
+</script>

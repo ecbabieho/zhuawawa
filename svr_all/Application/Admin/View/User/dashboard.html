@@ -1,0 +1,513 @@
+<style type="text/css">
+	.menu_pid{
+		display:block;
+		height:36px;
+		line-height:36px;
+		width:100%;
+		padding-left:10px;
+		border-color: #D2D2D2!important;
+	}
+</style>
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">昵称/ID</label>
+					<div class="layui-input-block">
+						<input type="text" id="name" placeholder="请输入昵称/ID" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">父级ID</label>
+					<div class="layui-input-block">
+						<input type="text" id="p_name" placeholder="请输入父级ID" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+
+<script type="text/html" id="publicTpl">
+	{{#  if(d.forbidden === '0'){ }}
+	<span class="layui-badge" onclick="jinyong({{d.id}},1)" style="color:white;background-color:green;cursor:pointer">正常</span>
+	{{#  } }}
+	{{#  if(d.forbidden === '1'){ }}
+	<span class="layui-badge-rim" onclick="jinyong({{d.id}},0)" style="color:white;background-color:red;cursor:pointer">禁用</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="is_subscribeTpl">
+	{{#  if(d.is_subscribe === '0'){ }}
+	<span class="layui-badge" style="color:white;background-color:green;cursor:pointer">未关注</span>
+	{{#  } }}
+	{{#  if(d.is_subscribe === '1'){ }}
+	<span class="layui-badge-rim" style="color:white;background-color:red;cursor:pointer">已关注</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="agentTpl">
+	{{#  if(d.is_agent === '0'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="agent({{d.id}},1)">否</span>
+	{{#  } }}
+	{{#  if(d.is_agent === '1'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="agent({{d.id}},0)">是</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="testTpl">
+	{{#  if(d.is_test === '0'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="ceshi({{d.id}},1)">普通用户</span>
+	{{#  } }}
+	{{#  if(d.is_test === '1'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="ceshi({{d.id}},0)">测试用户</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="managerTpl">
+	{{#  if(d.is_manager === '0'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="manager({{d.id}},1)">普通用户</span>
+	{{#  } }}
+	{{#  if(d.is_manager === '1'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="manager({{d.id}},0)">管理员用户</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="sexTpl">
+	{{#  if(d.sex === '0'){ }}
+	未知
+	{{#  } }}
+	{{#  if(d.sex === '1'){ }}
+	男
+	{{#  } }}
+	{{#  if(d.sex === '2'){ }}
+	女
+	{{#  } }}
+</script>
+<script type="text/html" id="headTpl">
+	<img src="{{d.headimgurl}}" title="{{d.headimgurl}}" style="width:100%;border-radius:50%;">
+</script>
+<script type="text/html" id="barDemo">
+	<!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>-->
+	<a class="layui-btn layui-btn-xs" lay-event="chongzhi_log">充值记录</a>
+	<a class="layui-btn layui-btn-xs" lay-event="give_coin">赠送糖豆</a>
+	<a class="layui-btn layui-btn-xs" lay-event="give_vip">赠送会员</a>
+	<a class="layui-btn layui-btn-xs" lay-event="give_good">赠送奖品</a>
+	<a class="layui-btn layui-btn-xs" lay-event="zhongjiang_log">中奖记录</a>
+	<a class="layui-btn layui-btn-xs" lay-event="agent_user">下级用户</a>
+	<a class="layui-btn layui-btn-xs" lay-event="qr_code">二维码</a>
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("User/ajax_get_users")}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+				[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'grade_name', title: '会员等级', width:120, sort: true},
+					{field: 'nickname', title: '用户昵称', width:120, sort: true},
+					{field: 'phone', title: '手机号', width:120, sort: true},
+					{field: 'headimgurl', title: '头像', width:120,templet:"#headTpl"},
+					{field: 'p_nickname', title: '父级用户', width:120},
+					{field: 'sex', title: '性别', width:120,templet:"#sexTpl"},
+					{field: 'country', title: '国家', width:120},
+					{field: 'province', title: '省份', width:120},
+					{field: 'city', title: '城市', width:120},
+					
+					{field: 'coin_num', title: '糖豆数量',  sort: true, width:120},
+					{field: 'charge_num', title: '充值金额', width:120,  sort: true},
+					{field: 'luck_num', title: '幸运值', width:80,  sort: true},
+					{field: 'add_time', title: '注册时间', sort: true, width:180},
+					{field: 'arrive_num', title: '扫码次数', width:180},
+					{field: 'is_subscribe', title: '是否关注', width:100, sort: false,templet:"#is_subscribeTpl",fixed: 'right'},
+					{field: 'is_public', title: '状态', width:80, sort: false,templet:"#publicTpl",fixed: 'right'},
+					{field: 'is_manager', title: '管理类型', width:100, sort: false,templet:"#managerTpl",fixed: 'right'},
+					{field: 'is_test', title: '用户类型', width:100, sort: false,templet:"#testTpl",fixed: 'right'},
+					{field: 'is_agent', title: '是否代理', width:100, sort: false,templet:"#agentTpl",fixed: 'right'},
+					{fixed: 'right',title:'操作',  align:'center', toolbar: '#barDemo',fixed: 'right',width:510} 
+				]
+			]
+		});
+
+	});
+	
+	table.on('tool(users)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+	  if(layEvent === 'chongzhi_log'){ //充值记录
+		window.location.href = "{:U('User/record_log')}"+'?id='+data['id'];
+	  } else if(layEvent === 'zhongjiang_log'){ //中奖记录
+		window.location.href = "{:U('User/winning_log')}"+'?id='+data['id'];
+	  } else if(layEvent === 'give_coin'){ //赠送糖豆
+		give_coin(data);
+	  } else if(layEvent === 'give_vip'){ //赠送糖豆
+		give_vip(data);
+	  } else if(layEvent === 'give_good'){ //赠送糖豆
+		give_good(data);
+	  } else if(layEvent === 'agent_user'){ //下级用户
+		window.location.href = "{:U('User/agent_user')}"+'?id='+data['id'];
+	  } else if(layEvent === 'qr_code'){ //下级用户
+		qr_code(data);
+		//console.log(data);
+	  }
+	});
+	function qr_code(data){
+		var str = '';
+		if(data['ticket'] == ''){
+			str = '该用户还没有生成微信分享二维码';
+		}else{
+			str = "<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>二维码</label>"+
+				"<div class='layui-input-block'>"+
+					"<img src='"+data['ticket']+"' style='width:200px;height:200px;'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>地址</label>"+
+				"<div class='layui-input-block'>"+
+					data['ticket']+
+				"</div>"+
+			"</div>";
+		}
+		$('body').append("<div id='qr_code_frame' style='display:none;padding:20px;'>"+
+			str+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'二维码',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['500px', '450px'],
+            content: $("#qr_code_frame"),
+            btn: ['确认'],
+            yes: function(index, layero){
+            	$("#qr_code_frame").remove()
+            },
+            btn2: function(index, layero){
+            	$("#qr_code_frame").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#qr_code_frame").remove()
+			}
+		});
+	}
+	function give_coin(data){
+		$('body').append("<div id='edit_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+			"<label class='layui-form-label'>赠送数量</label>"+
+			"<div class='layui-input-block'>"+
+			"<input type='number' id='coin_num'  required  lay-verify='required' placeholder='请输入糖豆数量' autocomplete='off' class='layui-input'"+
+			"</div>"+
+			"</div>"+
+			"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'赠送糖豆',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['450px', '200px'],
+            content: $("#edit_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var coin_num = $("#coin_num").val();
+            	var id = $('#type_id').val();
+            	if(coin_num == ''){
+            		layer.msg('请输入糖豆数量');
+            		return;
+            	}
+            	var sub_data = {
+            		id:id,
+            		coin_num:coin_num,
+            	}
+            	$.post("{:U('User/ajax_give_coin')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('赠送成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal").remove()
+			}
+		});
+	}
+	function give_vip(data){
+		$('body').append("<div id='edit_modal_vip' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+					"<label class='layui-form-label'>会员等级</label>"+
+					"<div  class='layui-input-block'>"+
+						"<select id='edit_level' class='menu_pid' style='display:block;'>"+
+						'<option value="" >请选择会员等级</option>'+
+						<volist name="grade_list" id="vo">
+						'<option value="{$vo['level']}" >{$vo['name']}</option>'+
+						</volist>
+						"</select>"+
+					"</div>"+
+			"</div>"+
+			"<div class='layui-form-item' style='margin-left:110px;'>"+
+			'<label style="color:red;">*如果选择等级等于用户当前等级，则用户等级不变，赠送天数为延期天数，如果选择等级超过用户当前等级，则直接修改用户当前等级为所选等级，到期时间为当前时间至赠送天数*</label>'+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>赠送天数</label>"+
+				"<div class='layui-input-block'>"+
+					"<input type='number' id='edit_day_num'  required  lay-verify='required' placeholder='请输入赠送天数' autocomplete='off' class='layui-input'"+
+				"</div>"+
+			"</div>"+
+			"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'赠送会员',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['450px', '340px'],
+            content: $("#edit_modal_vip"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var level = $("#edit_level").val();
+            	var day_num = $("#edit_day_num").val();
+            	var id = $('#type_id').val();
+            	if(level == ''){
+            		layer.msg('请选择会员等级');
+            		return;
+            	}
+            	if(day_num == ''){
+            		layer.msg('请输入赠送天数');
+            		return;
+            	}
+            	var sub_data = {
+            		id:id,
+            		level:level,
+            		day_num:day_num,
+            	}
+            	$.post("{:U('User/ajax_give_vip')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('赠送成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_modal_vip").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal_vip").remove()
+			}
+		});
+	}
+	function give_good(data){
+		$('body').append("<div id='edit_modal_good' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+					"<label class='layui-form-label'>场次</label>"+
+					"<div  class='layui-input-block'>"+
+						"<select id='edit_config_id' class='menu_pid' style='display:block;' onchange='select_config()'>"+
+						'<option value="" >请选择场次</option>'+
+						<volist name="lottery_config" id="vo">
+						'<option value="{$vo['id']}" >{$vo['id']}-{$vo['name']}</option>'+
+						</volist>
+						"</select>"+
+					"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+					"<label class='layui-form-label'>奖品</label>"+
+					"<div  class='layui-input-block'>"+
+						"<select id='edit_good_id' class='menu_pid' style='display:block;'>"+
+						'<option value="" >请选择奖品</option>'+
+						<volist name="lottery_good" id="vo">
+						'<option value="{$vo['id']}" >{$vo['id']}-{$vo['name']}</option>'+
+						</volist>
+						"</select>"+
+					"</div>"+
+			"</div>"+
+			"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'赠送奖品',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['450px', '250px'],
+            content: $("#edit_modal_good"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var edit_config_id = $("#edit_config_id").val();
+            	var edit_good_id = $("#edit_good_id").val();
+            	var id = $('#type_id').val();
+            	if(edit_good_id == ''){
+            		layer.msg('请选择奖品');
+            		return;
+            	}
+            	if(edit_config_id == ''){
+            		layer.msg('请选择场次');
+            		return;
+            	}
+            	var sub_data = {
+            		id:id,
+            		good_id:edit_good_id,
+            		config_id:edit_config_id,
+            	}
+            	$.post("{:U('User/ajax_give_good')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('赠送成功',function(){
+            				//window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_modal_good").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal_good").remove()
+			}
+		});
+	}
+	function select_config(){
+		var select_config = $('#edit_config_id').val();
+		if(select_config == ''){
+			$('#edit_good_id').html('');
+			return false;
+		}
+		var sub_data = {
+			select_config:select_config,
+		}
+		$.post("{:U('User/ajax_get_config_good')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				console.log(ret);
+				var str = '<option value="" >请选择奖品</option>';
+				if(ret['data']){
+					for(var i=0;i<ret['data'].length;i++){
+						str = str+'<option value="'+ret['data'][i]['id']+'" >'+ret['data'][i]['id']+'-'+ret['data'][i]['name']+'</option>';
+					}
+				}
+				$('#edit_good_id').html(str);
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		})
+	}
+	function sub(){
+		var name = $("#name").val();
+		var p_name = $("#p_name").val();
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				name:name,
+				p_name:p_name,
+			}
+		})
+	}
+	function jinyong(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('User/ajax_forbidden_user')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+	function ceshi(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('User/ajax_test_user')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+	function manager(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('User/ajax_manager_user')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+	function agent(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('User/ajax_agent_user')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+</script>

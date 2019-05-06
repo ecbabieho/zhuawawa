@@ -1,0 +1,160 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+
+<script type="text/html" id="publicTpl">
+	{{#  if(d.forbidden === '0'){ }}
+	<span class="layui-badge" onclick="jinyong({{d.id}},1)" style="color:white;background-color:green;cursor:pointer">正常</span>
+	{{#  } }}
+	{{#  if(d.forbidden === '1'){ }}
+	<span class="layui-badge-rim" onclick="jinyong({{d.id}},0)" style="color:white;background-color:red;cursor:pointer">禁用</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="agentTpl">
+	{{#  if(d.is_agent === '0'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="agent({{d.id}},1)">否</span>
+	{{#  } }}
+	{{#  if(d.is_agent === '1'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="agent({{d.id}},0)">是</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="testTpl">
+	{{#  if(d.is_test === '0'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="ceshi({{d.id}},1)">普通用户</span>
+	{{#  } }}
+	{{#  if(d.is_test === '1'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="ceshi({{d.id}},0)">测试用户</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="managerTpl">
+	{{#  if(d.is_manager === '0'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="manager({{d.id}},1)">普通用户</span>
+	{{#  } }}
+	{{#  if(d.is_manager === '1'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="manager({{d.id}},0)">管理员用户</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="sexTpl">
+	{{#  if(d.sex === '0'){ }}
+	未知
+	{{#  } }}
+	{{#  if(d.sex === '1'){ }}
+	男
+	{{#  } }}
+	{{#  if(d.sex === '2'){ }}
+	女
+	{{#  } }}
+</script>
+<script type="text/html" id="headTpl">
+	<img src="{{d.headimgurl}}" title="{{d.headimgurl}}" style="width:100%;border-radius:50%;">
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("User/ajax_get_agent_user")}'+'?id={:I('id')}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+				[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'grade_name', title: '会员等级', width:120, sort: true},
+					{field: 'nickname', title: '用户昵称', width:120, sort: true},
+					{field: 'phone', title: '手机号', width:120, sort: true},
+					{field: 'headimgurl', title: '头像', width:120,templet:"#headTpl"},
+					{field: 'sex', title: '性别', width:120,templet:"#sexTpl"},
+					{field: 'country', title: '国家', width:120},
+					{field: 'province', title: '省份', width:120},
+					{field: 'city', title: '城市', width:120},
+					
+					{field: 'coin_num', title: '糖豆数量',  sort: true, width:120},
+					{field: 'charge_num', title: '充值金额', width:120,  sort: true},
+					{field: 'luck_num', title: '幸运值', width:80,  sort: true},
+					{field: 'add_time', title: '注册时间', sort: true, width:180},
+					{field: 'is_public', title: '状态', width:80, sort: false,templet:"#publicTpl",fixed: 'right'},
+					{field: 'is_manager', title: '管理类型', width:100, sort: false,templet:"#managerTpl",fixed: 'right'},
+					{field: 'is_test', title: '用户类型', width:100, sort: false,templet:"#testTpl",fixed: 'right'},
+					{field: 'is_agent', title: '是否代理', width:100, sort: false,templet:"#agentTpl",fixed: 'right'},
+				]
+			]
+		});
+
+	});
+	
+	function jinyong(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('User/ajax_forbidden_user')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+	function ceshi(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('User/ajax_test_user')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+	function manager(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('User/ajax_manager_user')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+	function agent(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('User/ajax_agent_user')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+</script>

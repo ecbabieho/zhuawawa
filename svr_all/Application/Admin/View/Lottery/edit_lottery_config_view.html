@@ -1,0 +1,177 @@
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-sm12">
+			<div class="layui-card row">
+				<div class="layui-card-body">
+					<form class="layui-form" action="">
+						<div class="layui-form-item">
+							<label class="layui-form-label">名称</label>
+							<div class="layui-input-block">
+								<input type="text" id="name" lay-verify="title" autocomplete="off" placeholder="请输入名称" value="{$lottery_config.name}" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">所属分类</label>
+							<div class="layui-input-block">
+								<select id="lottery_type_id" name="lottery_type_id">
+										<option value="">请选择分类</option>
+										<volist name="lottery_type" id="vo">
+											<option value="{$vo.id}" <if condition="$vo['id'] eq $lottery_config['lottery_type_id']"> selected </if>>{$vo.name}</option>
+										</volist>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">封面图片</label>
+							<div class="layui-input-block">
+								<div class="layui-upload" style="text-align:left">
+									<blockquote class="layui-elem-quote">图片请上传334px*280px的背景奖品图片，此图片会在首页页面展示~~ <br/><strong>注意：点击图片即可上传</strong></blockquote>
+									<div class="layui-upload-list">
+										<img class="layui-upload-img" id="cover_image" style="width:334px;height:280px;border:1px solid #CCC;" src="<if condition="$lottery_config['cover_image'] neq ''"> {$lottery_config.cover_image} </if><if condition="$lottery_config['cover_image'] eq ''"><?php echo 'https://' . $_SERVER['SERVER_NAME'];?>__PUBLIC__/resources/images/upload_holder_good.png </if>">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">状态</label>
+							<div class="layui-input-block">
+								<select id="is_public" name="is_public">
+										<option value="">请选择状态</option>
+										<option value="0" <?php if($lottery_config['is_public'] == 0){echo 'selected';}?>>未发布</option>
+										<option value="1" <?php if($lottery_config['is_public'] == 1){echo 'selected';}?>>已发布</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">消耗糖豆</label>
+							<div class="layui-input-block">
+								<input type="number" id="coin_num" lay-verify="title" autocomplete="off" placeholder="请输入消耗糖豆" value="{$lottery_config.coin_num}" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">等级限制</label>
+							<div class="layui-input-block">
+								<select id="level" name="level">
+										<option value="">请选择最低等级,不选择表示不限制</option>
+										<volist name="vip_grade" id="vo">
+											<option value="{$vo.level}" <if condition="$vo['level'] eq $lottery_config['level']"> selected </if>>{$vo.name}</option>
+										</volist>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">排序</label>
+							<div class="layui-input-block">
+								<input type="number" id="sort" lay-verify="title" autocomplete="off" placeholder="请输入排序" value="{$lottery_config.sort}" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">库存量</label>
+							<div class="layui-input-block">
+								<input type="number" id="new_stock" lay-verify="title" autocomplete="off" placeholder="请输入库存量" value="{$lottery_config.new_stock}" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<a href='javascript:;' class="layui-btn"  style="float:right;" onclick='sub()'>立即提交</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+	<script type="text/javascript">
+		var layer, element;
+		layui.use(['layer', 'element'], function () {
+			layer = layui.layer;
+		});
+		//单图片上传
+		layui.use('upload', function () {
+			var upload = layui.upload;
+			var uploadInst = upload.render({
+				elem: '#cover_image',//绑定元素
+				url: '{:U("Index/upload_image")}',//上传接口
+				before: function (obj){
+					//预读图片
+					obj.preview(function (index, file, result) {
+						$('#cover_image').attr('src', result);
+					});
+				},
+				done: function (res) {
+					$('#cover_image').attr('src', res['data']['path']);
+				},
+				error: function () {
+					//请求异常回调
+				}
+			});
+		});
+		function sub() {
+			var cover_image = $("#cover_image").attr('src');
+			var name = $("#name").val();
+			var lottery_type_id = $('#lottery_type_id').val();
+			var is_public = $('#is_public').val();
+			var coin_num = $('#coin_num').val();
+			var level = $('#level').val();
+			var sort = $('#sort').val();
+			var new_stock = $('#new_stock').val();
+			if(name == ''){
+				layer.alert('请填写配置名称');
+				return;
+			}
+            if(cover_image == undefined){
+                layer.alert('请上传配置图片');
+                return;
+            }
+            if(lottery_type_id == ''){
+                layer.alert('请选择所属分类');
+                return;
+            }
+            if(is_public == ''){
+                layer.alert('请选择状态');
+                return;
+            }
+            if(coin_num == ''){
+                layer.alert('请填写消耗糖豆');
+                return;
+            }
+            if(level == ''){
+                level = 0;
+            }
+            if(sort == ''){
+                layer.alert('请输入排序');
+                return;
+            }
+            if(new_stock == ''){
+                layer.alert('请输入库存量');
+                return;
+            }
+			var add_xinxi = {
+				id:{:I('id')},
+				name: name,
+				lottery_type_id: lottery_type_id,
+				is_public: is_public,
+				coin_num:coin_num,
+				cover_image:cover_image,
+				level:level,
+				sort:sort,
+				new_stock:new_stock,
+			};
+			lottery_config = encodeURIComponent(JSON.stringify(add_xinxi));
+			var data = {
+				lottery_config: lottery_config
+			}
+			$.post("{:U('Lottery/ajax_edit_lottery_config')}", data, function (ret) {
+				if (ret['code'] == '0') {
+					layer.msg('编辑成功', function () {
+						//window.location.href="{:U('Lottery/lottery_list')}";
+						window.location.reload();
+					});
+				} else {
+					layer.msg(ret['msg']);
+				}
+			})
+		}
+	</script>

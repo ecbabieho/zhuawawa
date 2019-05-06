@@ -1,0 +1,87 @@
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-sm12">
+			<div class="layui-card row">
+				<div class="layui-card-body">
+					<form class="layui-form" action="">
+						<div class="layui-form-item">
+							<label class="layui-form-label">用户提示</label>
+							<div class="layui-input-block">
+								<input type="text" id="notice" lay-verify="title" autocomplete="off" placeholder="请输入用户提示" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">糖豆数量</label>
+							<div class="layui-input-block">
+								<input type="text" id="amount" lay-verify="title" autocomplete="off" placeholder="请输入糖豆数量" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">链接地址</label>
+							<div class="layui-input-block">
+								<input type="text" id="url"  autocomplete="off" placeholder="请输入链接地址" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">底部信息</label>
+							<div class="layui-input-block">
+								<input type="text" id="remark"  autocomplete="off" placeholder="请输入底部信息" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<a href='javascript:;' class="layui-btn" onclick='sub()'>立即提交</a>
+								<small style="color:#F00;font-weight: bolder">警告：此消息一经发出，无法撤回！请注意信息填写正确才可发送！</small>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+	<script type="text/javascript">
+		var layer, element;
+		layui.use(['layer', 'element'], function () {
+			layer = layui.layer;
+		});
+		function sub() {
+			var notice = $("#notice").val();
+			var amount = $("#amount").val();
+			var url = $("#url").val();
+			var remark = $("#remark").val();
+			if(notice == ''){
+				layer.msg('请输入用户提示');
+				return;
+			}
+            if(amount == ''){
+                layer.alert('请输入糖豆数量');
+                return;
+            }
+            if(url == ''){
+                layer.alert('请输入链接地址');
+                return;
+            }
+            if(remark == ''){
+                layer.alert('请输入底部信息');
+                return;
+            }
+            if(!confirm("确认要发送此消息吗？\n警告：此消息一经发出，无法撤回！请注意信息填写正确才可发送！")){
+            	return;
+            }
+			var data = {
+				amount:amount,
+				notice:notice,
+				url:url,
+				remark:remark
+			}
+			$.post("{:U('User/ajax_send_msg')}", data, function (ret) {
+				if (ret['code'] == '0') {
+					layer.alert('发送成功：' + ret['data']['success_num'] + "个，发送失败：" + ret['data']['fail_num'] + "个！");
+				} else {
+					layer.msg(ret['msg']);
+				}
+			})
+		}
+	</script>

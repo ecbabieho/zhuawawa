@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>哐糖-开宝箱</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/box_game.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<script src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+	<div class="box_game">
+	 	<div class="user_box">
+	 		<div class="user_item">
+		 		<div class="user_img">
+		 			<div class="img_quan">
+		 				<img src="{$user['headimgurl']}" alt="{$user['nickname']}" class="thumb">
+		 			</div>
+		 		</div>
+		 		<div class="yaoshi_text">
+		 			<span class="little_text">当前可用钥匙：</span>
+		 			<span class="big_text" id="lastTimes">{$user['box_times']}</span>
+		 		</div>
+		 			<a href="{:U("Index/bag")}" title="我的奖品" class="jiangpin_btn">我的奖品</a>
+		 			<a href="{:U("Index/invite")}" title="邀请好友" class="jiangpin_btn" style="margin-left: 0.10rem;">邀请好友</a>
+		 	</div>
+	 	</div>
+	 	<div class="hua_box"></div>
+	 	<div class="send_box">
+	 		<span class="send_num">已送出:{$box_count}个娃娃</span>
+	 	</div>
+	 	<div class="dibu_baoxiang"></div>
+	 	<div class="open_baoxiang" onclick="open_baoxiang()">开宝箱</div>
+	</div>
+	<div id="content">
+		<div class="send_wawa">
+			<div class="topboximg">
+				<div class="top_textimg"></div>
+			</div>
+			<ul class="wawa_item">
+				<volist name="box_goods" id="vo">
+				<li class="wawa_list">
+					<img src="{$vo['lottery_good']['img_url']}" alt="" class="wawa_img">
+					<p class="wawa_text">{$vo['lottery_good']['name']}</p>
+				</li>
+				</volist>
+			</ul>
+		</div>
+		<div class="get_wawa">
+			<div class="topboximg">
+				<div class="top_textimg"></div>	
+			</div>
+			<div class="get_itembox">
+				<ul class="get_item">
+					<volist name="box_logs" id="vo">
+					<li class="get_list">
+						<span class="get_left">{$vo['user']['nickname']}</span>
+						<div class="get_right_box">
+							<span class="get_right">刚刚 获得了</span>
+							<span class="get_yellow">{$vo['lottery_good']['name']}</span>
+						</div>
+					</li>
+					</volist>
+				</ul>
+			</div>
+			<div class="sanye_icon"></div>
+		</div>
+		<div class="guizi_box">
+			<div class="topboximg">
+				<div class="top_textimg" style="background-image: url(__PUBLIC__/weixin/image/huodong.png);width:2.8rem;"></div>	
+			</div>
+			<ul class="text_item">
+				<li class="text_list">每天每阶段系统免费赠送3把金钥匙</li>
+				<li class="text_list">每邀请1位好友加入，免费赠送1把金钥匙</li>
+				<li class="text_list">每阶段邀请好友最多可获得2把金钥匙</li>
+			</ul>
+			<div class="sanye_icon"></div>
+		</div>
+	</div>
+	<div class="success_box mask_box" id="sucBox">
+		<div class="mask_public" >
+			<div class="mask_box_success">
+				<div class="top_title">恭喜你获得</div>
+				<div class="goods_name" id="sucGoodName">大脸猫7寸</div>
+				<img src="" alt="" class="goods_img" id="sucGoodImg">
+				<div class="botton_btn">
+					<div class="look_package" onclick="jump_bag();"></div>
+					<div class="start_open" onclick="close_icon();"></div>
+				</div>
+			</div>
+			<div class="close_icon" onclick="close_icon();"></div>
+		</div>
+	</div>
+	<div class="fail_box mask_box" id="failBox">
+		<div class="mask_public" >
+			<div class="mask_box_fail">
+				<img src="__PUBLIC__/weixin/image/fail.png" alt="" class="goods_img" style="width:2rem;height: 2rem;margin:0.5rem auto;display: block;">
+				<div class="goods_name" style="font-size: 0.33rem;padding:0.3rem;">喵~没有获得奖品~不要灰心，再接再厉！</div>
+				<div class="botton_btn" style="padding-top:0.2rem;">
+					<div class="look_package" onclick="jump_bag();"></div>
+					<div class="start_open" onclick="close_icon();"></div>
+				</div>
+			</div>
+			<div class="close_icon" onclick="close_icon();"></div>
+		</div>
+	</div>
+</body>
+</html>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/bx_share.js"></script>
+<script type="text/javascript">
+	function jump_bag(){
+		window.location.href = "{:U("Index/bag")}";
+	}
+	function open_baoxiang(){
+		$.post("{:U("Activity/ajax_box_game")}",{},function(ret){
+			if (ret['code'] == 0) {
+				$("#lastTimes").html(ret['data']['box_times']);
+				// 没中奖
+				if (ret['data']['good_name'] == "") {
+					$("#failBox").show();	
+				}
+				else{
+				// 中奖了
+					$("#sucGoodName").html(ret['data']['good_name']);
+					$("#sucGoodImg").attr('src',ret['data']['good_url']);
+					$("#sucBox").show();	
+				}
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	function close_icon(){
+		$(".mask_box").hide();	
+	}
+</script>

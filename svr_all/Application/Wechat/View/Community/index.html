@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>圈子</title>
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+	<!-- search -->
+	<div class="Container_box" style="background-color: #FFF">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<volist name="banner_list" id="vo">
+				<div class="swiper-slide">
+					<div class="topImg">
+						<a href="{$vo['url']}" class="topImg_lk" title="{$vo['title']}">
+							<img src="{$vo['cover_image']}" alt="" class="img_lk">
+						</a>
+					</div>
+				</div>
+				</volist>
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+	</div>
+	<!-- tab -->
+	<div class="weui-tab" style="margin-bottom: 80px">
+		<div class="weui-navbar">
+			<a class="weui-navbar__item weui-bar__item--on" href="{:U("Community/index")}">
+				<p class="c_index_icon_quanzi"></p>
+				<p class="c_index_nav_text">圈子</p>
+			</a>
+			<a class="weui-navbar__item" href="{:U("Community/gonglve")}">
+				<p class="c_index_icon_gonglve"></p>
+				<p class="c_index_nav_text">攻略</p>
+			</a>
+		</div>
+		<div class="weui-tab__bd">
+			<div class="weui-tab__bd-item weui-tab__bd-item--active">
+				<div class="weui-panel weui-panel_access">
+					<div id="tiezi_list" class="tiezi_list">
+					</div>
+					<div class="weui-panel__ft" onclick="load_more()">
+						<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+							<div class="weui-cell__bd">查看更多</div>
+							<span class="weui-cell__ft"></span>
+						</a>    
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- footer -->
+	
+	<div class="weui-tabbar reset_tabbar">
+		<a href="{:U("Community/index")}" class="weui-tabbar__item weui-bar__item--on">
+			<div class="weui-tabbar__icon icon_index">
+			</div>
+			<p class="weui-tabbar__label">首页</p>
+		</a>
+		<a href="{:U("Community/zhanji")}" class="weui-tabbar__item">
+			<div class="weui-tabbar__icon icon_zhanji">
+			</div>
+			<p class="weui-tabbar__label">战绩</p>
+		</a>
+		<a href="{:U("Community/wo")}" class="weui-tabbar__item">
+			<div class="weui-tabbar__icon icon_my">
+			</div>
+			<p class="weui-tabbar__label">我</p>
+		</a>
+	</div>
+	<a class="community_pub_tiezi" href="{:U("Community/fabu")}">
+		<img src="__PUBLIC__/weixin/image/c_public.png" class="img">
+		<p class="text">发表</p>
+	</a>
+</div>
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+<script type="text/html" id="tmpl">
+	{{each data as value index}}
+	
+	<div class="weui-panel__bd">
+		<a href="javascript:detail({{value.id}});" class="weui-media-box weui-media-box_appmsg">
+			<div class="weui-media-box__bd tiezi">
+				<h4 class="weui-media-box__title title">{{value.title}}</h4>
+				<p class="weui-media-box__desc content">{{value.brief}}</p>
+			</div>
+		</a>
+		<a href="javascript:detail({{value.id}});" class="weui-media-box weui-media-box_appmsg weui-media-box_appmsg_reset">
+			{{each value.images as valuei indexi}}
+			<div class="weui-media-box__hd quanzi_show_image" style="background-image: url({{valuei}})">
+				<span class="tiezi_pic_num">共{{value.images_count}}张</span>
+			</div>
+			{{/each}}
+		</a>
+		<ul class="weui-media-box__info">
+			{{if value.user.level == 1}}
+			<li class="weui-media-box__info__meta tiezi_head_image head_putong" style="background-image: url({{value.user.headimgurl}})" onclick="user_info({{value.user.id}})">
+				<img src="__PUBLIC__/weixin/image/putong.png" class="img">
+			</li>
+			{{/if}}
+			{{if value.user.level == 2}}
+			<li class="weui-media-box__info__meta tiezi_head_image head_huangjin" style="background-image: url({{value.user.headimgurl}})" onclick="user_info({{value.user.id}})">
+				<img src="__PUBLIC__/weixin/image/huangjin.png" class="img">
+			</li>
+			{{/if}}
+			{{if value.user.level == 3}}
+			<li class="weui-media-box__info__meta tiezi_head_image head_zuanshi" style="background-image: url({{value.user.headimgurl}})" onclick="user_info({{value.user.id}})">
+				<img src="__PUBLIC__/weixin/image/zuanshi.png" class="img">
+			</li>
+			{{/if}}
+			<li class="weui-media-box__info__meta" onclick="user_info({{value.user.id}})">{{value.user.nickname}}</li>
+			<li class="weui-media-box__info__meta">{{value.add_time}}</li>
+			<li class="weui-media-box__info__meta weui-media-box__info__meta_extra c_extra">
+				<span class="c_thumb_up_icon"></span>
+				<span class="c_num" style="margin-right: 10px;">{{value.thumb_up_num}}</span>
+				<span class="c_comment_icon"></span>
+				<span class="c_num">{{value.comment_num}}</span>
+			</li>
+		</ul>
+	</div>
+	{{/each}}
+</script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.4/weui.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.4/weui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="__PUBLIC__/weixin/js/c_share.js"></script>
+<script type="text/javascript">
+$(function(){
+	var mySwiper = new Swiper('.swiper-container', {
+		autoplay: true,//可选选项，自动滑动
+		loop:true,
+		pagination: {
+			el: '.swiper-pagination',
+		}
+	})
+})
+var page_no = 1;
+var page_num = 10;
+var is_all = 0;
+function init(){
+	var data = {
+		page_no:page_no,
+		page_num:page_num,
+		type:0,
+	}
+	$.post("{:U("Community/ajax_get_tiezi")}",data,function(ret){
+		if (ret['code'] == 0) {
+			console.log(ret['data']);
+			if (ret['data'] == undefined || ret['data'].length == 0) {
+				is_all = 1;
+			}
+			if (page_no == 1) {
+				var htmlList = template('tmpl',ret);
+				$("#tiezi_list").html(htmlList);
+			}
+			else{
+				var htmlList = template('tmpl',ret);
+				$("#tiezi_list").append(htmlList);
+			}
+		}else{
+			alert(ret['msg']);
+		}
+	})
+}
+function user_info(id){
+	var url = "{:U("Community/user_zhanji",array('id'=>'-'))}";
+	url = url.replace('-',id + '');
+	window.location.href = url
+
+}
+function detail(id){
+	var url = "{:U("Community/detail",array('id'=>'-'))}";
+	url = url.replace('-',id + '');
+	window.location.href = url
+}
+function load_more(){
+	if(is_all == 1){
+		weui.topTips('没有更多了哦~', 1000);
+	}
+	else{
+		page_no++;
+		init();
+	}
+}
+$(function(){
+	init();
+})
+
+
+</script>

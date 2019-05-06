@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>{$merchant_category['name']}分类</title>
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/iconfont.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/vip.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+    <header class="new-navbar">
+        <div class="nav-wrap-left">
+            <a href="javascript:;" class="react back" onclick="back()">
+                <i class="text-icon iconfont icon-back"></i>
+            </a>
+        </div>
+        <div class="new-nav-header">
+            <a href="{:U("Vip/search")}">
+                <span class="nav-search">
+                    <i class="search-icon iconfont icon-search"></i>输入商家名、品类或商圈
+                </span>
+            </a>
+        </div>
+        <div class="nav-wrap-right">
+            <a href="{:U("Vip/personal")}">
+                <span class="nav-btn">
+                    <i class="person-icon iconfont icon-friend"></i>
+                </span>
+            </a>
+        </div>
+    </header>
+    <div class="box">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+				<foreach name="banner" item="vo" >
+                <div class="swiper-slide">
+                    <a href="{$vo['url']}" title="{$vo['title']}">
+                        <img src="{$vo['cover_image']}" class="img">
+                    </a>
+                </div>
+				</foreach>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+    <div class="nav-bar-wrapper">
+        <div class="nav">
+            {$merchant_category['name']}分类
+        </div>
+        <p style="text-align: center; font-size: .24rem;padding:30px;display: none;" id="no_shop">暂无店铺~</p>
+        <ul class="nav_item" id='nav_item'>
+		<!-- <foreach name="shop_list" item="vo" >
+            <li class="nav_list">
+                <a href="{:U('Vip/shop_detail')}?id={$vo['id']}" class="nav_lk">
+                    <div class="nax_top">
+                        <div class="image-wrappers" style="background-image: url({$vo['image']})"></div>
+                        <div class="poi-info">
+                            <div class="poi-name">{$vo['name']}</div>
+                            <div class="price-wrapper">
+                                <span class="price" style="max-width: 4rem;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{$vo['main_camp']} {$vo['trading_area']}</span><span class="location"><{$vo['distance']}</span>
+                            </div>
+                            <div class="cate-wrapper">
+                                <span class="catename">{$vo['business_time']}</span>
+                                <span class="smart-tag" style="color: rgb(190, 158, 77); background-color: rgb(251, 244, 228);">高新路沿线</span>
+                            </div>
+                            <div class="service-tags">
+                                <img class="icon" src="__PUBLIC__/weixin/image/vip/icon_notice.png">
+                                <span class="service-tag index-0" style="color: rgb(108, 186, 178);">{$vo['merchant_activity']['title']|default="暂无最新活动"}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="deal-info-wrapper">
+                        <div class="preferential maidan">
+                            <div class="promotion-wrapper"></div>
+                            <img class="icon" src="__PUBLIC__/weixin/image/vip/icon_vip.png">
+                            <span class="discount"></span>
+                            <span class="content">{$vo['vip_discount']}</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+		</foreach> -->
+            
+        </ul>
+    </div>
+
+    
+    <div class="item deal-loading"  onclick="get_more()" id="get_more">查看更多</div>
+    <div class="footer-copy-container">
+        <div class="footer-copy-right">
+            <div class="hr"></div>
+            <span class="footer-copy-right-text">
+                 ©2018 哐糖
+             </span>
+        </div>
+    </div>
+
+
+<a href="javascript:;" class="top-btn top Hide" id="topIcon" onclick="backTop()">
+        <span class="icon icon-top"></span>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <a class="community_pub_tiezi" href="{:U("Vip/ruzhu")}">
+        <img src="__PUBLIC__/weixin/image/c_public.png" class="img">
+        <p class="text">入驻</p>
+    </a> -->
+<script>
+
+	var page_no = 1;
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+	function get_more(){
+		var page_num = 10;
+		var category_id = '{:I('category_id')}';
+		var key = '{:I('key')}';
+		var data = {
+			page_no: page_no,
+			page_num: page_num,
+			lat:lat,
+			lng:lng,
+			category_id:category_id,
+			key:key,
+		};
+        $("#get_more").text("加载中...");
+		$.post("{:U('Vip/ajax_get_more_merchant')}", data, function (ret) {
+			if (ret['code'] == '0') {
+				if(ret['data'] == null){
+					$("#get_more").hide();
+                    if (page_no == 1) {
+                        $("#no_shop").show();
+                    }
+					return;
+				}
+                $("#get_more").text("查看更多");
+				var str = '';
+				for(var i=0;i<ret['data'].length;i++){
+					var title = '暂无最新活动';
+					if(ret['data'][i]['merchant_activity'] != null){
+						title = ret['data'][i]['merchant_activity']['title'];
+					}
+					str = str + '<li class="nav_list">'+
+									'<a href="{:U("Vip/shop_detail")}?id='+ret['data'][i]['id']+'" class="nav_lk">'+
+									   '<div class="nax_top">'+
+											'<div class="image-wrappers" style="background-image: url('+ret['data'][i]['image']+')"></div>'+
+											'<div class="poi-info">'+
+												'<div class="poi-name">'+ret['data'][i]['name']+'</div>'+
+												'<div class="price-wrapper">'+
+													'<span class="price" style="max-width: 4rem;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">'+ret['data'][i]['main_camp']+' '+ret['data'][i]['trading_area']+'</span><span class="location"><'+ret['data'][i]['distance']+'</span>'+
+												'</div>'+
+												'<div class="cate-wrapper">'+
+													'<span class="catename">'+ret['data'][i]['business_time']+'</span>'+
+												'</div>'+
+												'<div class="deal-info-wrapper deal-info-wrappers">'+
+                                                    '<div class="preferential maidan">'+
+                                                        '<img class="icon" src="__PUBLIC__/weixin/image/vip/icon_vip.png">'+
+                                                        '<span class="discount"></span>'+
+                                                        '<span class="content">'+ret['data'][i]['vip_discount']+'</span>'+
+                                                    '</div>'+
+                                                '</div>'+
+											'</div>'+
+										'</div>'+
+										'<div class="deal-info-wrapper">'+
+											'<div class="preferential maidan">'+
+												'<div class="promotion-wrapper"></div>'+
+                                                '<div class="service-tags">'+
+                                                    '<img class="icon" src="__PUBLIC__/weixin/image/vip/icon_notice.png">'+
+                                                    '<span class="service-tag index-0" style="color: rgb(108, 186, 178);">'+title+'</span>'+
+                                                '</div>'+
+											'</div>'+
+										'</div>'+
+									'</a>'+
+								'</li>';
+		
+				}
+				$('#nav_item').append(str);
+				page_no = page_no + 1;
+			} else {
+				layer.msg(ret['msg']);
+			}
+		})
+	}
+</script>
+</body>
+</html>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/libs/weuijs/1.1.4/weui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js" apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="__PUBLIC__/weixin/js/v_share.js"></script>
+<script type="text/javascript">
+    var mySwiper = new Swiper('.swiper-container', {
+        autoplay: true,//可选选项，自动滑动
+        loop:true,
+        pagination: {
+            el: '.swiper-pagination',
+        }
+    })
+    function back(){
+        window.history.back();
+    }
+    var lat = "";
+    var lng = "";
+    function location_call_back(latitude,longitude,speed,accuracy){
+        lat = latitude;
+        lng = longitude;
+        get_more();
+    }
+      $("body").on("touchstart", function() {
+            $(window).scroll(function() {
+                if ($(window).scrollTop() > 200) {
+                    $("#topIcon").removeClass("Hide");
+                } else {
+                    $("#topIcon").addClass("Hide");
+                }
+            });
+        }).on("touchend", function() {
+            $(window).scroll(function() {
+                if ($(window).scrollTop() > 200) {
+                    $("#topIcon").removeClass("Hide");
+                } else {
+                    $("#topIcon").addClass("Hide");
+                }
+            });
+        }).on("touchmove", function() {
+            $("#topIcon").addClass("Hide");
+            if ($(window).scrollTop() > 200) {
+                $("#topIcon").removeClass("Hide");
+            }else{
+                $("#topIcon").addClass("Hide");
+            }
+        })
+
+    var backTop = function(){
+        $("html,body").animate({scrollTop:0},300);
+        $("#topIcon").addClass('Hide');
+        return;
+    }
+</script>

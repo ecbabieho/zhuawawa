@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>哐糖抓抓-我的娃娃</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/wawa.css">
+	<script src="__PUBLIC__/weixin/js/rem.js"></script>
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="body_back">
+	<div class="top_body">
+		<div class="content_body">
+			<div class="content_top">
+				<div class="contentLeft" style="background-image: url({$lottery_good['img_url']})"></div>
+				<div class="contentright">
+					<div class="right_top">
+						<p class="wawa_name">{$user['nickname']|mb_substr=0,7,'utf-8'}的{$lottery_good['name']}</p>
+						<p class="chengzhang_text">成长值</p>
+					</div>
+					<div class="shuzhi_box">
+						<div class="shuzhi_status" id="shuzhi_status">
+							<div class="shuzhi_statubox"></div>
+						</div>
+						<div class="control_sanjiao">
+							<div class="shuzhi_sanjiao"></div>
+						</div>
+						<div class="shuzhi_numBox">
+							<span class="chengzhang_num" id="left_num">{$adopt_log['adopt_val']}</span>
+							<span class="chengzhang_num" id="right_num">{$adopt_log['adopt_config']['adopt_val']}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="centent_bot">
+				<if condition="$is_self eq 1">
+				<div class="centerright" onclick="ChangeWawa()">换一只</div>
+				</if>
+				<div class="shengyu_time">剩余时间:{$adopt_log['last_time_d']}天{$adopt_log['last_time_h']}时{$adopt_log['last_time_m']}分</div>
+				<div class="centerright" onclick="weishi()">喂饼干</div>
+			</div>
+		</div>
+		<div class="bot_icon left_icon"></div>
+		<div class="bot_icon right_icon"></div>
+	</div>
+
+	<div class="center_container">
+		<div class="center_body">
+			<ul class="body_item" id="body_itemtop">
+				<li class="body_list">
+					<div class="centerLeft">
+						<div class="center_img"></div>
+						<div class="center_textbox">
+							<div class="text_top">登录1次游戏</div>
+							<div class="text_bot">成长值+5</div>
+						</div>
+					</div>
+					<if condition="$one_over eq 1">
+					<div class="centerright center_active">已完成</div>
+					</if>
+					<if condition="$one_over eq 0 && $is_self eq 1">
+					<div class="centerright"  onclick="jump_game()">去完成</div>
+					</if>
+				</li>
+				<li class="body_list">
+					<div class="centerLeft">
+						<div class="center_img"></div>
+						<div class="center_textbox">
+							<div class="text_top">开始1局任意游戏</div>
+							<div class="text_bot">成长值+5</div>
+						</div>
+					</div>
+					<if condition="$three_over eq 1">
+					<div class="centerright center_active">已完成</div>
+					</if>
+					<if condition="$three_over eq 0 && $is_self eq 1">
+					<div class="centerright"  onclick="jump_game()">去完成</div>
+					</if>
+				</li>
+				<li class="body_list">
+					<div class="centerLeft">
+						<div class="center_img"></div>
+						<div class="center_textbox">
+							<div class="text_top">分享此页面邀请4个好友喂饼干({$two_finish}/{$two_total})</div>
+							<div class="text_bot">成长值+20</div>
+						</div>
+					</div>
+				</li>
+				<li class="body_list">
+					<div class="centerLeft">
+						<div class="center_img"></div>
+						<div class="center_textbox">
+							<div class="text_top">糖豆消费抓娃娃({$four_finish}/{$four_total})</div>
+							<div class="text_bot">成长值+20</div>
+						</div>
+					</div>
+					<if condition="$four_over eq 1">
+					<div class="centerright center_active">已完成</div>
+					</if>
+					<if condition="$four_over eq 0 && $is_self eq 1">
+					<div class="centerright"  onclick="jump_game()">去完成</div>
+					</if>
+				</li>
+				<li class="body_list">
+					<div class="centerLeft">
+						<div class="center_img"></div>
+						<div class="center_textbox">
+							<div class="text_top">糖豆消费抓娃娃5次({$five_finish}/{$five_total})</div>
+							<div class="text_bot">成长值+30</div>
+						</div>
+					</div>
+					<if condition="$five_over eq 1">
+					<div class="centerright center_active">已完成</div>
+					</if>
+					<if condition="$five_over eq 0 && $is_self eq 1">
+					<div class="centerright"  onclick="jump_game()">去完成</div>
+					</if>
+				</li>
+			</ul>
+			<div class="position_box"></div>
+			<div class="bot_icon left_icon"></div>
+			<div class="bot_icon right_icon"></div>
+		</div>
+	</div>	
+
+	<div class="center_container center_containers">
+		<div class="center_body">
+			<ul class="body_item" id="body_itembot">
+				<li class="body_list">
+					<div class="centerLeft">
+						<div class="center_img"></div>
+						<div class="center_textbox">
+							<div class="text_top">成功抓到1只娃娃</div>
+							<div class="text_bot">成长值+50</div>
+						</div>
+					</div>
+					<if condition="$sex_over eq 1">
+					<div class="centerright center_active">已完成</div>
+					</if>
+					<if condition="$sex_over eq 0 && $is_self eq 1">
+					<div class="centerright"  onclick="jump_game()">去完成</div>
+					</if>
+				</li>
+				<li class="body_list">
+					<div class="centerLeft">
+						<div class="center_img"></div>
+						<div class="center_textbox">
+							<div class="text_top">成功抓到2只娃娃({$seven_finish}/{$seven_total})</div>
+							<div class="text_bot">成长值+100</div>
+						</div>
+					</div>
+					<if condition="$seven_over eq 1">
+					<div class="centerright center_active">已完成</div>
+					</if>
+					<if condition="$seven_over eq 0 && $is_self eq 1">
+					<div class="centerright"  onclick="jump_game()">去完成</div>
+					</if>
+				</li>
+				<li class="body_list">
+					<div class="centerLeft">
+						<div class="center_img"></div>
+						<div class="center_textbox">
+							<div class="text_top" style="max-width: 3.6rem;">当天消费糖豆达300({$eight_finish}/{$eight_total})</div>
+							<div class="text_bot">成长值+150</div>
+						</div>
+					</div>
+					<if condition="$eight_over eq 1">
+					<div class="centerright center_active" style="flex: 1;">已完成</div>
+					</if>
+					<if condition="$eight_over eq 0 && $is_self eq 1">
+					<div class="centerright"  onclick="jump_game()">去完成</div>
+					</if>
+				</li>
+				<if condition="$is_self eq 1">
+				<li class="body_list">
+					<div class="centerLeft">
+						<div class="center_img"></div>
+						<div class="center_textbox">
+							<div class="text_top">购买500成长值</div>
+							<div class="text_bot">成长值+500</div>
+						</div>
+					</div>
+					<div class="centerright"  onclick="jump_buy()">去购买</div>
+				</li>
+				</if>
+			</ul>
+			<div class="position_box"></div>
+		</div>
+	</div>	
+
+	<div class="maskbox" id="maskbox">
+		<div class="mask_div">
+			<div class="mask_content">
+				<div class="content_text">您已经领养一只娃娃，如现在更换领养娃娃，累计的成长值将减半</div>
+				<div class="centent_bot">
+					<div class="centerright center_active" onclick="AgainThink()">再想一想</div>
+					<div class="centerright" onclick="jump_change()">确认更换</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 领养娃娃 -->
+	<div class="baoxiang_boxs">
+		<a href="{:U("Index/article",array('id'=>7))}" title="领养娃娃游戏">
+			<img src="__PUBLIC__/weixin/image/wawa_page/adopt-icon.png" alt="领养娃娃游戏" class="img">
+		</a>
+	</div>
+	<ul class="weiyang_list">
+		<volist name="stroke_list" id="vo">
+		<li>
+			<img src="{$vo['headimgurl']}" alt="" class="img">
+			<span class="notice">好友"{$vo['nickname']}"给娃娃喂饼干,娃娃成长值+5！</span>
+		</li>
+		</volist>
+	</ul>
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="__PUBLIC__/weixin/js/l_share.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	//  shuzhi_sanjiao   的 left  值（换色的三角）
+	//  shuzhi_statubox  的 width 值（黄色的快）
+	var left_num = parseInt($("#left_num").html());
+	var right_num = parseInt($("#right_num").html());
+	var percentage = left_num / right_num;
+	var Width = (($("#shuzhi_status").width() * 2 * percentage ) / 100).toFixed(2);
+	var leftFixed = (0.18 * left_num / right_num * 100).toFixed(2);
+	var shuzhi_sanjiaoLeft = Width- 0.09 + 'rem';
+	var share_image = "{$lottery_good['img_url']}";
+	var share_name = "{$lottery_good['name']}";
+	function weishi(){
+		var data = {
+			to_user_id:{$user['id']},
+		}
+		$.post("{:U("Activity/ajax_adopt_other_stroke")}",data,function(ret){
+			if (ret['code'] == 0) {
+				alert("谢谢叔叔/阿姨们给我的小饼干~我会快快长大哒~");
+				window.location.reload();
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	$(".shuzhi_statubox").width(Width + 'rem');
+	$(".shuzhi_sanjiao").css('left',shuzhi_sanjiaoLeft )
+	function jump_change(){
+		window.location.href = "{:U("Index/lingyang_wawa")}";
+	}
+	function ChangeWawa(){
+		$("#maskbox").show();
+	}
+	function AgainThink(){
+		$("#maskbox").hide();
+	}
+	function jump_game(){
+		window.location.href = "{:U("Index/index")}";
+	}
+	function pay(data){
+		function onBridgeReady(){
+			WeixinJSBridge.invoke(
+			'getBrandWCPayRequest', {
+			"appId":data['appId'],     //公众号名称，由商户传入     
+			"timeStamp":data['timeStamp'],         //时间戳，自1970年以来的秒数     
+			"nonceStr":data['nonceStr'], //随机串     
+			"package":data['package'],     
+			"signType":data['signType'],         //微信签名方式：     
+			"paySign":data['paySign'] //微信签名 
+		},
+		function(res){
+			if(res.err_msg == "get_brand_wcpay_request:ok" ){
+				window.location.reload();
+			}
+			else{
+				JSON.stringify(res);
+			} 
+		}); 
+		}
+		if (typeof WeixinJSBridge == "undefined"){
+			if( document.addEventListener ){
+				document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+			}else if (document.attachEvent){
+				document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+				document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+			}
+		}else{
+			onBridgeReady();
+		}
+	}
+	function jump_buy(){
+		$.post("{:U("Pay/ajax_pay_grade_val")}",{},function(ret){
+			if (ret['code'] == 0) {
+				pay(ret['data']);
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+</script>

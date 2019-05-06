@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>设置收货地址</title>
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link type="text/css" rel="shortcut icon" href="/favicon.ico" />
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body class="index-bg">
+	<div class="Address">
+		<ul class="Address_item">
+			<volist name="addresses" id="vo">
+			<li class="Address_list">
+				<div class="Receiver">
+					<span style="float: left">联系人：{$vo['real_name']}</span>
+					<span style="float: right">{$vo['tel']}</span>
+				</div>
+				<div class="Delivery_address">收货地址：{$vo['address']}</div>
+				<div class="btnBox flex">
+					<div class="leftBox flex">
+						备注：{$vo['remark']}
+					</div>
+					<div class="rightBox">
+						<a href="javascript:;" class="bianji_btn" onclick="select_address({$vo['id']})">选中</a>
+					</div>
+				</div>
+			</li>
+			</volist>	
+		</ul>
+	</div>
+	<div class="Add_Btn">
+		<a href="{:U("Index/address")}" class="Add_lk">
+			<div class="addIcon">+</div>	
+			<div class="addText">添加收货地址</div>	
+		</a>		
+	</div>
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	var address = {$addresses_json};
+	function select_address(id){
+		if (!confirm("您确定配送到此收货地址吗？")) {
+			return;
+		}
+		var index = -1;
+		for (var i = address.length - 1; i >= 0; i--) {
+			if (address[i]['id'] == id) {
+				index = i;
+				break;
+			}
+		}
+		if (index == -1) {
+			return;
+		}
+		var data = {
+			id:{$lottery_record['id']},
+			realname:address[index]['real_name'],
+			remark:address[index]['remark'],
+			tel:address[index]['tel'],
+			address:address[index]['address'],
+		}
+		$.post("{:U("Index/ajax_bind_address")}",data,function(ret){
+			if (ret['code'] == 0) {
+				alert("设置成功~");
+				window.location.href = "{:U("Index/bag")}";
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+</script>

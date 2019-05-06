@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>充值</title>
+	<link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/recharge.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+	<div class="re_title">
+		<span class="re_icon"></span>
+		<span class="re_text">中国石油</span>
+	</div>
+	<a class="re_action" href="">想加油充值便宜点？每月领油卡充值代金券，戳我看看>>></a>
+	<div class="re_input">
+		<div class="re_input_box">
+			<p class="re_input_text">姓名</p>
+			<input type="text" placeholder="请输入姓名" class="re_input_po">
+		</div>
+		<div class="re_line"></div>
+		<div class="re_input_box">
+			<p class="re_input_text">手机号</p>
+			<input type="number" placeholder="请输入手机号" class="re_input_po">
+		</div>
+		<div class="re_line"></div>
+		<div class="re_care_box">
+			<span class="re_care_icon"></span>
+			<span class="re_care_text">请仔细输入手机号及姓名，避免造成不必要的损失</span>
+		</div>
+		<div class="re_line"></div>
+	</div>
+	<div class="recharge_box">
+		<ul class="recharge_item">
+			<li class="recharge_list active" onclick="choose('0')">
+				<div class="recharge_one">3000</div>
+				<div class="recharge_two">售价2999元</div>
+			</li>
+			<li class="recharge_list" onclick="choose('1')">
+				<div class="recharge_one">3000</div>
+				<div class="recharge_two">售价2999元</div>
+			</li>
+		</ul>
+		<div class="re_line"></div>
+	</div>
+	<div class="have_read">
+		<span class="re_care_icon" onclick="Agree()"></span>
+		<span class="re_care_text re_care_texts">已阅读并同意</span>
+		<a href="" class="re_care_text">《充值代缴服务说明》</a>
+	</div>
+	<button class="re_btn" type="button" disabled="disabled" onclick="pay()">
+		<div class="re_btn_textone">确认充值</div>
+		<div class="re_btn_texttwo">(实付3000.00元)</div>
+	</button>
+	<ul class="text_item">
+		<li class="text_list">
+			<span class="little_one"></span>
+			<span class="re_care_texts">本服务为全国加油卡代充服务，故</span>
+			<span class="re_care_text">不提供充值发票</span>
+		</li>
+		<li class="text_list">
+			<span class="little_one"></span>
+			<span class="re_care_texts">充值成功后，需要到</span>
+			<span class="re_care_text">加油站圈存</span>
+			<span class="re_care_texts">后方可加油试用</span>
+		</li>
+		<li class="text_list">
+			<span class="little_one"></span>
+			<span class="re_care_texts">充值时请仔细核对手机卡号和姓名，避免造成不必要的损失</span>
+		</li>
+	</ul>
+</body>
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</html>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script type="text/javascript">
+	function choose(i){
+		$(".recharge_list").removeClass('active').eq(i).addClass('active');
+	}
+	var flag = true;
+	function Agree(){
+		if(flag){
+			$(".re_care_icon").addClass('re_care_icon_active');
+			$(".re_btn").attr('disabled', false);
+			flag = false;
+		}else{
+			$(".re_care_icon").removeClass('re_care_icon_active');
+			$(".re_btn").attr('disabled', true);
+			flag = true;
+		}
+	}
+	function pay(){
+		if(!flag){
+			// 执行付款代码
+			alert("充值多少多少钱");
+			return;
+		}else{
+			alert("请先选择已阅读并同意");
+			return;
+		}
+	}
+
+</script>

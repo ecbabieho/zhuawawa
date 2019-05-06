@@ -1,0 +1,156 @@
+
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-sm12">
+			<div class="layui-card">
+				<div class="layui-card-body">
+					<div class="layui-row layui-col-space15">
+						<div class="layui-col-sm12">
+							<form class="layui-form" action="" lay-filter="component-form-element">
+								<div class="layui-row layui-col-space10 layui-form-item">
+									<div class="layui-col-lg3">
+										<label class="layui-form-label">分类</label>
+										<div class="layui-input-block">
+											<select id="lottery_type_id">
+												<option value="">全部分类</option>
+												<volist name="lottery_types" id="vo">
+												<option value="{$vo['id']}">{$vo['name']}</option>
+												</volist>
+											</select>
+										</div>
+									</div>
+									<div class="layui-col-lg3">
+
+										<a class="layui-btn layuiadmin-btn-order" onclick="search_lottery()">
+											<i class="layui-icon layui-icon-search  layuiadmin-button-btn"></i>
+										</a>
+										<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+											<i class="layui-icon layui-icon-add-1 layuiadmin-button-btn"></i>
+										</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<table id="lotterys" lay-filter="lotterys">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/html" id="publicTpl">
+	{{#  if(d.is_public === '0'){ }}
+	<span class="layui-badge" onclick="fabu({{d.id}},1)" style="color:white;background-color:red;cursor:pointer">未发布</span>
+	{{#  } }}
+	{{#  if(d.is_public === '1'){ }}
+	<span class="layui-badge-rim" onclick="fabu({{d.id}},0)" style="color:white;background-color:green;cursor:pointer">已发布</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="coverImageTpl">
+	<img src="{{d.cover_image}}" title="{{d.cover_image}}" style="width:100%;">
+</script>
+<script type="text/html" id="barDemo">
+	<!--<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>-->
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-xs" lay-event="edit_goods">设置娃娃</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#lotterys',
+			height: 500,
+			url: '{:U("Lottery/ajax_get_lotterys")}', //数据接口
+			page: true, //开启分页
+			limit:200,
+			limits:[10,20,30,40,50,60,70,80,90,200],
+			id:'lotterys',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'type_name', title: '所属分类', width:180, sort: true},
+					{field: 'name', title: '名称', width:200},
+					{field: 'cover_image', title: '封面图', width:180,templet:"#coverImageTpl"},
+					{field: 'coin_num', title: '消耗糖豆', width:150},
+					{field: 'zhua_times', title: '已抓次数', width:150, sort: true},
+					{field: 'level_name', title: '等级名称', width:150, sort: true},
+					{field: 'add_time', title: '配置时间', sort: true, width:180},
+					{field: 'sort', title: '排序', width:100, sort: true,fixed: 'right'},
+					{field: 'new_stock', title: '库存量', width:100, sort: true,fixed: 'right'},
+					{field: 'is_public', title: '状态', width:120, sort: true,templet:"#publicTpl",fixed:"right"},
+					{fixed: 'right',title:'操作',  align:'center', toolbar: '#barDemo',fixed: 'right', width:250} 
+					]
+					]
+				});
+
+	});
+	table.on('tool(lotterys)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+
+	  if(layEvent === 'del'){ //删除
+		layer.confirm('确定删除此选项吗？', function(index){
+		  layer.close(index);
+		  
+		  //向服务端发送删除指令
+		  var sub_data = {
+			id:data['id']
+		  };
+		  $.post("{:U('Lottery/ajax_delete_lottery_config')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('删除成功',function(){
+					//window.location.reload();
+				})
+				obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		  });
+		});
+	  } else if(layEvent === 'edit'){ //编辑
+		//window.location.href = "{:U('Lottery/edit_lottery_config_view')}"+'?id='+data['id'];
+		window.open("{:U('Lottery/edit_lottery_config_view')}"+'?id='+data['id']);
+	  }else if(layEvent === 'edit_goods'){ //编辑娃娃
+		//window.location.href = "{:U('Lottery/edit_lottery_config_goods_view')}"+'?id='+data['id'];
+		window.open("{:U('Lottery/edit_lottery_config_goods_view')}"+'?id='+data['id']);
+	  }
+	});
+	function search_lottery(){
+		var lottery_type_id = $("#lottery_type_id").val();
+		table.reload("lotterys",{
+			page:{
+				curr : 1
+			},
+			where:{
+				lottery_type_id:lottery_type_id,
+			}
+		})
+	}
+	function sub(){
+		//window.location.href = "{:U('Lottery/add_lottery_config_view')}";
+		window.open("{:U('Lottery/add_lottery_config_view')}");
+	}
+	
+	function fabu(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('Lottery/ajax_public_config')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+</script>

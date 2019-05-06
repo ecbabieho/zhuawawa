@@ -1,0 +1,92 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-card-body">
+			<table id="users" lay-filter="logs">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script type="text/html" id="publicTpl">
+	{{#  if(d.status === '0'){ }}
+	<span class="layui-badge" onclick="fabu({{d.id}},1)" style="color:white;background-color:red;cursor:pointer">未发货</span>
+	{{#  } }}
+	{{#  if(d.status === '1'){ }}
+	<span class="layui-badge-rim" style="color:white;background-color:green;" onclick="fabu({{d.id}},0)">已发货</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="delTpl">
+	<a class="layui-btn layui-btn-danger layui-btn-xs" onclick="del({{d.id}})" href="javascript:;">删除</a>
+</script>
+<script type="text/html" id="picTpl">
+	<img src="{{d.lottery_goods_pic}}">
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("User/ajax_get_winning_log")}'+'?id={:I('id')}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'lottery_type_name', title: '分类名称', width:100, sort: true},
+					{field: 'lottery_config_name', title: '配置时间', width:100},
+					{field: 'lottery_config_name', title: '抓娃娃名称', width:100},
+					{field: 'lottery_goods_name', title: '娃娃名称', width:150},
+					{field: 'lottery_goods_pic', title: '图片', templet:"#picTpl",width:150},
+					{field: 'user_name', title: '中奖用户昵称', width:100},
+					{field: 'add_time', title: '中奖时间', width:180},
+					{field: 'realname', title: '联系人', width:100},
+					{field: 'tel', title: '手机号', width:150},
+					{field: 'address', title: '地址', width:200},
+					{field: 'memo', title: '备注', width:200},
+					{field: 'status', title: '发货状态', templet:"#publicTpl",fixed: 'right', sort: true, width:100},
+					{field: 'id', title: '操作', templet:"#delTpl",fixed: 'right', sort: true, width:100},
+					]
+					]
+				});
+
+	});
+	function del(id){
+		if (!confirm("确认要删除此中奖纪录吗？")) {
+			return;
+		}
+		var data = {
+			id:id,
+		  };
+		  $.post("{:U('Lottery/ajax_del_lottery_record')}",data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('删除成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+
+	}
+	function fabu(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('Lottery/ajax_record_status')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('编辑成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+</script>

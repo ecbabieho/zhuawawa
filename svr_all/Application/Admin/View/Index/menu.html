@@ -1,0 +1,208 @@
+<style type="text/css">
+	.menu_pid{
+		display:block;
+		height:36px;
+		line-height:36px;
+		width:100%;
+		padding-left:10px;
+		border-color: #D2D2D2!important;
+	}
+</style>
+<div class="wrapper">
+	<div class="box">
+		<div class="box-header">
+			<h3 class="box-title"> &nbsp;</h3>
+			<include file="Public/breadcrumb"/>	
+		</div>
+		<!-- /.box-header -->
+		<div class="box-body">
+			<div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+				<div class="row">
+					<div class="col-sm-6"></div>
+					<div class="col-sm-6"></div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<form action="" method="post">
+							<table class="layui-table" id="example2">
+								<thead>
+								<tr role="row"  style="background-color: #fff;">
+									<th style="width: 30%" tabindex="0" aria-controls="example2" aria-label="Rendering engine: activate to sort column ascending">菜单名称</th>
+									<th style="width: 30%" tabindex="0" aria-controls="example2" aria-label="Browser: activate to sort column ascending" aria-sort="descending">类型</th>
+									<th style="width: 30%" tabindex="0" aria-controls="example2" aria-label="Platform(s): activate to sort column ascending">类型值</th>
+									<th style="width: 10%" tabindex="0" aria-controls="example2" aria-label="Platform(s): activate to sort column ascending">排序</th>
+								</tr>
+								</thead>
+								<tbody id="tbody">
+									<volist name="p_lists" id="list">
+										<!--父级操作-->
+
+										<tr  role="row" class="odd  pmenu{$list.id} menu{$list.id}" >
+											<td>
+												<div class="layui-input-block" style="margin-left: 0px;">
+													<input type="text" style="width:70%;display:inline;margin-right:10px;" name="menu[{$list.id}][name]" required  lay-verify="required" placeholder="菜单名称" autocomplete="off" class="layui-input topmenu"  value="{$list.name}">
+													<a onclick="addcmenu({$list.id});" class="layui-btn layuiadmin-btn-order"><i class="layui-icon layui-icon-add-circle layuiadmin-button-btn"></i></a>
+													<a onclick="delmenu({$list.id});" class="layui-btn layui-btn-danger layuiadmin-btn-order"><i class="layui-icon layui-icon-delete layuiadmin-button-btn"></i></a>
+												</div>
+											</td>
+											<td>
+												<select name="menu[{$list.id}][type]" class="menu_pid">
+													<option <if condition="$list['type'] eq 'view'">selected</if> value="view">链接</option>
+													<option <if condition="$list['type'] eq 'miniprogram'">selected</if> value="miniprogram">链接</option>
+													<option <if condition="$list['type'] eq 'click'">selected</if> value="click">触发关键字</option>
+													<option <if condition="$list['type'] eq 'scancode_push'">selected</if> value="scancode_push">扫码</option>
+													<option <if condition="$list['type'] eq 'scancode_waitmsg'">selected</if> value="scancode_waitmsg"> 扫码（等待信息）</option>
+													<option <if condition="$list['type'] eq 'pic_sysphoto'">selected</if> value="pic_sysphoto">系统拍照发图</option>
+													<option <if condition="$list['type'] eq 'pic_photo_or_album'">selected</if> value="pic_photo_or_album">拍照或者相册发图</option>
+													<option <if condition="$list['type'] eq 'pic_weixin'">selected</if> value="pic_weixin">微信相册发图</option>
+													<option <if condition="$list['type'] eq 'location_select'">selected</if> value="location_select">地理位置</option>
+												</select>
+											</td>
+											<td>
+												<div class="layui-input-block" style="margin-left: 0px;">
+												<input style="width: 100%" type="text" value="{$list.value}" name="menu[{$list.id}][value]" placeholder="菜单值" class="layui-input"  lay-verify="required" autocomplete="off">
+												</div>
+											</td>
+											<td>
+												<div class="layui-input-block" style="margin-left: 0px;">
+												<input style="width: 100%" type="text" value="{$list.sort}" name="menu[{$list.id}][sort]" placeholder="排序" class="layui-input"  lay-verify="required" autocomplete="off">
+												</div>
+											</td>
+											<input style="width: 100%" name="menu[{$list.id}][pid]" type="hidden" value="0">
+										</tr>
+										<!--父级操作-->
+
+										<volist name="c_lists" id="clist">
+											<if condition="$clist['pid'] eq $list['id']">
+												<tr  role="row" class="odd  pmenu{$list.id} menu{$clist.id}" >
+													<td <if condition="$clist['pid'] gt 0">style="padding-left: 5em"</if>>
+													<div class="layui-input-block" style="margin-left: 0px;">
+														<input type="text"  style="width:70%;display:inline;margin-right:10px;" name="menu[{$clist.id}][name]" value="{$clist.name}" required  lay-verify="required" placeholder="菜单名称" autocomplete="off" class="layui-input">
+														<a onclick="delmenu({$clist.id});" class="layui-btn layui-btn-danger layuiadmin-btn-order"><i class="layui-icon layui-icon-delete layuiadmin-button-btn"></i></a></td>
+													</div>
+													
+													<td>
+														<select name="menu[{$clist.id}][type]" class="menu_pid">
+															<option <if condition="$clist['type'] eq 'view'">selected</if> value="view">链接</option>
+															<option <if condition="$clist['type'] eq 'miniprogram'">selected</if> value="miniprogram">微信小程序</option>
+															<option <if condition="$clist['type'] eq 'click'">selected</if> value="click">触发关键字</option>
+															<option <if condition="$clist['type'] eq 'scancode_push'">selected</if> value="scancode_push">扫码</option>
+															<option <if condition="$clist['type'] eq 'scancode_waitmsg'">selected</if> value="scancode_waitmsg"> 扫码（等待信息）</option>
+															<option <if condition="$clist['type'] eq 'pic_sysphoto'">selected</if> value="pic_sysphoto">系统拍照发图</option>
+															<option <if condition="$clist['type'] eq 'pic_photo_or_album'">selected</if> value="pic_photo_or_album">拍照或者相册发图</option>
+															<option <if condition="$clist['type'] eq 'pic_weixin'">selected</if> value="pic_weixin">微信相册发图</option>
+															<option <if condition="$clist['type'] eq 'location_select'">selected</if> value="location_select">地理位置</option>
+														</select>
+													</td>
+													<td>
+														<div class="layui-input-block" style="margin-left: 0px;">
+															<input style="width: 100%" type="text" value="{$clist.value}" name="menu[{$clist.id}][value]" placeholder="菜单值" class="layui-input" required  lay-verify="required" autocomplete="off">
+														</div>
+													</td>
+													<td>
+														<div class="layui-input-block" style="margin-left: 0px;">
+															<input style="width: 100%" type="text" value="{$clist.sort}" name="menu[{$clist.id}][sort]" placeholder="排序" class="layui-input" required  lay-verify="required" autocomplete="off">
+														</div>
+													</td>
+													
+											
+													<input style="width: 100%" name="menu[{$clist.id}][pid]" type="hidden" value="{$clist.pid}">
+												</tr>
+											</if>
+										</volist>
+
+									</volist>
+								</tbody>
+
+							</table>
+							<button class="layui-btn layui-btn-warm" type="button" onclick="addpmenu()">
+								添加一级菜单<i class="fa fa-plus"></i>
+							</button>
+
+							<button class="layui-btn" type="submit">
+								保存
+							</button>
+
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.box-body -->
+	</div>
+
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script>
+//Demo
+layui.use('form', function(){
+  var form = layui.form;
+  
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+    //layer.msg(JSON.stringify(data.field));
+    return false;
+  });
+});
+</script>
+<script>
+	var i  = {$max_id};
+	//添加菜单
+	function addpmenu(){
+		var pmenu = $('.topmenu');
+//		alert(pmenu.length);
+		if(pmenu.length >= 3){
+			layer.alert('最多三个一级菜单', {icon: 2});  //alert('最多三个一级菜单');
+			return;
+		}
+		i++;
+		var id = i;
+		var tpl = '<tr  role="row" class="odd  pmenu__id__ menu__id__"><td><div class="layui-input-block" style="margin-left: 0px;"><input type="text"  style="width:70%;display:inline;margin-right:10px;" name="menu[__id__][name]" required  lay-verify="required" placeholder="菜单名称" autocomplete="off" class="layui-input"  value=""><a onclick="addcmenu(__id__);" class="layui-btn layuiadmin-btn-order"><i class="layui-icon layui-icon-add-circle layuiadmin-button-btn"></i></a><a onclick="delmenu(__id__);" class="layui-btn layui-btn-danger layuiadmin-btn-order"><i class="layui-icon layui-icon-delete layuiadmin-button-btn"></i></a></div></td><td><select name="menu[__id__][type]" class="menu_pid"><option value="view">链接</option><option value="miniprogram">微信小程序</option><option value="click">触发关键字</option><option value="scancode_push">扫码</option><option value="scancode_waitmsg"> 扫码（等待信息）</option><option value="pic_sysphoto">系统拍照发图</option><option value="pic_photo_or_album">拍照或者相册发图</option><option value="pic_weixin">微信相册发图</option><option value="location_select">地理位置</option></select></td><td><div class="layui-input-block" style="margin-left: 0px;"><input style="width: 100%" type="text" value="" name="menu[__id__][value]" placeholder="菜单值" class="layui-input"  lay-verify="required" autocomplete="off"></div></td><td><div class="layui-input-block" style="margin-left: 0px;"><input style="width: 100%" type="text" value="" name="menu[__id__][sort]" placeholder="排序" class="layui-input"  lay-verify="required" autocomplete="off"></div></td><input style="width: 100%" name="menu[__id__][pid]" type="hidden" value="0"></tr>';
+		tpl = tpl.replace(/__id__/g,id);
+		layui.use('form', function(){
+		  var form = layui.form;
+		});
+		$('#tbody').append(tpl);
+	}
+
+	function addcmenu(pid){
+		var cmenu = $('.pmenu'+pid);
+		if(cmenu.length >= 6){
+			layer.alert('一级菜单下最多5个二级菜单', {icon: 2});  //alert('一级菜单下最多5个二级菜单');
+			return;
+		}
+		i++;
+		var id = i;
+		var tpl = '<tr role="row" class="odd pmenu__pid__ menu__id__" ><td class="" style="padding-left: 5em"><div class="layui-input-block" style="margin-left: 0px;"><input type="text"  style="width:70%;display:inline;margin-right:10px;" name="menu[__id__][name]" value="" required  lay-verify="required" placeholder="菜单名称" autocomplete="off" class="layui-input"><a onclick="delmenu(__id__);" class="layui-btn layui-btn-danger layuiadmin-btn-order"><i class="layui-icon layui-icon-delete layuiadmin-button-btn"></i></a></div></td><td><select  name="menu[__id__][type]" class="menu_pid"><option value="view">链接</option><option value="miniprogram">微信小程序</option><option value="click">触发关键字</option><option value="scancode_push">扫码</option><option value="scancode_waitmsg"> 扫码（等待信息）</option><option value="pic_sysphoto">系统拍照发图</option><option value="pic_photo_or_album">拍照或者相册发图</option><option value="pic_weixin">微信相册发图</option><option value="location_select">地理位置</option></select></td><td><div class="layui-input-block" style="margin-left: 0px;"><input style="width: 100%" type="text" value="" name="menu[__id__][value]" placeholder="菜单值" class="layui-input" required  lay-verify="required" autocomplete="off"></div></td><td><div class="layui-input-block" style="margin-left: 0px;"><input style="width: 100%" type="text" value="" name="menu[__id__][sort]" placeholder="排序" class="layui-input" required  lay-verify="required" autocomplete="off"></div></td><input style="width: 100%" name="menu[__id__][pid]" type="hidden" value="__pid__"></tr>';
+		tpl = tpl.replace(/__id__/g,id);
+		tpl = tpl.replace(/__pid__/g,pid);
+		$(cmenu.last()).after(tpl);
+	}
+
+	function delmenu(id){
+		if(!confirm("确定删除吗？")){
+			return;
+		}
+		$.ajax({
+			url:'{:U("Index/del_menu")}?id='+id,
+			type:'get',
+			success:function(data){
+				if(data=='success'){
+					//删除子分类
+					$('.pmenu'+id).remove();
+					$('.menu'+id).remove();
+				}else{
+					layer.msg('删除失败');
+				}
+			}
+		});
+		/*
+		//删除子分类
+		$('.pmenu'+id).remove();
+		$('.menu'+id).remove();
+		*/
+	}
+
+</script>
+</body>
+</html>

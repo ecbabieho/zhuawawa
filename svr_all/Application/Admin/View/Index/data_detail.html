@@ -1,0 +1,184 @@
+
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-sm4">
+			<div class="layui-card">
+				<div class="layui-card-header">
+					今日储值
+				</div>
+				<div class="layui-card-body layui-text">
+					<ul class="layui-row layui-col-space10 layui-this">
+						<li class="layui-col-xs6">
+							<a href="javascript:;" class="layadmin-backlog-body">
+								<h3>累计金额（元）</h3>
+								<p><cite>66</cite></p>
+							</a>
+						</li>
+						<li class="layui-col-xs6">
+							<a href="" class="layadmin-backlog-body">
+								<h3>累计单数（笔）</h3>
+								<p><cite>12</cite></p>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-sm4">
+			<div class="layui-card">
+				<div class="layui-card-header">
+					本周储值
+				</div>
+				<div class="layui-card-body layui-text">
+					<ul class="layui-row layui-col-space10 layui-this">
+						<li class="layui-col-xs6">
+							<a href="javascript:;" class="layadmin-backlog-body">
+								<h3>累计金额（元）</h3>
+								<p><cite>66</cite></p>
+							</a>
+						</li>
+						<li class="layui-col-xs6">
+							<a href="" class="layadmin-backlog-body">
+								<h3>累计单数（笔）</h3>
+								<p><cite>12</cite></p>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="layui-col-sm4">
+			<div class="layui-card">
+				<div class="layui-card-header">
+					本周储值
+				</div>
+				<div class="layui-card-body layui-text">
+					<ul class="layui-row layui-col-space10 layui-this">
+						<li class="layui-col-xs6">
+							<a href="javascript:;" class="layadmin-backlog-body">
+								<h3>累计金额（元）</h3>
+								<p><cite>66</cite></p>
+							</a>
+						</li>
+						<li class="layui-col-xs6">
+							<a href="" class="layadmin-backlog-body">
+								<h3>累计单数（笔）</h3>
+								<p><cite>12</cite></p>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var layer,element;
+	layui.use(['layer','element'],function(){
+		layer = layui.layer;
+		element = layui.element;
+	});
+	lay('.layui-date').each(function(){
+		laydate.render({
+			elem: this
+			,trigger: 'click'
+		});
+	});
+	function shenhe(id,status){
+		if(status == 2){
+			layer.prompt({
+				formType: 2,
+				value:"",
+				title: '请输入拒绝原因',
+				area: ['250px', '200px'],
+			},
+			function(value,index,elem){
+				var data = {
+					id:id,
+					status:status,
+					reason:value
+				}
+				$.post("{:U('Index/ajax_shenhe')}",data,function(ret){
+					if(ret['code'] == 0){
+						layer.msg("修改成功",function(){
+							layer.close(index);
+							window.location.reload();
+						});
+					}else{
+						layer.msg(ret['msg']);
+					}
+				});
+			});
+		}else{
+			layer.confirm('确认修改此用户状态吗？', function(index){
+				layer.close(index);
+				//向服务端发送删除指令
+				var data = {
+					id:id,
+					status:status
+				}
+				$.post("{:U('Index/ajax_shenhe')}",data,function(ret){
+					if(ret['code'] == 0){
+						layer.msg("修改成功",function(){
+							layer.close(index);
+							window.location.reload();
+						});
+					}else{
+						layer.msg(ret['msg']);
+					}
+				})
+			});
+		}
+	}
+	function chengjiao(id){
+		layer.open({
+			type:1,
+			content:"<form  class='layui-form' style='padding:15px;padding-top:24px'><input type='number' placeholder='请输入成交价格' id='chengjiao_price' class='layui-input'/></form>",
+			area: ['300px', '180px'],
+			btn: ['确认', '取消'],
+			title:'请输入成交价格',
+			yes: function(index,layero){
+				var chengjiao_price = $("#chengjiao_price").val();
+				if(chengjiao_price == ''){
+					layer.msg('请输入成交价格！');
+					return;
+				}
+				var data = {
+					id:id,
+					chengjiao_price:chengjiao_price
+				}
+				$.post("{:U('Index/ajax_chengjiao')}",data,function(ret){
+					if(ret['code'] == 0){
+						layer.msg("修改成功",function(){
+							layer.close(index);
+							window.location.reload();
+						});
+					}else{
+						layer.msg(ret['msg']);
+					}
+				})
+			},
+			no: function(index, layero){
+    			//按钮【按钮一】的回调
+    		},  
+    	})
+	}
+	function jiesuan(id){
+		layer.confirm('确定要处理成已结算佣金了吗？', {icon: 3, title:'提示'}, function(index){
+			var data = {
+				id:id,
+			}
+			$.post("{:U("Index/ajax_jiesuan")}",data,function(ret){
+				if (ret['code'] == 0) {
+					layer.close(index);
+					window.location.reload();
+				}
+				else{
+					layer.msg(ret['msg']);
+				}
+			});
+		});
+
+	}
+</script>

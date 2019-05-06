@@ -1,0 +1,97 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-tab layui-tab-brief">
+			<ul class="layui-tab-title">
+				<li class="layui-this">全部消息<span class="layui-badge">300</span></li>
+				<li>系统公告<span class="layui-badge">300</span></li>
+				<li>系统消息</li>
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+					<div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+						<a class="layui-btn layui-btn-primary layui-btn-sm" >删除</a>
+						<a class="layui-btn layui-btn-primary layui-btn-sm" >标记已读</a>
+						<a class="layui-btn layui-btn-primary layui-btn-sm" >全部已读</a>
+					</div>
+					<table id="all">
+					</table>
+				</div>
+				<div class="layui-tab-item">
+					<div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+						<a class="layui-btn layui-btn-primary layui-btn-sm" >删除</a>
+						<a class="layui-btn layui-btn-primary layui-btn-sm" >标记已读</a>
+						<a class="layui-btn layui-btn-primary layui-btn-sm" >全部已读</a>
+					</div>
+					<table id="notice">
+					</table>
+				</div>
+				<div class="layui-tab-item">
+					<div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+						<a class="layui-btn layui-btn-primary layui-btn-sm" >删除</a>
+						<a class="layui-btn layui-btn-primary layui-btn-sm" >标记已读</a>
+						<a class="layui-btn layui-btn-primary layui-btn-sm" >全部已读</a>
+					</div>
+					<table id="msg">
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#all',
+			height: 500,
+			url: '{:U("Sys/ajax_get_logs")}', //数据接口
+			page: true, //开启分页
+			id:'logs',
+			cols: [
+				[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'add_time', title: '操作时间', width:180, sort: true},
+					{field: 'merchant_name', title: '操作人', width:180},
+					{field: 'content', title: '操作内容'}
+				]
+			]
+		});
+		table.render({
+			elem: '#msg',
+			height: 500,
+			url: '{:U("Sys/ajax_get_logs")}', //数据接口
+			page: true, //开启分页
+			id:'logs',
+			cols: [
+				[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'add_time', title: '操作时间', width:180, sort: true},
+					{field: 'merchant_name', title: '操作人', width:180},
+					{field: 'content', title: '操作内容'}
+				]
+			]
+		});
+		table.render({
+			elem: '#notice',
+			height: 500,
+			url: '{:U("Sys/ajax_get_logs")}', //数据接口
+			page: true, //开启分页
+			id:'logs',
+			cols: [
+				[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'add_time', title: '操作时间', width:180, sort: true},
+					{field: 'merchant_name', title: '操作人', width:180},
+					{field: 'content', title: '操作内容'}
+				]
+			]
+		});
+
+	});
+</script>

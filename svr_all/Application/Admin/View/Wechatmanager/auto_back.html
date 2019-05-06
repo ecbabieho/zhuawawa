@@ -1,0 +1,216 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-add-circle layuiadmin-button-btn">添加</i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="logs">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+
+<script type="text/html" id="publicTpl">
+	{{d.callback_msg}}
+</script>
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Wechatmanager/ajax_get_auto_back")}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'msg', title: '关键字', width:300},
+					{field: 'callback_msg', title: '回复内容', width:600,  templet:"#publicTpl"},
+					{field: 'add_time', title: '配置时间', width:200},
+					{fixed: 'right',title:'操作', width:150, align:'center', toolbar: '#barDemo'} 
+					]
+					]
+				});
+
+	});
+	table.on('tool(logs)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+	  if(layEvent === 'detail'){ //查看
+	  	console.log(data['msg']);
+		//do somehing
+	  } else if(layEvent === 'del'){ //删除
+	  	layer.confirm('确定要删除此配置吗？', function(index){
+		  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+		  layer.close(index);
+		  //向服务端发送删除指令
+		  var sub_data = {
+		  	id:data['id']
+		  };
+		  $.post("{:U('Wechatmanager/ajax_delete_auto_back')}",sub_data,function(ret){
+		  	if(ret['code'] == 0){
+		  		layer.msg('删除成功',function(){
+		  			window.location.reload();
+		  		})
+		  	}else{
+		  		layer.msg(ret['msg']);
+		  	}
+
+		  });
+		});
+	  } else if(layEvent === 'edit'){ //编辑
+	  	edit_view(data);
+	  }
+	});
+	function edit_view(data){
+		$('body').append("<div id='edit_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>关键字</label>"+
+				"<div class='layui-input-block'>"+
+					"<input type='text' id='data_msg'  required  lay-verify='required' placeholder='请输入关键字' autocomplete='off' class='layui-input' value='"+data['msg']+"'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>回复内容</label>"+
+				"<div class='layui-input-block'>"+
+					"<textarea style='width:90%;height:250px;resize:none;line-height:30px;padding:5%;' id='data_callback_msg'>"+data['callback_msg']+"</textarea>"+
+				"</div>"+
+			"</div>"+
+			"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'编辑配置',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['450px', '500px'],
+            content: $("#edit_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var msg = $("#data_msg").val();
+            	var callback_msg = $("#data_callback_msg").val();
+            	var type_id = $('#type_id').val();
+            	if(msg == ''){
+            		layer.msg('请输入关键字');
+            		return;
+            	}
+            	if(callback_msg == ''){
+            		layer.msg('请输入回复内容');
+            		return;
+            	}
+            	var sub_data = {
+            		id:type_id,
+            		msg:msg,
+            		callback_msg:callback_msg,
+            	}
+				auto_back = encodeURIComponent(JSON.stringify(sub_data));
+				var data = {
+					auto_back: auto_back
+				}
+            	$.post("{:U('Wechatmanager/ajax_edit_auto_back')}",data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('编辑成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal").remove()
+			}
+		});
+	}
+	function sub(){
+		$('body').append("<div id='add_modal' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>关键字</label>"+
+				"<div class='layui-input-block'>"+
+					"<input type='text' id='data_msg'  required  lay-verify='required' placeholder='请输入关键字' autocomplete='off' class='layui-input'>"+
+				"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+				"<label class='layui-form-label'>回复内容</label>"+
+				"<div class='layui-input-block'>"+
+					"<textarea style='width:90%;height:250px;resize:none;line-height:30px;padding:5%;' id='data_callback_msg'></textarea>"+
+				"</div>"+
+			"</div>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'添加配置',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['450px', '500px'],
+            content: $("#add_modal"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var msg = $("#data_msg").val();
+            	var callback_msg = $("#data_callback_msg").val();
+            	if(msg == ''){
+            		layer.msg('请输入关键字');
+            		return;
+            	}
+            	if(callback_msg == ''){
+            		layer.msg('请输入回复内容');
+            		return;
+            	}
+            	var sub_data = {
+            		msg:msg,
+            		callback_msg:callback_msg,
+            	}
+				auto_back = encodeURIComponent(JSON.stringify(sub_data));
+				var data = {
+					auto_back: auto_back
+				}
+            	$.post("{:U('Wechatmanager/ajax_add_auto_back')}",data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('添加成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#add_modal").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#add_modal").remove()
+			}
+		});
+	}
+
+</script>

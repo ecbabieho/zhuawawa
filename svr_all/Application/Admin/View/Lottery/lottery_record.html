@@ -1,0 +1,185 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">用户</label>
+					<div class="layui-input-block">
+						<select id="user_id_s">
+							<option value="">全部用户</option>
+							<volist name="user_list" id="vo">
+							<option value="{$vo['id']}">{$vo['id']}-{$vo['nickname']}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">娃娃</label>
+					<div class="layui-input-block">
+						<select id="lottery_goods_id_s">
+							<option value="">全部娃娃</option>
+							<volist name="goods_list" id="vo">
+							<option value="{$vo['id']}">{$vo['name']}-{$vo['cost']}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width:88px;">收货人电话/ID</label>
+					<div class="layui-input-block" style="margin-left: 118px;">
+						<input type="text" id="search_val" placeholder="请输入收货人电话/ID" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width:88px;">中奖ID</label>
+					<div class="layui-input-block" style="margin-left: 118px;">
+						<input type="text" id="search_id" placeholder="请输入中奖ID" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="search_lottery()">
+						<i class="layui-icon layui-icon-search  layuiadmin-button-btn"></i>
+					</a>
+					<a class="layui-btn layui-btn-danger" onclick="delete_test_record()">清空测试用户中奖记录
+						<i class="layui-icon layui-icon-delete  layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="logs">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script type="text/html" id="publicTpl">
+	{{#  if(d.status === '0'){ }}
+	<span class="layui-badge" onclick="fabu({{d.id}},1)" style="color:white;background-color:red;cursor:pointer">未发货</span>
+	{{#  } }}
+	{{#  if(d.status === '1'){ }}
+	<span class="layui-badge-rim" style="color:white;background-color:green;">已发货</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="sub_scribeTpl">
+	{{#  if(d.is_subscribe === '1'){ }}
+	<span class="layui-badge" style="color:white;background-color:red;cursor:pointer">已关注</span>
+	{{#  } }}
+	{{#  if(d.is_subscribe === '0'){ }}
+	<span class="layui-badge-rim" style="color:white;background-color:green;">未关注</span>
+
+	{{#  } }}
+	
+</script>
+<script type="text/html" id="typeTpl">
+	{{#  if(d.type === '0'){ }}
+	<span class="layui-badge" style="color:white;background-color:red;">用户抓取</span>
+	{{#  } }}
+	{{#  if(d.type === '1'){ }}
+	<span class="layui-badge-rim" style="color:white;background-color:green;">管理员赠送</span>
+
+	{{#  } }}
+	{{#  if(d.type === '-3'){ }}
+	<span class="layui-badge" style="color:white;background-color:red;">宝箱抽奖</span>
+	{{#  } }}
+	{{#  if(d.type === '-4'){ }}
+	<span class="layui-badge" style="color:white;background-color:red;">领养活动</span>
+	{{#  } }}
+	{{#  if(d.type === '-5'){ }}
+	<span class="layui-badge" style="color:white;background-color:red;">临时活动</span>
+	{{#  } }}
+	{{#  if(d.type === '-6'){ }}
+	<span class="layui-badge" style="color:white;background-color:red;">水果活动</span>
+	{{#  } }}
+	{{#  if(d.type === '-7'){ }}
+	<span class="layui-badge" style="color:white;background-color:red;">圣诞活动</span>
+	{{#  } }}
+	
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Lottery/ajax_get_lottery_record")}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'lottery_type_name', title: '分类名称', width:100, sort: true},
+					{field: 'lottery_config_name', title: '配置时间', width:100},
+					{field: 'lottery_config_name', title: '抓娃娃名称', width:100},
+					{field: 'lottery_goods_name', title: '娃娃名称', width:150},
+					
+					{field: 'add_time', title: '中奖时间', width:180},
+					{field: 'realname', title: '联系人', width:100},
+					{field: 'tel', title: '手机号', width:150},
+					{field: 'address', title: '地址', width:200},
+					{field: 'memo', title: '备注', width:200},
+					{field: 'user_name', title: '用户昵称', width:100,fixed: 'right'},
+					{field: 'is_subscribe', title: '是否关注',  templet:"#sub_scribeTpl",width:100,fixed: 'right'},
+					{field: 'type', title: '中奖类型',  templet:"#typeTpl",width:100,fixed: 'right'},
+					{field: 'user_charge_num', title: '充值金额', width:100,fixed: 'right'},
+					{field: 'status', title: '发货状态', templet:"#publicTpl",fixed: 'right', sort: true, width:100},
+					]
+					]
+				});
+
+	});
+	
+	function search_lottery(){
+		var user_id = $("#user_id_s").val();
+		var lottery_goods_id = $("#lottery_goods_id_s").val();
+		var search_val = $("#search_val").val();
+		var search_id = $("#search_id").val();
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				user_id:user_id,
+				lottery_goods_id:lottery_goods_id,
+				search_val:search_val,
+				search_id:search_id,
+			}
+		})
+	}
+	function fabu(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('Lottery/ajax_record_status')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('编辑成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+	function delete_test_record(){	
+			var sub_data = {};
+		layer.confirm('确定清空所有测试用户的中奖记录吗？', function(index){
+		  layer.close(index);
+		  $.post("{:U('Lottery/ajax_delete_test_record')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('删除成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		  });
+		});
+	}
+</script>

@@ -1,0 +1,152 @@
+.signin{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;overflow:hidden}
+.coin{width:4.12rem;height:4.12rem;font-size:30px;margin-left:calc((100% - 4.12rem) / 2);margin-top:calc((9.22rem / 2) - 1.5rem);position:relative}
+.coin .bg{float:left;width:4.12rem;height:4.12rem}
+.coin .texts{position:absolute;top:1.7rem;left:1.11rem;width:1.9rem;height:.72rem;}
+.oac{display: none;}
+.coin1{width:.68rem;height:.5rem;position:absolute;top:.3rem;right:0;animation-delay:0.3s}
+.coin2{width:.33rem;height:.43rem;position:absolute;top:.5rem;left:3.7rem;animation-delay:0.25s}
+.coin3{width:.67rem;height:.8rem;position:absolute;top:3.3rem;left:.9rem;animation-delay:0.2s}
+.coin4{width:.75rem;height:.55rem;position:absolute;top:3.7rem;right:1.3rem;animation-delay:0.15s}
+.coin5{width:.83rem;height:.59rem;position:absolute;top:6.8rem;right:1.1rem;animation-delay:0.1s}
+.coin6{width:.8rem;height:.74rem;position:absolute;top:8rem;right:.3rem;animation-delay:0.05s}
+.coin7{width:2.12rem;height:1.9rem;position:absolute;top:8.7rem;left:1.2rem;animation-delay:0.05s}
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+}
+
+@keyframes bounceInDown {
+    from,
+    60%,
+    75%,
+    90%,
+    to {
+        -webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    0% {
+        -webkit-transform: translate3d(0, -3000px, 0);
+        transform: translate3d(0, -3000px, 0);
+    }
+    60% {
+        -webkit-transform: translate3d(0, 25px, 0);
+        transform: translate3d(0, 25px, 0);
+    }
+    75% {
+        -webkit-transform: translate3d(0, -10px, 0);
+        transform: translate3d(0, -10px, 0);
+    }
+    90% {
+        -webkit-transform: translate3d(0, 5px, 0);
+        transform: translate3d(0, 5px, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.bounceInDown {
+    -webkit-animation-name: bounceInDown;
+    animation-name: bounceInDown;
+    -webkit-animation-duration: 0.8s;
+    animation-duration: 0.8s;
+}
+@keyframes rotateInDownRight {
+    from {
+        opacity: 0;
+        transform: rotate(60deg);
+    }
+    60% {
+        opacity: 1;
+        transform: rotate(60deg);
+    }
+    to {
+        transform: rotate(0);
+    }
+}
+
+.rotateInDownRight {
+    -webkit-animation-name: rotateInDownRight;
+    animation-name: rotateInDownRight;
+    -webkit-animation-duration: 0.8s;
+    animation-duration: 0.8s;
+}
+@keyframes rotateInDownRighttext {
+    from {
+        opacity: 0;
+        transform: rotate(60deg) scale(1.2);
+    }
+    75% {
+        opacity: 1;
+        transform: rotate(60deg) scale(1);
+    }
+    to {
+        transform: rotate(0) scale(1);
+    }
+}
+
+.rotateInDownRighttext {
+    -webkit-animation-name: rotateInDownRighttext;
+    animation-name: rotateInDownRighttext;
+    -webkit-animation-duration: 0.8s;
+    animation-duration: 0.8s;
+}
+@keyframes bigVanish {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(3);
+    }
+}
+
+.bigVanish {
+    -webkit-animation-name: bigVanish;
+    animation-name: bigVanish;
+    -webkit-animation-duration: 0.4s;
+    animation-duration: 0.4s;
+    animation-delay: 1s;
+}
+@keyframes coinDown {
+    from {
+        -webkit-transform: translate3d(0, -3000px, 0);
+        transform: translate3d(0, -3000px, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+@keyframes goDown {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        -webkit-transform: translate3d(0, 1000px, 0);
+        transform: translate3d(0, 1000px, 0);
+    }
+}
+.signin>img{
+	position: absolute;
+    -webkit-animation-name: coinDown;
+    animation-name: coinDown;
+    -webkit-animation-duration: 0.8s;
+    animation-duration: 0.8s;
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+}
+.signin>img.goDown{
+    -webkit-animation-name: goDown;
+    animation-name: goDown;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    animation-delay: 1s;
+}

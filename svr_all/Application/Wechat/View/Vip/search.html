@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>搜索</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/vip.css">
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+	 <header class="navbar search">
+        <div class="nav-wrap-left">
+            <a href="javascript:;" class="react back" onclick="back()">
+                <i class="text-icon icon-back"></i>
+            </a>
+        </div>
+        <div class="nav-header">搜索</div>
+        <div class="nav-wrap-right">
+            <a href="{:U('Vip/index')}" class="">
+                <span class="nav-btn">
+                    <i class="text-icon icon-sp icon-collect"></i>
+                    首页
+                </span>
+            </a>
+        </div>  
+    </header>
+    <div class="search-wrapper">
+    	<form id="search-form"  style="display: block;" action="{:U("Vip/search_res")}">
+	        <div class="box-search" style="display: block!important;">
+	            <i class="icon-search text-icon"></i>
+	            <input id="keyword" type="text" placeholder="输入商家名、品类或商圈" value="" onkeyup="associated();">
+	            <i class="btn-reset" onclick="clearInput()">x</i>
+	        </div>
+	        <button type="button" class="btn" disabled="disabled" id="search-submit" onclick="search_res()" style="padding:0rem;">搜索</button>
+	    </form>
+	    <div id="search-hot" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1); display: block;">
+            <dl class="list list-in">
+                <dd class="icon-wrapper h_gesture_">
+                <ul class="icon-list page current" style="position: relative">
+                    <li class="icon">
+                        <a class="hot-link react title">
+                           <h2> 热门搜索</h2>
+                        </a>
+                    </li>
+                    <volist name="merchant_search" id="vo">
+                    <li class="icon">
+                    	<a class="hot-link react" href="{:U("Vip/search_res",array('key'=>$vo['name']))}">{$vo['name']}</a>
+                    </li>
+                    </volist>
+                </ul>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="footer-copy-container">
+        <div class="footer-copy-right">
+            <div class="hr"></div>
+            <span class="footer-copy-right-text">
+                 ©2018 哐糖
+             </span>
+        </div>
+    </div>   
+</body>
+</html>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js" apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="__PUBLIC__/weixin/js/v_share.js"></script>
+<script>
+    $("#keyword").on('keypress', function(e) {
+        var keycode = e.keyCode;
+        $(".clear_icon").removeClass("hide");
+        //keycode是键码，13也是电脑物理键盘的 enter
+        if (keycode == '13') {
+            e.preventDefault();
+            search_res();
+        }
+    });
+  	var search_res = function(){
+        var keyword = $("#keyword").val();
+        if(keyword == ''){
+            alert('请输入搜索内容');
+            $("#search").blur();
+            return;
+        }else{
+            var url = "{:U("Vip/search_res",array('key'=>"fakekey"))}";
+            url = url.replace('fakekey',keyword);
+  			window.location.href = url;
+        }
+    }
+    var associated = function(){
+        let search = $("#keyword").val().length;
+        if(search == '0'){
+            $(".btn-reset").hide();
+            $("#search-submit").attr('disabled', true);
+        }else{
+            $(".btn-reset").show();
+            $("#search-submit").removeAttr("disabled"); //启用按钮
+        }
+    }
+    function back(){
+        window.history.back();
+    }
+    var clearInput = function() {
+        $("#keyword").val('');
+        $(".btn-reset").hide();
+        $("#search-submit").attr('disabled', true);
+    }
+    function location_call_back(latitude,longitude,speed,accuracy){
+    }
+</script>

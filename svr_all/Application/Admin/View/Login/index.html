@@ -1,0 +1,93 @@
+{__NOLAYOUT__}
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>哐糖管理系统</title>
+	<link href="__PUBLIC__/resources/layui/css/layui.css" rel="stylesheet">
+	<link rel="stylesheet" href="__PUBLIC__/resources/layui/css/admin.css">
+	<link rel="stylesheet" href="__PUBLIC__/resources/layui/css/login.css">
+</head>
+<body class="layui-layout-body">
+	<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login">
+		<div class="layadmin-user-login-main">
+			<div class="layadmin-user-login-box layadmin-user-login-header">
+				<h2>哐糖管理系统v1.0</h2>
+			</div>
+			<div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+				<div class="layui-form-item">
+					<label class="layadmin-user-login-icon layui-icon layui-icon-username" for="tel"></label>
+					<input type="text" id="tel" placeholder="手机号" class="layui-input">
+				</div>
+				<div class="layui-form-item">
+					<label class="layadmin-user-login-icon layui-icon layui-icon-password" for="pwd"></label>
+					<input type="password" id="pwd" placeholder="密码" class="layui-input">
+				</div>
+				<div class="layui-form-item">
+					<button class="layui-btn layui-btn-fluid" onclick="sub()">登 入</button>
+				</div>
+			</div>
+		</div>
+		
+		<div class="layui-trans layadmin-user-login-footer">
+			
+			<p>
+				© 2018 
+				<a href="http://www.bichonfrise.cn/" target="_blank">http://bichonfrise.cn</a>
+			</p>
+			<p>
+				<span>
+					<a href="http://www.bichonfrise.cn/" target="_blank">西安比熊网络科技有限公司</a>
+				</span>
+				<span>
+					<a href="http://www.bichonfrise.cn/" target="_blank">前往官网</a>
+				</span>
+			</p>
+		</div>
+	</div>
+	<script src="__PUBLIC__/resources/jquery.js"></script>
+	<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+	<script type="text/javascript">
+		var layer,element;
+		layui.use(['layer'],function(){
+			layer = layui.layer;
+			element = layui.element;
+		});
+		$(document).keyup(function(event){
+		  if(event.keyCode ==13){
+			sub();
+		  }
+		});
+		function sub(){
+			var tel = $("#tel").val();
+			var pwd = $("#pwd").val();
+			if (tel == "") {
+				layer.msg("请输入手机号");
+				return;
+			}
+			if (pwd == "") {
+				layer.msg("请输入密码");
+				return;
+			}
+			var data = {
+				tel:tel,
+				pwd:pwd,
+			}
+			$.post("{:U("Login/ajax_login")}",data,function(ret){
+				if (ret['code'] == 0) {
+					window.location.href = "{:U("Index/index")}";
+				}
+				else{
+					layer.msg(ret['msg']);
+				}
+			})
+		}
+	</script>
+</body>
+</html>
+	
+
+
+

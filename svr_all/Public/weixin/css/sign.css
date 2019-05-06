@@ -1,0 +1,111 @@
+.mask{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	background-color: rgba(0, 0, 0, .4);
+}
+.maskbox{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+.mask_box{
+	width: 5.47rem;
+	height: 8rem;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	
+}
+.mask_boxone{
+	width: 5.47rem;
+	height: 6.49rem;
+	background-position: center;
+	background-size: 100% 100%;
+	text-align: center;
+	background-repeat: no-repeat;
+	background-image: url('../image/vip/sign_box.png');
+}
+.mask_cancel{
+	width: 0.57rem;
+	height: 0.57rem;
+	margin: 1rem auto 0rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/close_icon.png');
+}
+.signText{
+	font-size: 0.41rem;
+	color: #00000;
+	padding-top: 4.1rem;
+}
+.maskBtn{
+	width: 3.99rem;
+	height: 0.7rem;
+	display:inline-block;
+	font-size: 0.41rem;
+	color: #FFFFFF;
+	margin: 0.5rem auto 0rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/vip/maskbtn.png');
+}
+.swiper_ban{
+	width: 100%;
+	height: 2.86rem;
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('../image/vip/swiper_ban.png');
+}
+.sign_item{
+	padding:0.44rem 0.28rem 0;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+.sign_list{
+	width: 1.48rem;
+	height: 3.2rem;
+	text-align: center;
+	list-style: none;
+}
+.sign_img{
+	width: 100%;
+	height: 2.51rem;
+	display: block;
+}
+.sign_week{
+	height: 0.69rem;
+	line-height: 0.69rem;
+	font-size: 0.26rem;
+	color: #000000;
+}
+.sign_list:last-child{
+	width: 3.3rem;
+}
+.sign_botton{
+	font-size: 0.32rem;
+	width: 6.93rem;
+	height: 0.81rem;
+	color: #FFFFFF;
+	border-radius: 20px;
+	background-color: #ff5f5a;
+	margin: 0.08rem auto 0.38rem;
+	line-height: 0.81rem;
+	text-align: center;
+}
+.botton_text{
+	font-size: 0.24rem;
+	color: #000000;
+	text-align: center;
+	padding-bottom: 0.2rem;
+}

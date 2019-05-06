@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>我的邀请</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="index-bg user_bg">
+	<div class="user_header">
+		<div class="user_money">
+			￥{$user['yu_e']}
+		</div>
+		<p class="name">{$user['nickname']}</p>
+	</div>
+	<ul class="user_list">
+		<li class="border_bottom arrow">
+			<a href="{:U("Agent/users")}" title="我的糖豆">
+				<span class="icon icon_frd"></span>
+				<span class="name">已邀请好友</span>
+			</a>
+		</li>
+		<li class="border_bottom arrow">
+			<a href="{:U("Agent/prizes")}" title="好友娃娃">
+				<span class="icon icon_bag"></span>
+				<span class="name">好友娃娃</span>
+			</a>
+		</li>
+		<li class="arrow">
+			<a href="{:U("Agent/charge")}" title="好友充值">
+				<span class="icon icon_coin"></span>
+				<span class="name">好友充值</span>
+			</a>
+		</li>
+	</ul>
+	<a href="{:U("Agent/tixian")}" class="address_save_btn">申请提现</a>
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	fly.init();
+
+</script>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>哐糖管理系统</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link href="__PUBLIC__/resources/layui/css/layui.css" rel="stylesheet">
+	<link rel="stylesheet" href="__PUBLIC__/resources/layui/css/admin.css">
+	
+	<script src="__PUBLIC__/resources/jquery.js"></script>
+	<script src="__PUBLIC__/resources/jquery.form.js"></script>
+	<script src="__PUBLIC__/resources/jquery.fullscreen.js"></script>
+	
+</head>
+<body class="layui-layout-body">
+	<div id="LAY_app">
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header">
+				<!-- 头部区域 -->
+				<ul class="layui-nav layui-layout-left">
+					<li class="layui-nav-item layadmin-flexible" lay-unselect>
+						<a href="javascript:toggleSlide();" title="侧边伸缩">
+							<i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+						</a>
+					</li>
+					<li class="layui-nav-item layui-hide-xs" lay-unselect>
+						<a href="{:U('Index/index')}" title="首页">
+							<i class="layui-icon layui-icon-website"></i>
+						</a>
+					</li>
+					<li class="layui-nav-item" lay-unselect>
+						<a href="javascript:window.location.reload();" layadmin-event="refresh" title="刷新">
+							<i class="layui-icon layui-icon-refresh-3"></i>
+						</a>
+					</li>
+				</ul>
+				<ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+					<li class="layui-nav-item layui-hide-xs" lay-unselect>
+						<a href="javascript:;" onclick="toggleFullscreen()">
+							<i class="layui-icon layui-icon-screen-full" id="LAY_fullscreen"></i>
+						</a>
+					</li>
+					<li class="layui-nav-item" lay-unselect>
+						<a href="javascript:;">
+							<cite>{$admin['name']}（{$admin['tel']}）</cite>
+						</a>
+						<dl class="layui-nav-child">
+							<dd><a href="{:U('Sys/change_pwd')}">修改密码</a></dd>
+							<hr>
+							<dd style="text-align: center;"><a href="{:U('Login/logout')}">退出</a></dd>
+						</dl>
+					</li>
+
+					<li class="layui-nav-item" lay-unselect>
+						<a href="{:U('Sys/msg')}" layadmin-event="message" lay-text="消息中心">
+							<i class="layui-icon layui-icon-notice"></i>  
+
+							<!-- 如果有新消息，则显示小圆点 -->
+							<span class="layui-badge-dot"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<!-- 侧边菜单 -->
+			<div class="layui-side layui-side-menu">
+				<div class="layui-side-scroll">
+					<div class="layui-logo" lay-href="home/console.html">
+						<span>哐糖管理系统 <small>v1.0</small></span>
+					</div>
+
+					<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+						<li class="layui-nav-item  
+							<if condition="($Think.const.CONTROLLER_NAME eq 'Index') 
+							and ( $Think.const.ACTION_NAME eq 'index')">
+							layui-this
+							</if>
+						">
+							<a href="{:U('Index/index')}" lay-tips="首页" lay-direction="2">
+								<i class="layui-icon layui-icon-home"></i>
+								<cite>首页</cite>
+							</a>
+						</li>
+						<li class="layui-nav-item  
+							<if condition="($Think.const.CONTROLLER_NAME eq 'Index') 
+							and ( $Think.const.ACTION_NAME eq 'shop_distribution')">
+							layui-this
+							</if>
+						">
+							<a href="{:U('Index/shop_distribution')}" lay-tips="商家分布" lay-direction="2">
+								<i class="layui-icon layui-icon-home"></i>
+								<cite>商家分布</cite>
+							</a>
+						</li>
+
+						
+						<li class="layui-nav-item <if condition="$Think.const.CONTROLLER_NAME eq 'User'">layui-nav-itemed</if>">
+							<a href="javascript:;" lay-tips="用户管理" lay-direction="2">
+								<i class="layui-icon layui-icon-list"></i>
+								<cite>用户管理</cite>
+							</a>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'User') 
+									and ( $Think.const.ACTION_NAME eq 'dashboard')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('User/dashboard')}">用户列表</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'User') 
+									and ( $Think.const.ACTION_NAME eq 'send_msg')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('User/send_msg')}">群发活动消息</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'User') 
+									and ( $Think.const.ACTION_NAME eq 'grade_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('User/grade_list')}">会员等级</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'User') 
+									and ( $Think.const.ACTION_NAME eq 'vip_pay_log')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('User/vip_pay_log')}">会员购买记录</a>
+								</dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item <if condition="$Think.const.CONTROLLER_NAME eq 'Withdraw'">layui-nav-itemed</if>">
+							<a href="javascript:;" lay-tips="佣金管理" lay-direction="2">
+								<i class="layui-icon layui-icon-rmb"></i>
+								<cite>佣金管理</cite>
+							</a>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Withdraw') 
+									and ( $Think.const.ACTION_NAME eq 'withdraw_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Withdraw/withdraw_list')}">提现管理</a>
+								</dd>
+							</dl>
+						</li>
+						<!-- <li class="layui-nav-item  
+							<if condition="($Think.const.CONTROLLER_NAME eq 'Index') 
+							and ( $Think.const.ACTION_NAME eq 'postal_card')">
+							layui-this
+							</if>
+						">
+							<a href="{:U('Index/postal_card')}" lay-tips="包邮卡管理" lay-direction="2">
+								<i class="layui-icon layui-icon-cart"></i>
+								<cite>包邮卡管理</cite>
+							</a>
+						</li> -->
+						<li class="layui-nav-item 
+							<if condition="	($Think.const.CONTROLLER_NAME eq 'Banner') 
+							and ( $Think.const.ACTION_NAME eq 'banner_list')">
+							layui-this
+							</if>
+						">
+							<a href="{:U('Banner/banner_list')}" lay-tips="轮播图管理" lay-direction="2">
+								<i class="layui-icon layui-icon-picture"></i>
+								<cite>轮播图管理</cite>
+							</a>
+						</li>
+						<li class="layui-nav-item <if condition="$Think.const.CONTROLLER_NAME eq 'Lottery'">layui-nav-itemed</if>">
+							<a href="javascript:;" lay-tips="抓娃娃管理" lay-direction="2">
+								<i class="layui-icon layui-icon-engine"></i>
+								<cite>抓娃娃管理</cite>
+							</a>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Lottery') 
+									and ( $Think.const.ACTION_NAME eq 'lottery_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Lottery/lottery_list')}">抓娃娃列表</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Lottery') 
+									and ( $Think.const.ACTION_NAME eq 'good_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Lottery/good_list')}">娃娃列表</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Lottery') 
+									and ( $Think.const.ACTION_NAME eq 'lottery_type')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Lottery/lottery_type')}">娃娃分类</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Lottery') 
+									and ( $Think.const.ACTION_NAME eq 'lottery_record')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Lottery/lottery_record')}">中奖记录</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Lottery') 
+									and ( $Think.const.ACTION_NAME eq 'luck_draw_log')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Lottery/luck_draw_log')}">抽奖记录</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Lottery') 
+									and ( $Think.const.ACTION_NAME eq 'record_log')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Lottery/record_log')}">进货管理</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Lottery') 
+									and ( $Think.const.ACTION_NAME eq 'delivery_log')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Lottery/delivery_log')}">送货管理</a>
+								</dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item <if condition="$Think.const.CONTROLLER_NAME eq 'Article'">layui-nav-itemed</if>">
+							<a href="javascript:;" lay-tips="文章管理" lay-direction="2">
+								<i class="layui-icon layui-icon-list"></i>
+								<cite>文章管理</cite>
+							</a>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Article') 
+									and ( $Think.const.ACTION_NAME eq 'article_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Article/article_list')}">文章管理</a>
+								</dd>
+								
+								<!--<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Article') 
+									and ( $Think.const.ACTION_NAME eq 'tiezi_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Article/tiezi_list')}">攻略管理</a>
+								</dd>-->
+							</dl>
+						</li>
+						<li class="layui-nav-item <if condition="$Think.const.CONTROLLER_NAME eq 'Activity'">layui-nav-itemed</if>">
+							<a href="javascript:;" lay-tips="活动管理" lay-direction="2">
+								<i class="layui-icon layui-icon-tabs"></i>
+								<cite>活动管理</cite>
+							</a>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Activity') 
+									and ( $Think.const.ACTION_NAME eq 'activity_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Activity/activity_list')}">活动管理</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Activity') 
+									and ( $Think.const.ACTION_NAME eq 'activity_vip')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Activity/activity_vip')}">会员活动</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Activity') 
+									and ( $Think.const.ACTION_NAME eq 'bank_user')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Activity/bank_user')}">银行用户</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Activity') 
+									and ( $Think.const.ACTION_NAME eq 'box_good_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Activity/box_good_list')}">宝箱商品管理</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Activity') 
+									and ( $Think.const.ACTION_NAME eq 'adopt_config')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Activity/adopt_config')}">领养宠物管理</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Activity') 
+									and ( $Think.const.ACTION_NAME eq 'fruit_config')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Activity/fruit_config')}">种植水果管理</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Activity') 
+									and ( $Think.const.ACTION_NAME eq 'lottery_activity')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Activity/lottery_activity')}">抓娃娃活动</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Activity') 
+									and ( $Think.const.ACTION_NAME eq 'christmas_activity')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Activity/christmas_activity')}">圣诞活动</a>
+								</dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item <if condition="$Think.const.CONTROLLER_NAME eq 'Wechatmanager'">layui-nav-itemed</if>">
+							<a href="javascript:;" lay-tips="公众号配置" lay-direction="2">
+								<i class="layui-icon layui-icon-tabs"></i>
+								<cite>公众号配置</cite>
+							</a>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Wechatmanager') 
+									and ( $Think.const.ACTION_NAME eq 'menu')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Wechatmanager/menu')}">菜单管理</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Wechatmanager') 
+									and ( $Think.const.ACTION_NAME eq 'auto_back')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Wechatmanager/auto_back')}">自动回复配置</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Wechatmanager') 
+									and ( $Think.const.ACTION_NAME eq 'wechat_msg_log')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Wechatmanager/wechat_msg_log')}">推送记录</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Wechatmanager') 
+									and ( $Think.const.ACTION_NAME eq 'wechat_msg_config')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Wechatmanager/wechat_msg_config')}">引导语推送</a>
+								</dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item <if condition="$Think.const.CONTROLLER_NAME eq 'Shop'">layui-nav-itemed</if>">
+							<a href="javascript:;" lay-tips="商家管理" lay-direction="2">
+								<i class="layui-icon layui-icon-tabs"></i>
+								<cite>商家管理</cite>
+							</a>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Shop') 
+									and ( $Think.const.ACTION_NAME eq 'merchant_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Shop/merchant_list')}">商家列表</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Shop') 
+									and ( $Think.const.ACTION_NAME eq 'banner_list')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Shop/banner_list')}">商家轮播图管理</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Shop') 
+									and ( $Think.const.ACTION_NAME eq 'merchant_category')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Shop/merchant_category')}">商家分类管理</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Shop') 
+									and ( $Think.const.ACTION_NAME eq 'merchant_search')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Shop/merchant_search')}">搜索关键字</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Shop') 
+									and ( $Think.const.ACTION_NAME eq 'merchant_apply')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Shop/merchant_apply')}">商家入驻申请</a>
+								</dd>
+							</dl>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Shop') 
+									and ( $Think.const.ACTION_NAME eq 'user_arrive_log')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Shop/user_arrive_log')}">用户到店记录</a>
+								</dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item  
+							<if condition="($Think.const.CONTROLLER_NAME eq 'Sys') 
+							and ( $Think.const.ACTION_NAME eq 'feedback')">
+							layui-this
+							</if>
+						">
+							<a href="{:U('Sys/recharge')}" lay-tips="充值规则" lay-direction="2">
+								<i class="layui-icon layui-icon-dollar"></i>
+								<cite>充值规则</cite>
+							</a>
+						</li>
+						<li class="layui-nav-item  
+							<if condition="($Think.const.CONTROLLER_NAME eq 'Sys') 
+							and ( $Think.const.ACTION_NAME eq 'change_pwd')">
+							layui-this
+							</if>
+						">
+							<a href="{:U('Sys/change_pwd')}" lay-tips="账号设置" lay-direction="2">
+								<i class="layui-icon layui-icon-set"></i>
+								<cite>账号设置</cite>
+							</a>
+						</li>
+						
+						<li class="layui-nav-item <if condition="$Think.const.CONTROLLER_NAME eq 'Quotations'">layui-nav-itemed</if>">
+							<a href="javascript:;" lay-tips="美喵语录" lay-direction="2">
+								<i class="layui-icon layui-icon-tabs"></i>
+								<cite>美喵语录</cite>
+							</a>
+							<dl class="layui-nav-child">
+								<dd class=" 
+									<if condition="($Think.const.CONTROLLER_NAME eq 'Quotations') 
+									and ( $Think.const.ACTION_NAME eq 'index')">
+									layui-this
+									</if>
+								"> 
+									<a href="{:U('Quotations/index')}">美喵语录</a>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+					<img src="__PUBLIC__/weixin/image/qrcode.jpg" alt="" style="width:200px;height: 200px;margin:10px;">
+				</div>
+			</div>
+
+
+			<!-- 主体内容 -->
+			<div class="layui-body" id="LAY_app_body">
+				<div class="layadmin-tabsbody-item layui-show">
+				{__CONTENT__}
+				</div>
+			</div>
+
+			<!-- 辅助元素，一般用于移动设备下遮罩 -->
+			<div class="layadmin-body-shade" layadmin-event="shade"></div>
+		</div>
+	</div>
+
+</body>
+</html>
+<script type="text/javascript">
+	function toggleSlide(){
+		$("#LAY_app").toggleClass("layadmin-side-shrink");
+	}
+	function toggleFullscreen(){
+		if (!$.fullscreen.isFullScreen()) {
+			$("body").fullscreen();
+			$("#LAY_fullscreen").removeClass("layui-icon-screen-full");
+			$("#LAY_fullscreen").addClass("layui-icon-screen-restore");
+		}
+		else{
+			$.fullscreen.exit();
+			$("#LAY_fullscreen").removeClass("layui-icon-screen-restore");
+			$("#LAY_fullscreen").addClass("layui-icon-screen-full");
+		}
+		
+	}
+	function get_url(url, key, val) {
+		var url_arr = url.split('/');
+		var group = url_arr[4];
+		var ctrl = url_arr[5];
+		var action = url_arr[6];
+		url_arr[url_arr.length - 1] = url_arr[url_arr.length - 1].split('.')[0];
+		var params_arr = [];
+		var b_found = 0;
+			//先放到参数表里面
+			for (var i = 7; i < url_arr.length; i += 2) {
+				if (url_arr[i] == key) {
+					if (val != "") {
+						params_arr.push(url_arr[i]);
+						params_arr.push(val);
+					}
+					b_found = 1;
+				}
+				else {
+					params_arr.push(url_arr[i]);
+					params_arr.push(url_arr[i + 1]);
+				}
+			}
+			if (!b_found) {
+				if (val != "") {
+					params_arr.push(key);
+					params_arr.push(val);
+				}
+			}
+			var url = url_arr[0] + "//" + url_arr[2] + "/" + url_arr[3] + "/" + url_arr[4] + "/" + url_arr[5] + "/" + url_arr[6];
+			if (params_arr.length == 0) {
+				url += params_arr.join('/') + ".html"
+			}
+			else {
+				url += "/" + params_arr.join('/') + ".html"
+			}
+			return url;
+
+		}
+
+	</script>

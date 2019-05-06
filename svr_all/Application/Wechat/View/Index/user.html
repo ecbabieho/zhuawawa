@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>个人中心</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="index-bg user_bg">
+	<div class="user_header">
+		<a href="{:U("Index/vip_charge")}">
+			<div class="user_head" style="background-image: url({$head_image})">
+				
+			</div>
+			<img src="
+			<if condition="$level eq 1">__PUBLIC__/weixin/image/putong.png</if>
+			<if condition="$level eq 2">__PUBLIC__/weixin/image/huangjin.png</if>
+			<if condition="$level eq 3">__PUBLIC__/weixin/image/zuanshi.png</if>
+			" class="vip_type <if condition="$is_over eq 1">vip_gray</if>">
+			<p class="
+				<if condition="$level eq 1">user_vip_normal</if>
+				<if condition="$level gt 1">user_vip</if>
+			">{$level_name}</p>
+			<p class="name">{$nickname} (ID:{$user_id})</p>
+		</a>
+	</div>
+	<ul class="user_list">
+		<li class="arrow border_bottom">
+			<a href="{:U("Index/bag")}" title="我的背包">
+				<span class="icon icon_bag"></span>
+				<span class="name">我的背包</span>
+			</a>
+		</li>
+		<li class="border_bottom arrow">
+			<a href="{:U("Index/charge")}" title="我的糖豆">
+				<span class="icon icon_coin"></span>
+				<span class="name">我的糖豆</span>
+				<span class="num">{$coin_num}糖豆</span>
+			</a>
+		</li>
+		<li class="arrow border_bottom">
+			<a href="javascript:;" title="我的手机号">
+				<span class="icon icon_tel"></span>
+				<span class="name">我的手机号</span>
+				<if condition="$phone neq ''">
+				<span class="tel">{$phone}</span>
+				</if>
+				<if condition="$phone eq ''">
+				<span class="tel_btn" onclick="bind_tel()">立即绑定</span>
+				</if>
+				
+			</a>
+		</li>
+		<li class="arrow border_bottom">
+			<a href="{:U("Index/user_address")}" title="收货地址">
+				<span class="icon icon_address"></span>
+				<span class="name">收货地址</span>
+			</a>
+		</li>
+		<li class="arrow">
+			<a href="{:U("Agent/index")}" title="我的邀请">
+				<span class="icon icon_frd"></span>
+				<span class="name">我的邀请</span>
+			</a>
+		</li>
+	</ul>
+
+	<ul class="user_list">
+		<li class="arrow border_bottom" onclick="jumpShare()">
+			<span class="icon icon_qrcode"></span>
+			<span class="name">邀请好友</span>
+		</li>
+		<li class="arrow"  onclick="jumpQuestion()">
+			<span class="icon icon_feedback"></span>
+			<span class="name">常见问题</span>
+		</li>
+	</ul>
+	<div class="bind_tel_bg" id="bind_tel">
+		<ul class="address_list bind_tel">
+			<li class="border_bottom">
+				<input type="tel" id="phone" class="input" placeholder="请输入手机号">
+				<span class="icon_close" onclick="close_bind_tel()"></span>
+			</li>
+			<li class="border_bottom">
+				<input type="tel" id="code" class="input" placeholder="验证码" style="width: 80px;margin-right: 10px;">
+				<a href="javascript:;" title="获取验证码" class="code" style="margin-right:0px;" onclick="get_code()" id="code_ctrl">获取验证码</a>
+			</li>
+			<li>
+				<a href="javascript:sub_bind_tel();" class="address_save_btn" style="height: 40px;;line-height: 40px;font-size: 14px;margin:10px auto;">立即绑定</a>
+			</li>
+
+		</ul>
+	</div>
+	<!-- mask -->
+	<div class="maskBox" id="feedbackMaskBox">
+		<div class="mask">
+			<div class="mask_back">
+				<img src="__PUBLIC__/weixin/image/qrcode.jpg" alt="" class="qrocdeImg">
+				<p class="mask_text">如遇到问题可扫描上方二维码</p>
+				<p class="mask_text">关注微信公众号,或搜索“哐糖”<br>寻求帮助~</p>
+				<div class="mask_button" id="feedbackClose">我知道了</div>
+			</div>
+		</div>
+	</div>
+	<!-- mask -->
+	<div class="maskBox" id="inviteFrdMaskBox">
+		<div class="mask">
+			<div class="mask_back">
+				<img src="{$ticket}" alt="" class="qrocdeImg">
+				<p class="mask_text">1.长按上方二维码保存到手机相册~</p>
+				<p class="mask_text">2.邀请好友使用上方二维码关注公众号即可获得高额奖金哦~</p>
+				<div class="mask_button" id="inviteFrdClose">我知道了</div>
+			</div>
+		</div>
+	</div>
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	fly.init();
+	function jumpShare(){
+		window.location.href = "{:U("Index/invite")}";
+	}
+	function jumpQuestion(){
+		window.location.href = "{:U("Index/article",array('id'=>2))}";
+	}
+	$("#inviteFrdShow").click(function(){
+		$("#inviteFrdMaskBox").addClass('active')
+	})
+	$("#inviteFrdClose").click(function(){
+		$("#inviteFrdMaskBox").removeClass('active')
+	})
+	$("#feedbackShow").click(function(){
+		$("#feedbackMaskBox").addClass('active')
+	})
+	$("#feedbackClose").click(function(){
+		$("#feedbackMaskBox").removeClass('active')
+	})
+	function bind_tel(){
+		$("#bind_tel").fadeIn();
+	}
+	function close_bind_tel(){
+		$("#bind_tel").fadeOut();
+	}
+	function sub_bind_tel(){
+		var phone = $("#phone").val();
+		var code = $("#code").val();
+		if (phone == "") {
+			alert("请输入手机号~");
+			return;
+		}
+		if (code == "") {
+			alert("请输入验证码~");
+			return;
+		}
+		var data = {
+			phone:phone,
+			code:code,
+		}
+		$.post("{:U("Index/ajax_bind_phone")}",data,function(ret){
+			if (ret['code'] != 0) {
+				alert(ret['msg']);
+			}
+			else{
+				alert("恭喜您绑定成功~");
+				window.location.reload();
+			}
+		})
+
+	}
+	var timer = null;
+	var last_seconds = 60;
+	function change_code(){
+		if (last_seconds < 0) {
+			last_seconds = 60;
+			$("#code_ctrl").text("获取验证码");
+			clearInterval(timer);
+			return;
+		}
+		else{
+			last_seconds -= 1;
+			$("#code_ctrl").text(last_seconds + "s");
+		}
+	}
+	function get_code(){
+		if (last_seconds != 60) {
+			return;
+		}
+		var phone = $("#phone").val();
+		if (phone == "") {
+			alert("请输入手机号~");
+			return;
+		}
+		var data = {
+			phone:phone,
+		}
+		$.post("{:U("Index/ajax_send_code")}",data,function(ret){
+			if (ret['code'] != 0) {
+				alert(ret['msg']);
+			}
+			else{
+				timer = setInterval('change_code()',1000);
+			}
+		})
+	}
+
+</script>

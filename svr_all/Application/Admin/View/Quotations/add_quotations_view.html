@@ -1,0 +1,130 @@
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-sm12">
+			<div class="layui-card row">
+				<div class="layui-card-body">
+					<form class="layui-form" action="">
+						<div class="layui-form-item">
+							<label class="layui-form-label">标题</label>
+							<div class="layui-input-block">
+								<input type="text" id="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label">内容</label>
+							<div class="layui-input-block">
+								<textarea class='layui-textarea' id="content" style='height:200px;text-align:left'></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">作者</label>
+							<div class="layui-input-block">
+								<input type="text" id="author" lay-verify="title" autocomplete="off" placeholder="请输入作者" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">封面图片</label>
+							<div class="layui-input-block">
+								<div class="layui-upload" style="text-align:left">
+									<blockquote class="layui-elem-quote">图片请上传200px*200px的背景透明纯奖品图片，此图片会在抽奖页面展示~~ <br/><strong>注意：一定要是背景透明的png图片，点击图片即可上传</strong></blockquote>
+									<div class="layui-upload-list">
+										<img class="layui-upload-img" id="cover_image" style="width:200px;height:200px;border:1px solid #CCC;" src="<?php echo 'https://' . $_SERVER['SERVER_NAME'];?>__PUBLIC__/resources/images/upload_holder_good.png">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">图片简介</label>
+							<div class="layui-input-block">
+								<input type="text" id="image_abstract" lay-verify="title" autocomplete="off" placeholder="请输入图片简介" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<a href='javascript:;' class="layui-btn" onclick='sub_tijaio()'>立即提交</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+    <script src="__PUBLIC__/resources/Sortable.min.js"></script>
+	<script type="text/javascript">
+		//实例化编辑器
+		var layer, element;
+		layui.use(['layer', 'element'], function () {
+			layer = layui.layer;
+		});
+		//单图片上传
+		layui.use('upload', function () {
+			var upload = layui.upload;
+			var uploadInst = upload.render({
+				elem: '#cover_image',//绑定元素
+				url: '{:U("Index/upload_image")}',//上传接口
+				before: function (obj){
+					//预读图片
+				obj.preview(function (index, file, result) {
+					console.log(file)
+					$('#cover_image').attr('src', result);
+				});
+				},
+				done: function (res) {
+					$('#cover_image').attr('src', res['data']['path']);
+				},
+				error: function () {
+					//请求异常回调
+				}
+			});
+		});
+		function sub_tijaio() {
+			var cover_image = $("#cover_image").attr('src');
+			var title = $("#title").val();
+			var content = $("#content").val();
+			var author = $("#author").val();
+			var image_abstract = $("#image_abstract").val();
+			//var is_index_show = $("#is_index_show").val();
+			if(title == ''){
+				layer.msg('请填写标题');
+				return;
+			}
+            if(content == ''){
+                layer.msg('请填写内容');
+                return;
+            }
+            /*if(author == ''){
+                layer.msg('请填写作者');
+                return;
+            }*/
+            if(cover_image == undefined){
+                layer.msg('请上传封面图片');
+                return;
+            }
+            /*if(image_abstract == ''){
+                layer.msg('请填写图片简介');
+                return;
+            }*/
+			var add_xinxi = {
+				title: title,
+				cover_image: cover_image,
+				content: content,
+				author: author,
+				image_abstract: image_abstract,
+			};
+			lottery_config = encodeURIComponent(JSON.stringify(add_xinxi));
+			var data = {
+				lottery_config: lottery_config
+			}
+			$.post("{:U('Quotations/ajax_add_quotations')}", data, function (ret) {
+				if (ret['code'] == '0') {
+					layer.msg('添加成功', function () {
+						window.location.href="{:U("Quotations/index")}";
+					});
+				} else {
+					layer.msg(ret['msg']);
+				}
+			})
+		}
+	</script>

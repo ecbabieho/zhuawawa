@@ -1,0 +1,159 @@
+
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.8.9/dist/data-set.min.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=ce1d7952bfe7215b1cecb51b69ae04f2"></script> 
+<script src="https://webapi.amap.com/ui/1.0/main.js"></script>
+<style type="text/css" media="screen">
+	.layui-text a:not(.layui-btn):hover{
+		text-decoration: none;
+	}
+	.layui-status-imgs{
+		width: 58px!important;
+		height: 58px!important;
+		background-color: #ffffff!important;
+		overflow: hidden;
+	}
+	.layui-status-imgs img{
+		width: 100%!important;
+		height: 100%!important;
+	}		
+</style>
+
+<div class="layui-row layui-col-space15">
+	<div class="layui-col-sm12">
+		<div class="layui-card">
+			<div class="layui-tab layui-tab-brief">
+				<ul class="layui-tab-title">
+					<li class="layui-this">合作商家覆盖图</li>
+				</ul>
+				
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">选择类型</label>
+					<div class="layui-input-block">
+						<select id="search_category_id" onchange="shaixuan()">
+							<option value="">请选择类型</option>
+							<volist name="category" id="vo">
+							<option value="{$vo['id']}" <if condition=" $id eq $vo['id'] ">selected</if>>{$vo['name']}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="search_lottery()">
+						<i class="layui-icon layui-icon-search  layuiadmin-button-btn"></i>
+					</a>
+					</a>
+				</div>
+			</div>
+		</div>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">
+						<div id="container" class="layui-tab-item layui-show" style="height: 1000px;margin-top:10px;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=ce1d7952bfe7215b1cecb51b69ae04f2&plugin=AMap.PlaceSearch"></script>
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/PlaceSearchRender.js"></script>
+<script type="text/javascript">
+function search_lottery(){
+		var category_id = $("#search_category_id").val();
+		window.location.href = "{:U('Index/shop_distribution')}?id="+category_id;
+}
+	var map,lat,lng,marker = null,positionPicker = null;
+	var infoWindow;
+	map = new AMap.Map('container', {
+		resizeEnable: true,
+		center: [108.886676, 34.215289],
+		zoom: 12,
+	});
+	AMapUI.loadUI(['control/BasicControl'], function(BasicControl) {
+		//缩放控件，显示Zoom值
+		map.addControl(new BasicControl.Zoom({
+			position: {
+				top:'70px',
+				right:'10px',
+			},
+			showZoomNum: true
+		}));
+	});
+	map.clearMap();  // 清除地图覆盖物
+	var placeSearch = new AMap.PlaceSearch();
+	var placeSearchRender=new Lib.AMap.PlaceSearchRender();
+	var markers = [];
+    //关键字查询，您如果想修改结果展现效果，请参考页面：https://lbs.amap.com/fn/css-style/
+    <?php foreach($list as $key=>$val){?>
+    			var temp = {
+    				position: [<?php echo $val['lat_lng']?>]
+    			};
+    			marker = new AMap.Marker({
+    				map: map,
+    				position: [temp.position[0], temp.position[1]],
+    				offset: new AMap.Pixel(-12, -36),
+    				extData:{
+    					'name':'<?php echo $val['name'];?>',
+    					'category_name':'<?php echo $val['category_name'];?>',
+    					'user_id':'<?php echo $val['id'];?>',
+    					'address':'<?php echo $val['address'];?>',
+    					'phone':'<?php echo $val['link_tel'];?>',
+    					'realname':'<?php echo $val['link_name'];?>',
+    					'position': [temp.position[0], temp.position[1]]
+    				}
+    			});
+
+    			markers.push(marker);
+    			marker.on('click', function(e){
+					//alert(1);
+					openInfo(this.getExtData());
+				});
+    	<?php }?>
+     //在指定位置打开信息窗体
+     function openInfo(data) {
+        //构建信息窗体中显示的内容
+        var info = [];
+        info.push("<div style=\"padding:0px 0px 0px 4px;\"><b>"+data['name']+"------"+data['category_name']+"</b>");
+        info.push("电话 : "+data['realname']+'-'+data['phone']);
+        info.push("地址 :"+data['vip_discount']);
+        info.push("地址 :"+data['address']+"</div></div>");
+        infoWindow = new AMap.InfoWindow({
+            content: info.join("<br/>")  //使用默认信息窗体框样式，显示信息内容
+        });
+        infoWindow.open(map, data['position']);
+    }
+
+	/*
+    // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
+    markers.forEach(function(marker) {
+        new AMap.Marker({
+            map: map,
+            position: [marker.position[0], marker.position[1]],
+            offset: new AMap.Pixel(-12, -36)
+        });
+    });*/
+    AMapUI.loadUI(['overlay/SimpleInfoWindow'], function(SimpleInfoWindow) {
+
+
+    	var infoWindow = new SimpleInfoWindow({
+
+    		infoTitle: '<strong>这里是标题</strong>',
+    		infoBody: '<p class="my-desc"><strong>这里是内容。</strong> <br/> 高德地图 JavaScript API，是由 JavaScript 语言编写的应用程序接口，' +
+    		'它能够帮助您在网站或移动端中构建功能丰富、交互性强的地图应用程序</p>',
+
+            //基点指向marker的头部位置
+            offset: new AMap.Pixel(0, -31)
+        });
+
+
+    });
+    function openInfoWin() {
+    	infoWindow.open(map, markers.getPosition());
+    }
+
+
+</script>

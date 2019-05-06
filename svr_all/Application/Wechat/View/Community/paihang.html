@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>排行榜</title>
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+	<link type="text/css" rel="shortcut icon" href="/favicon.ico" />
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body class="index-bg" style="overflow: hidden;">
+	<div class="Container_box">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<volist name="banner_list" id="vo">
+				<div class="swiper-slide">
+					<div class="topImg">
+						<a href="{$vo['url']}" class="topImg_lk" title="{$vo['title']}">
+							<img src="{$vo['cover_image']}" alt="" class="img_lk">
+						</a>
+					</div>
+				</div>
+				</volist>
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+		<div class="the_charts">
+			<div class="top_switch">
+				<div class="left_switch  switchBox active" onclick="changeTab(0)">富豪榜</div>
+				<div class="right_switch switchBox " onclick="changeTab(1)">大神榜</div>
+			</div>
+			<div class="the_info">
+				<div class="infoOne">排名</div>
+				<div class="infoTwo">用户</div>
+				<div class="infoThree" id="lastName">豪气值</div>
+			</div>
+			<div class="chartsBox">
+				<ul class="charts_item charts_xiaofei">
+					<volist name="money_list" id="vo">
+					<li class="charts_list">
+						<div class="charts_Icon charts_IconText">
+							<switch name="key">
+								<case value="0">1</case>
+								<case value="0">2</case>
+								<case value="0">3</case>
+								<default />{$key+1}
+							</switch>
+						</div>
+						<div class="charts_infoBox">
+							<div class="author_imgBox">
+								<img class="author_img" src="{$vo['headimgurl']}">
+							</div>
+							<div class="author_name">{$vo['nickname']}</div>
+						</div>
+						<div class="charts_num">{$vo['charge_num']*100}</div>
+					</li>
+					</volist>
+				</ul>
+			</div>
+			<div class="chartsBox hide">
+				<ul class="charts_item charts_dashen">
+					<volist name="record_list" id="vo">
+					<li class="charts_list">
+						<div class="charts_Icon charts_IconText">
+							<switch name="key">
+								<case value="0">1</case>
+								<case value="0">2</case>
+								<case value="0">3</case>
+								<default />{$key+1}
+							</switch>
+						</div>
+						<div class="charts_infoBox">
+							<div class="author_imgBox">
+								<img class="author_img" src="{$vo['headimgurl']}">
+							</div>
+							<div class="author_name">{$vo['nickname']}</div>
+						</div>
+						<div class="charts_num">{$vo['record_total']}个</div>
+					</li>
+					</volist>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="dibu_box">
+		<div class="dibu_container">
+			<div class="dibuImg_box">
+				<img src="{$user['headimgurl']}" alt="" class="dibu_img">
+			</div>
+			<div class="dibuImg_textBox">
+				<div class="name_one">{$user['nickname']}</div>
+				<div id="info0">
+					<div class="name_Two">排名：{$user['money_paihang']}</div>
+					<div class="name_Two">我的豪气值：{$user['charge_num']*100}</div>
+				</div>
+				<div id="info1" style="display: none">
+					<div class="name_Two">排名：{$user['record_paihang']}</div>
+					<div class="name_Two">我的娃娃：{$user['record_total']}个</div>
+				</div>
+			</div>
+			<div class="dibu_bangdan">
+				<div class="dibu_text" onclick="notice()">
+					<div class="dibuIcon"></div>
+					<div class="name_Two">榜单规则</div>
+				</div>
+				<div class="dibu_btn" id="btn0">
+					<a href="{:U("Index/charge")}" class="dibu_btn_lk">去充糖豆</a>
+				</div>
+				<div class="dibu_btn" id="btn1" style="display: none">
+					<a href="{:U("Index/index")}" class="dibu_btn_lk">去抓娃娃</a>
+				</div>
+			</div>	
+		</div>
+	</div>
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/c_share.js"></script>
+<script type="text/javascript">
+	function notcice(){
+		alert("正在完善中~");
+	}
+	function changeTab(index){
+		var i = index;
+		$(".switchBox").removeClass('active').eq(i).addClass('active');
+		$(".chartsBox").addClass('hide').eq(i).removeClass('hide');
+		if (i == 0) {
+			$("#lastName").text("豪气值");
+			$("#info0").show();
+			$("#info1").hide();
+			$("#btn0").show();
+			$("#btn1").hide();
+		}
+		else{
+			$("#lastName").text("娃娃数量");
+			$("#info0").hide();
+			$("#info1").show();
+			$("#btn0").hide();
+			$("#btn1").show();
+		}
+	}
+	$(function(){
+		var mySwiper = new Swiper('.swiper-container', {
+			autoplay: true,//可选选项，自动滑动
+			loop:true,
+			pagination: {
+				el: '.swiper-pagination',
+			}
+		})
+	})
+</script>

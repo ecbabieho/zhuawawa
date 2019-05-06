@@ -1,0 +1,79 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-card-body">
+			<table id="users" lay-filter="users">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+
+<script type="text/html" id="publicTpl">
+	{{#  if(d.status === '0'){ }}
+	<span class="layui-badge" style="color:white;background-color:red;">失败</span>
+	{{#  } }}
+	{{#  if(d.status === '1'){ }}
+	<span class="layui-badge-rim" style="color:white;background-color:green;">成功</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="publicType">
+	{{#  if(d.type === '0'){ }}
+	<span class="layui-badge-rim">用户充值</span>
+	{{#  } }}
+	{{#  if(d.type === '-1'){ }}
+	<span class="layui-badge-rim">管理员赠送</span>
+	{{#  } }}
+	{{#  if(d.type === '-2'){ }}
+	<span class="layui-badge-rim">帖子发布分享奖励糖豆</span>
+	{{#  } }}
+	{{#  if(d.type === '-3'){ }}
+	<span class="layui-badge-rim">宝箱娃娃兑换糖豆</span>
+	{{#  } }}
+	{{#  if(d.type === '-4'){ }}
+	<span class="layui-badge-rim">中奖娃娃兑换糖豆</span>
+	{{#  } }}
+	{{#  if(d.type === '-5'){ }}
+	<span class="layui-badge-rim">购买会员赠送糖豆</span>
+	{{#  } }}
+	{{#  if(d.type === '-6'){ }}
+	<span class="layui-badge-rim">签到赠送糖豆</span>
+	{{#  } }}
+	{{#  if(d.type === '-7'){ }}
+	<span class="layui-badge-rim">到店消费赠送糖豆</span>
+	{{#  } }}
+
+	{{#  if(d.type > '0'){ }}
+	<span class="layui-badge-rim">{{d.amount_config.config_name}}</span>
+	{{#  } }}
+</script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("User/ajax_get_record_log")}'+'?id={:I('id')}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+				[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'user_name', title: '用户昵称', width:120, sort: true},
+					{field: 'money', title: '充值金额', width:120},
+					{field: 'num', title: '充值糖豆', width:120},
+					{field: 'before_balance', title: '充值前余额', width:120},
+					{field: 'after_balance', title: '充值后余额', width:120},
+					{field: 'type', title: '获取方式', width:200,templet:"#publicType"},
+					{field: 'add_time', title: '充值时间', width:180,fixed: 'right'},
+					{field: 'status', title: '支付状态', width:120, sort: false,templet:"#publicTpl",fixed: 'right'},
+				]
+			]
+		});
+
+	});
+</script>

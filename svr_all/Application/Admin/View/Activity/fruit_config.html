@@ -1,0 +1,280 @@
+<style type="text/css">
+	.menu_pid{
+		display:block;
+		height:36px;
+		line-height:36px;
+		width:100%;
+		padding-left:10px;
+		border-color: #D2D2D2!important;
+	}
+</style>
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="sub()">
+						<i class="layui-icon layui-icon-add-1 layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="logs">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+
+<script type="text/html" id="agentTpl">
+	{{#  if(d.is_open === '0'){ }}
+	<span class="layui-btn layui-btn-warm layui-btn-xs" onclick="agent({{d.id}},1)">否</span>
+	{{#  } }}
+	{{#  if(d.is_open === '1'){ }}
+	<span class="layui-btn layui-btn-normal layui-btn-xs" onclick="agent({{d.id}},0)">是</span>
+
+	{{#  } }}
+</script>
+<script type="text/html" id="coverImageTpl">
+	<img src="{{d.cover_image}}" title="{{d.cover_image}}" style="width:100%;">
+</script>
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+	<!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("Activity/ajax_get_fruit_config")}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'lottery_good_name', title: '奖品名称', width:300},
+					{field: 'cover_image', title: '奖品图片', width:300,templet:"#coverImageTpl"},
+					{field: 'fruit_val', title: '所需能量值', width:200},
+					{field: 'add_time', title: '配置时间', width:180},
+					{field: 'is_open', title: '是否可选', width:100,templet:"#agentTpl",fixed: 'right'},
+					{fixed: 'right',title:'操作', width:200, align:'center', toolbar: '#barDemo', fixed: 'right'} 
+					]
+					]
+				});
+
+	});
+	table.on('tool(logs)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	  var data = obj.data; //获得当前行数据
+	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+	  if(layEvent === 'detail'){ //查看
+	  	console.log(data['name']);
+		//do somehing
+	  } else if(layEvent === 'del'){ //删除
+	  	layer.confirm('确定要删除此配置吗？', function(index){
+		  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+		  layer.close(index);
+		  //向服务端发送删除指令
+		  var sub_data = {
+		  	id:data['id']
+		  };
+		  $.post("{:U('Activity/ajax_delete_fruit_config')}",sub_data,function(ret){
+		  	if(ret['code'] == 0){
+		  		layer.msg('删除成功',function(){
+		  			window.location.reload();
+		  		})
+		  	}else{
+		  		layer.msg(ret['msg']);
+		  	}
+
+		  });
+		});
+	  } else if(layEvent === 'edit'){ //编辑
+			edit_frame(data);
+	  }
+	});
+	function edit_frame(data){
+			$('body').append("<div id='edit_modal' style='display:none;padding:20px;'>"+
+						"<form class='layui-form'>"+
+								"<div class='layui-form-item'>"+
+										"<label class='layui-form-label'>能量值</label>"+
+										"<div class='layui-input-block'>"+
+										"<input type='number' id='edit_fruit_val'  required  lay-verify='required' placeholder='请输入能量值' autocomplete='off' class='layui-input'  value='"+data['fruit_val']+"'>"+
+										"</div>"+
+								"</div>"+
+								"<input type='hidden' id='type_id' value='"+data['id']+"'>"+
+						"</form>"+
+						"</div>"
+		);
+		layer.open({
+			type:1,
+			title:'编辑',
+            //skin: 'layui-layer-molv', //加上边框
+			area: ['600px', '200px'],
+			content: $("#edit_modal"),
+			btn: ['确认','取消'],
+			yes: function(index, layero){
+				var edit_fruit_val = $("#edit_fruit_val").val();
+				var type_id = $("#type_id").val();
+				if(edit_fruit_val == ''){
+					layer.msg('请输入能量值!');
+					return;
+				}
+				var sub_data = {
+					fruit_val:edit_fruit_val,
+					id:type_id,
+				}
+				$.post("{:U('Activity/ajax_edit_fruit_config')}",sub_data,function(ret){
+					if(ret['code'] == 0){
+						layer.msg('修改成功',function(){
+						window.location.reload();
+					})
+					}else{
+						layer.msg(ret['msg']);
+					}
+
+				})
+			},
+			btn2: function(index, layero){
+				$("#edit_modal").hide()
+						window.location.reload()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal").hide()
+						window.location.reload()
+			}
+			});
+	}
+	function sub(){
+		$('body').append("<div id='edit_modal_good' style='display:none;padding:20px;'>"+
+			"<form class='layui-form'>"+
+			"<div class='layui-form-item'>"+
+					"<label class='layui-form-label'>场次</label>"+
+					"<div  class='layui-input-block'>"+
+						"<select id='edit_config_id' class='menu_pid' style='display:block;' onchange='select_config()'>"+
+						'<option value="" >请选择场次</option>'+
+						<volist name="lottery_config" id="vo">
+						'<option value="{$vo['id']}" >{$vo['id']}-{$vo['name']}</option>'+
+						</volist>
+						"</select>"+
+					"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+					"<label class='layui-form-label'>奖品</label>"+
+					"<div  class='layui-input-block'>"+
+						"<select id='edit_good_id' class='menu_pid' style='display:block;'>"+
+						'<option value="" >请选择奖品</option>'+
+						<volist name="lottery_good" id="vo">
+						'<option value="{$vo['id']}" >{$vo['id']}-{$vo['name']}</option>'+
+						</volist>
+						"</select>"+
+					"</div>"+
+			"</div>"+
+			"<div class='layui-form-item'>"+
+					"<label class='layui-form-label'>能量值</label>"+
+					"<div class='layui-input-block'>"+
+					"<input type='number' id='add_fruit_val'  required  lay-verify='required' placeholder='请输入能量值' autocomplete='off' class='layui-input'>"+
+					"</div>"+
+			"</div>"+
+			"</form>"+
+			"</div>"
+			);
+		layer.open({
+			type:1,
+			title:'添加',
+            //skin: 'layui-layer-molv', //加上边框
+            area: ['450px', '300px'],
+            content: $("#edit_modal_good"),
+            btn: ['确认','取消'],
+            yes: function(index, layero){
+            	var edit_config_id = $("#edit_config_id").val();
+            	var edit_good_id = $("#edit_good_id").val();
+            	var edit_fruit_val = $("#add_fruit_val").val();
+            	if(edit_good_id == ''){
+            		layer.msg('请选择奖品');
+            		return;
+            	}
+            	if(edit_config_id == ''){
+            		layer.msg('请选择场次');
+            		return;
+            	}
+            	if(edit_fruit_val == ''){
+            		layer.msg('请输入能量殖');
+            		return;
+            	}
+            	var sub_data = {
+            		good_id:edit_good_id,
+            		config_id:edit_config_id,
+            		fruit_val:edit_fruit_val,
+            	}
+            	$.post("{:U('Activity/ajax_add_fruit_config')}",sub_data,function(ret){
+            		if(ret['code'] == 0){
+            			layer.msg('添加成功',function(){
+            				window.location.reload();
+            			})
+            		}else{
+            			layer.msg(ret['msg']);
+            		}
+
+            	})
+            },
+            btn2: function(index, layero){
+            	$("#edit_modal_good").remove()
+				//取消按钮
+			},
+			cancel: function(){
+				//右上角关闭回调
+				$("#edit_modal_good").remove()
+			}
+		});
+	}
+	function select_config(){
+		var select_config = $('#edit_config_id').val();
+		if(select_config == ''){
+			$('#edit_good_id').html('');
+			return false;
+		}
+		var sub_data = {
+			select_config:select_config,
+		}
+		$.post("{:U('User/ajax_get_config_good')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				console.log(ret);
+				var str = '<option value="" >请选择奖品</option>';
+				if(ret['data']){
+					for(var i=0;i<ret['data'].length;i++){
+						str = str+'<option value="'+ret['data'][i]['id']+'" >'+ret['data'][i]['id']+'-'+ret['data'][i]['name']+'</option>';
+					}
+				}
+				$('#edit_good_id').html(str);
+			}else{
+				layer.msg(ret['msg']);
+			}
+
+		})
+	}
+
+	function agent(id,type){	
+		var sub_data = {
+			id:id,
+			type:type
+		  };
+		  $.post("{:U('Activity/ajax_edit_fruit_open')}",sub_data,function(ret){
+			if(ret['code'] == 0){
+				layer.msg('修改成功',function(){
+					window.location.reload();
+				})
+			}else{
+				layer.msg(ret['msg']);
+			}
+		});
+	}
+</script>

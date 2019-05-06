@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>绿果田园-亲手种水果，包邮送到家</title>
+	<link type="text/css" rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/iconfont.css">
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/lvguo.css">
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+	<link type="text/css" rel="shortcut icon" href="/favicon.ico" />
+	<link rel="stylesheet" id="pageloader-css"  href="__PUBLIC__/weixin/css/pageloader.css" type="text/css" media="all" />
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<body>
+<div id="bonfire-pageloader">
+	<div class="bonfire-pageloader-icon">
+		<svg version="1.1"  x="0px" y="0px"
+			 width="512px" height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+		<path id="loading-12-icon" d="M291,82.219c0,16.568-13.432,30-30,30s-30-13.432-30-30s13.432-30,30-30S291,65.65,291,82.219z
+			 M261,404.781c-15.188,0-27.5,12.312-27.5,27.5s12.312,27.5,27.5,27.5s27.5-12.312,27.5-27.5S276.188,404.781,261,404.781z
+			 M361.504,113.167c-4.142,7.173-13.314,9.631-20.487,5.489c-7.173-4.141-9.631-13.313-5.49-20.487
+			c4.142-7.173,13.314-9.631,20.488-5.489C363.188,96.821,365.645,105.994,361.504,113.167z M188.484,382.851
+			c-14.348-8.284-32.697-3.368-40.98,10.98c-8.285,14.349-3.367,32.696,10.98,40.981c14.35,8.283,32.697,3.367,40.98-10.981
+			C207.75,409.482,202.834,391.135,188.484,382.851z M421.33,184.888c-8.368,4.831-19.07,1.965-23.901-6.404
+			c-4.832-8.368-1.965-19.07,6.404-23.902c8.368-4.831,19.069-1.964,23.9,6.405C432.566,169.354,429.699,180.056,421.33,184.888z
+			 M135.399,329.767c-8.285-14.35-26.633-19.266-40.982-10.982c-14.348,8.285-19.264,26.633-10.979,40.982
+			c8.284,14.348,26.632,19.264,40.981,10.98C138.767,362.462,143.683,344.114,135.399,329.767z M436.031,277.249
+			c-11.044,0-20-8.953-20-19.999c0-11.045,8.955-20.001,20.001-20.001c11.044,0,19.999,8.955,19.999,20.002
+			C456.031,268.295,447.078,277.249,436.031,277.249z M115.97,257.251c-0.001-16.57-13.433-30.001-30.001-30.002
+			c-16.568,0.001-29.999,13.432-30,30.002c0.001,16.566,13.433,29.998,30.001,30C102.538,287.249,115.969,273.817,115.97,257.251z
+			 M401.333,364.248c-10.759-6.212-14.446-19.97-8.234-30.73c6.212-10.759,19.971-14.446,30.731-8.233
+			c10.759,6.211,14.445,19.971,8.232,30.73C425.852,366.774,412.094,370.46,401.333,364.248z M135.398,184.736
+			c8.285-14.352,3.368-32.698-10.98-40.983c-14.349-8.283-32.695-3.367-40.981,10.982c-8.282,14.348-3.366,32.696,10.981,40.981
+			C108.768,204,127.115,199.082,135.398,184.736z M326.869,421.328c-6.902-11.953-2.807-27.242,9.148-34.145
+			s27.243-2.806,34.146,9.149c6.902,11.954,2.806,27.243-9.15,34.145C349.059,437.381,333.771,433.284,326.869,421.328z
+			 M188.482,131.649c14.352-8.286,19.266-26.633,10.982-40.982c-8.285-14.348-26.631-19.264-40.982-10.98
+			c-14.346,8.285-19.264,26.633-10.98,40.982C155.787,135.017,174.137,139.932,188.482,131.649z">
+		</svg>
+	</div>
+</div>
+
+
+<if condition="$user['phone'] eq '' ">
+	<div class="main" style="z-index: 9999999;">
+		<div class="main_box">
+			<div class="main_content">
+				<div class="phone_text">为保证账号安全，请绑定手机号</div>
+				<div class="input_box">
+					<input type="number" class="phone" id="phone" placeholder="请输入手机号码">
+				</div>
+				<div class="input_box">
+					<input type="number" class="code" id="code" placeholder="请输入验证码">
+					<button class="get_code" id="code_ctrl" onclick="get_code()">获取验证码</button>
+				</div>
+			</div>
+			<div class="main_control">
+				<!-- <div class="cancel_box">取消</div>
+				<div class="line"></div> -->
+				<div class="cancel_sure" onclick="sub_bind_tel()">确认</div>
+			</div>
+		</div>
+	</div>
+</if>
+
+<div class="body">
+	<!-- 判断水果列表弹窗  -->
+	<if condition="$status eq 1 ">
+		<div class="main " id="zhongzhi">
+			<div class="author_box">
+				<div class="author_img">
+					<img src="{$user['headimgurl']}" alt="" class="">
+				</div>
+				<p class="author_text">{$user['nickname']}</p>
+			</div>
+			<div class="send_shuiguo">
+				<span class="send_icon send_l"></span>
+				<span class="send_text">送你一箱水果</span>
+				<span class="send_icon send_r"></span>
+			</div>
+			<p class="zhong_text">种植后免费送到你家</p>
+			<ul class="guoyuan_item">
+				<volist name="fruit_list" id="vo" >
+					<li class="guoyuan_list" onclick="choose('{$vo['id']}','{$vo['lottery_good']['name']}','{$i}')">
+						<div class="guoyuan_yuan">
+							<img src="{$vo['lottery_good']['img_url']} " alt="" class="guoyuan_img">
+							<div class="guoshu_box">{$vo['lottery_good']['name']} </div>
+						</div>
+					</li>
+				</volist>
+
+			</ul>
+			<button class="sure_btn" onclick="start()">开始种植</button>
+		</div>
+	</if>
+
+	<if condition="$status eq 2 ">
+		<div class="dody_main" id="dody_main" style="height: 100%;">
+				<!-- tree -->
+				<div class="tree_img">
+					<div class="tree_box">
+						<div class="tree_shan">不如来果园,浇浇水,看看我~</div>
+					</div>
+				</div>
+
+				<!-- 底部信息 -->
+				<div class="dibu_info">
+					<div class="left_info">
+						<div class="dibu_imgbox">
+							<img src="{$user['headimgurl']}" alt="" class="dibu_autor_img">
+							<div class="shuiguo_box" style="background-image: url({$fruit_config['lottery_good']['img_url']} )"></div>
+						</div>
+						<p class="author_name">{$user['nickname']}</p>
+					</div>
+					<div class="right_info">
+						<div class="swiper-container switch_container">
+		                    <div class="swiper-wrapper">
+
+								<volist name="friend_list" id="vo" >
+			                    	<div class="left_info swiper-slide">
+										<div class="dibu_imgbox">
+											<img src="{$vo['user']['headimgurl']}" alt="" class="dibu_autor_img">
+										</div>
+										<p class="author_name">{$vo['user']['nickname']}</p>
+									</div>
+								</volist>
+
+		                    </div>
+		                </div>
+					</div>
+				</div>
+
+				<!-- 领水滴 -->
+				<div class="water_di" onclick="shareSQ()">
+					<div class="water_box">
+						<span class="water_text">可分享</span>
+					</div>
+				</div>
+
+				<!-- 领水滴底部弹窗 -->
+				<div class="main hide" id="shareSQ">
+					<div class="shuidi_content" id="shuidi_content">
+						<div class="shuidi_box">
+							<div class="sd_top">
+								<span class="cancel_tt"></span>
+								<h2 class="sd_title">做任务得水滴</h2>
+								<span class="cancel_icon" onclick="hideSQ()"></span>
+							</div>
+							<p class="tishi_text">完成任务会获得水滴,超过当天24点未领取会消失哦</p>
+							<ul class="sd_item">
+								<li class="sd_list">
+									<div class="list_main">
+										<div class="sd_l">
+											<div class="sd_icon"></div>
+											<div class="sd_content">
+												<p class="content_text">邀请好友种树</p>
+												<p class="content_hui">奖励20g  <span class="shuidi_icon"></span> 每天3次</p>
+											</div>
+										</div>
+										<if condition="$count_friend lt 3 ">
+											<div class="sd_r" onclick="doingWord('0')">去完成</div>
+										</if>
+										<if condition="$count_friend eq 3 ">
+											<div class="sd_r" style="background-color: #cccccc">已完成</div>
+										</if>
+									</div>
+								</li>
+								<li class="sd_list">
+									<div class="list_main">
+										<div class="sd_l">
+											<div class="sd_icon"></div>
+											<div class="sd_content">
+												<p class="content_text">分享朋友圈领水滴</p>
+												<p class="content_hui">奖励20g  <span class="shuidi_icon"></span> 每天1次</p>
+											</div>
+										</div>
+										<if condition="$is_share eq 0 ">
+											<div class="sd_r" onclick="doingWord('1')">去完成</div>
+										</if>
+										<if condition="$is_share eq 1 ">
+											<div class="sd_r" style="background-color: #cccccc">已完成</div>
+										</if>
+									</div>
+								</li>
+								<li class="sd_list">
+									<div class="list_main">
+										<div class="sd_l">
+											<div class="sd_icon"></div>
+											<div class="sd_content">
+												<p class="content_text">花费5元购买水滴</p>
+												<p class="content_hui">奖励500g  <span class="shuidi_icon"></span> 不限次</p>
+											</div>
+										</div>
+										<div class="sd_r" onclick="charge()">去充值</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+
+				<!-- 定时福袋 -->
+				<div class="dingshi" onclick="showFUdai()"></div>
+				<div class="main hide" id="fudai">
+					<div class="fudai_content">
+						<div class="fudai_box">
+							<div class="fudai_main">
+								<div class="fudai_toptitle">定时福袋</div>
+								<div class="fudai_bg">
+									<div class="fudai_img"></div>
+									<p class="fudai_text">每天<span class="fudai_red">12点-14点</span>,<span class="fudai_red"> 18点-20点</span></p>
+									<p class="fudai_text">都可以领取定时福袋</p>
+									<button class="fudai_btn" id="fudai_button" onclick="clickLq()">点击领取</button>
+								</div>
+								<div class="fudai_cancel" onclick="hideFUdai()"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 新手指引 -->
+				<div class="main" id="game_rule">
+					<div class="fudai_content">
+						<div class="fudai_box" style="height:10.04rem;">
+							<div class="fudai_main">
+								<div class="fudai_toptitle">游戏规则</div>
+								<div class="fudai_bg" style="height:9.24rem;">
+									<div style="text-align: left;padding:0.7rem;">
+										<p class="fudai_text" style="padding-bottom:7px;">1.绑定手机号奖励20g水滴；</p>
+										<p class="fudai_text" style="padding-bottom:7px;">2.每天签到奖励10-15g水滴；</p>
+										<p class="fudai_text" style="padding-bottom:7px;">3.邀请好友奖励20g水滴，每天最多可邀请3个好友；</p>
+										<p class="fudai_text" style="padding-bottom:7px;">4.分享至朋友圈奖励10g水滴，每天最多分享1次；</p>
+										<p class="fudai_text" style="padding-bottom:7px;">5.每天12:00-14:00、18:00-20:00可领取20g水滴奖励；</p>
+										<p class="fudai_text" style="padding-bottom:7px;">6.可以购买肥料帮你快速种出水果蔬菜哦！</p>
+										<p style="text-align:center">
+										<img src="__PUBLIC__/weixin/image/guoyuan/qrcode.jpeg" style="width:2rem;"/>
+										</p>
+										<p class="fudai_text" style="padding-bottom:7px;0.25rem;font-size:0.25rem;">长按识别二维码，获得更多水果蔬菜哦！</p>
+									</div>
+									<!-- <button class="fudai_btn" onclick="hideGameRule()">我知道了</button> -->
+								</div>
+								<div class="fudai_cancel" onclick="hideGameRule()"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 签到 -->
+				<div class="signboxs" onclick="showsignbox()"></div>
+
+				<div class="main hide" id="signbox">
+					<div class="fudai_content">
+						<div class="fudai_box">
+							<div class="fudai_main">
+								<div class="fudai_toptitle">签到</div>
+								<div class="fudai_bg">
+									<div class="fudai_img sign_img"></div>
+									<p class="fudai_text">签到可领取<span class="fudai_red"> 10g-20g </span>水</p>
+									<button class="fudai_btn" onclick="clcikSign()">点击签到</button>
+								</div>
+								<div class="fudai_cancel" onclick="hideSignbox()"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 分享好友弹窗 -->
+				<div class="main sharebox hide" onclick="hideSharebox('0')">
+					<div class="share_wechat">
+						<p class="share_text">点击右上角分享给 <span class="speac_text">好友</span> 或 <span class="speac_text">群聊</span></p>
+						<p class="share_text">邀请好友来种树,你可得20g水滴 <span class="shuidi_icon"></span></p>
+					</div>
+				</div>
+
+				<!-- 分享朋友圈弹窗 -->
+				<div class="main sharebox hide" onclick="hideSharebox('1')">
+					<div class="share_wechat">
+						<p class="share_text">点击右上角分享给 <span class="speac_text">朋友圈</span></p>
+						<p class="share_text">邀请好友来种树,你可得20g水滴 <span class="shuidi_icon"></span></p>
+					</div>
+				</div>
+
+				<!-- 浇水status -->
+				<div class="jiaoshui">
+					<p class="jiaoshui_text">当前能量：<span>{$user_fruit['fruit_val']}</span></p>
+					<div class="jiaoshui_top">
+						<div class="jiaoshui_top_status" id="jiaoshui_top_status"></div>
+					</div>
+					<p class="jiaoshui_text">总能量：<span>{$fruit_config['fruit_val']}</span></p>
+				</div>
+
+				<!-- 浇水壶 -->
+				<!-- <div class="hu">
+					<div class="hu_bg">
+						<div class="hu_lv" id="hu_lv"></div>
+						<div class="hu_text"><span class="hu_num" id="hu_num">64</span>g</div>
+					</div>
+				</div>
+				<div class="shuidi_img"></div> -->
+				<div class="zhuli" onclick="zhuli()">
+					<div class="zhuli_box">
+						<p class="zhuli_action">
+							<span id="friend"><if condition="$status eq 1 ">0<else />{$count_friend}</if></span>
+							<span> / 3</span>
+						</p>
+					</div>
+				</div>
+
+				<div class="main hide" id="shuidi">
+					<div class="fudai_content">
+						<div class="fudai_box">
+							<div class="fudai_main">
+								<div class="fudai_bg">
+									<div class="fudai_img"></div>
+									<p class="fudai_text">剩余水滴不足</p>
+									<div class="shuidi_boxs">
+										<p class="shuidi_text">每次浇水需要10g水滴</p>
+										<p class="shuidi_text">完成指定任务即可领取水滴</p>
+									</div>
+									<button class="fudai_btn" onclick="lq_shuidi()">领取水滴</button>
+								</div>
+								<div class="fudai_cancel" onclick="hideshuidi()"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
+	</if>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+<script type="text/javascript" src="__PUBLIC__/weixin/js/jquery.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="__PUBLIC__/weixin/js/pageloader.js"></script>
+<script>
+	 //jQuery(window).resize(function(){
+	 	 //resizenow();
+	 //});
+	 // function resizenow() {
+	 // 	var browserwidth = jQuery(window).width();
+	 // 	var browserheight = jQuery(window).height();
+	 // 	jQuery('.bonfire-pageloader-icon').css('right', ((browserwidth - jQuery(".bonfire-pageloader-icon").width())/2)).css('top', ((browserheight - jQuery(".bonfire-pageloader-icon").height())/2));
+	 // };
+	 // resizenow();
+</script>
+
+<script type="text/javascript">
+	//能量状态
+	//var {$user_fruit['fruit_val']},{$fruit_config['fruit_val']};
+	/*<if condition="$status neq 0">
+		var status_local = <if condition="$status eq 1">1<else />{$user_fruit['fruit_val']}</if>;
+		var status_all = <if condition="$status eq 1">1<else />{$fruit_config['fruit_val']}</if>;
+	<else />
+		var status_all = 1;
+		var status_local = 1;
+	</if>*/
+	 var status = {$status};
+	var status_local = <if condition="$status eq 1">1<else />{$user_fruit['fruit_val']}</if>;
+	var status_all = <if condition="$status eq 1">1<else />{$fruit_config['fruit_val']}</if>;
+
+	var width = (status_local/status_all)*100 + '%';
+	$("#jiaoshui_top_status").width(width)
+
+	 var swiper = new Swiper('.switch_container', {
+        slidesPerView: 'auto',
+        watchSlidesProgress: true,
+        touchMoveStopPropagation: true,
+    });
+
+
+
+	var mydate = new Date();
+	var hours = mydate.getHours();
+	var guoshuId;
+	function choose(index,obj,i){
+		guoshuId = index;
+		var id = i-1;
+		$(".guoyuan_list").removeClass('guoyuan_list_active').eq(id).addClass('guoyuan_list_active');
+		$(".sure_btn").addClass('sure_btn_active');
+		$('.sure_btn').html('开始种植' + obj)
+	}
+	function start(){
+		if(guoshuId){
+			var data = {
+				fruit_config_id:guoshuId
+
+			}
+			$.post("{:U("Activity/ajax_add_user_fruit")}",data,function(ret){
+				if (ret['code'] == 0) {
+					$("#zhongzhi").addClass('hide');
+					window.location.reload();
+				}
+				else{
+					layer.msg(ret['msg']);
+				}
+			})
+			return;
+		}else{
+			layer.msg("请先选择水果");
+			return;
+		}
+	}
+
+	function shareSQ(){
+		$("#shareSQ").removeClass('hide');
+		$("#shuidi_content").addClass('shuidi_content_active')
+	}
+	function hideSQ(){
+		$("#shareSQ").addClass('hide');
+		$("#shuidi_content").removeClass('shuidi_content_active')
+	}
+
+
+
+
+
+	//福袋
+	function showFUdai(){
+		$("#fudai").removeClass('hide');
+		if(('12'<= hours && hours <'14') || ('18'<= hours && hours < '20')){
+			
+		}else{
+			$("#fudai_button").css("background-color","#cccccc");
+			$("#fudai_button").html('活动未开始');
+			return;
+		}
+	}
+	function hideFUdai(){
+		$("#fudai").addClass('hide');
+	}
+	function hideGameRule(){
+		$("#game_rule").addClass('hide');
+	}
+	function clickLq(){
+		if(('12'<= hours && hours <'14') || ('18'<= hours && hours < '20')){
+			$.post("{:U("Wechat/Activity/ajax_add_fruit_timing")}",'',function(ret){
+				if (ret['code'] == 0) {
+					layer.msg("领取成功");
+					hideFUdai();
+					return;
+				}
+				else{
+					layer.msg(ret['msg']);
+				}
+			})
+			return;
+		}else{
+			layer.msg('活动暂未开始');
+			return;
+		}
+	}
+
+
+	function zhuli(){
+		var friend = $("#friend").html();
+		var msg = '今日好友已经助力' + friend +'次啦!'
+		layer.msg(msg);
+	}
+
+
+
+
+
+
+	function showsignbox(){
+		$("#signbox").removeClass('hide');
+	}
+	function hideSignbox(){
+		$("#signbox").addClass('hide');
+	}
+
+	function clcikSign(){
+		$.post("{:U("Wechat/Activity/ajax_add_fruit_sign")}",'',function(ret){
+			if (ret['code'] == 0) {
+				layer.msg("签到成功");
+				hideSignbox();
+				return;
+			}
+			else{
+				layer.msg(ret['msg']);
+				return;
+			}
+		})
+	}
+
+	function doingWord(i){
+		$("#shareSQ").addClass('hide');
+		$(".sharebox").eq(i).removeClass('hide');
+	}
+	function hideSharebox(i){
+		$(".sharebox").eq(i).addClass('hide');
+	}
+
+
+	$(function(){
+		<if condition="$friend_status eq 1 ">
+		alert('{$msg}');
+		window.location.href = window.location.protocol + "//" + window.location.host + "/index.php/Wechat/Activity/lvguonongchang_zyf";
+		return false;
+		<else />
+		</if>
+		aaaa_share();
+	})
+	function aaaa_share(){
+		var data = {
+			url:window.location.protocol + "//" + window.location.host + "/index.php/Wechat/Activity/lvguonongchang_zyf",
+		};
+		var url = window.location.protocol + "//" + window.location.host + "/index.php/Wechat/App/ajax_get_wx_share_fruit";
+		$.post(url,data,function(ret){
+			if (ret['code'] == 0) {
+				wx.config({
+					debug: false,
+					appId: ret['data']['signPackage']['appId'],
+					timestamp: ret['data']['signPackage']['timestamp'],
+					nonceStr: ret['data']['signPackage']['nonceStr'],
+					signature: ret['data']['signPackage']['signature'],
+					jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone','hideMenuItems'],
+				});
+				var share_data = {
+					title:"",
+					desc:"",
+					imgUrl:"",
+					link:"",
+				}
+				share_data['title'] = "【送你一箱水果】亲手种水果，包邮送到家";
+				share_data['imgUrl'] = ret['data']['signPackage']['imgUrl'];
+				share_data['link'] = ret['data']['signPackage']['url'];
+				share_data['desc'] = "放心种树免费拿水果~";
+				//alert(JSON.stringify(share_data))
+				fill_share_data_aaa(share_data);
+			}
+			else{
+				layer.msg(ret['msg']);
+			}
+		})
+	}
+function fill_share_data_aaa(share_data){
+	wx.ready(function(){
+		//朋友圈
+		wx.onMenuShareTimeline({
+			title: share_data['title'],
+			link: share_data['link'],
+			imgUrl: share_data['imgUrl'],//'https://fssw.bichonfrise.cn/Public/weixin/image/guoyuan/share_tree.jpg',
+			success: function () {
+				$.post("{:U("Activity/ajax_add_fruit_share")}",'',function(ret){
+					//alert(JSON.stringify(ret))
+					if (ret['code'] == 0) {
+						layer.msg("分享成功");
+						window.location.reload();
+					}
+					else{
+						layer.msg(ret['msg']);
+					}
+				})
+			},
+			cancel: function () {
+
+			}
+		});
+		
+		//好友
+		wx.onMenuShareAppMessage({
+			title:share_data['title'],
+			desc: share_data['desc'],
+			link: share_data['link'],
+			imgUrl:share_data['imgUrl'],
+			type: 'link',
+			dataUrl: '',
+			success: function () {
+				/*alert(JSON.stringify(ret))
+				$.post("{:U("App/ajax_add_fruit_share")}",'',function(ret){
+					if (ret['code'] == 0) {
+						layer.msg("分享成功");
+						window.location.reload();
+					}
+					else{
+						layer.msg(ret['msg']);
+					}
+				})*/
+			},
+			cancel: function () {
+			}
+		});
+		wx.onMenuShareQQ({
+			title:share_data['title'],
+			desc: share_data['desc'],
+			link: share_data['link'],
+			imgUrl:share_data['imgUrl'],
+			success: function () {
+			},
+			cancel: function () {
+			}
+		});
+		wx.onMenuShareWeibo({
+			title:share_data['title'],
+			desc: share_data['desc'],
+			link: share_data['link'],
+			imgUrl:share_data['imgUrl'],
+			success: function () {
+			},
+			cancel: function () {
+			}
+		});
+		wx.onMenuShareQZone({
+			title:share_data['title'],
+			desc: share_data['desc'],
+			link: share_data['link'],
+			imgUrl:share_data['imgUrl'],
+			success: function () {
+			},
+			cancel: function () {
+			}
+		});
+	});
+}
+
+	function charge(){
+		$.post("{:U("Pay/ajax_pay_fruit_val")}",'',function(ret){
+			if (ret['code'] == 0) {
+				pay(ret['data']);
+			}
+			else{
+				layer.msg(ret['msg']);
+			}
+		})
+	}
+	function pay(data){
+		function onBridgeReady(){
+			WeixinJSBridge.invoke(
+			'getBrandWCPayRequest', {
+			"appId":data['appId'],     //公众号名称，由商户传入     
+			"timeStamp":data['timeStamp'],         //时间戳，自1970年以来的秒数     
+			"nonceStr":data['nonceStr'], //随机串     
+			"package":data['package'],     
+			"signType":data['signType'],         //微信签名方式：     
+			"paySign":data['paySign'] //微信签名 
+		},
+		function(res){
+			if(res.err_msg == "get_brand_wcpay_request:ok" ){
+				window.location.reload();
+			}
+			else{
+				JSON.stringify(res);
+			} 
+		}); 
+		}
+		if (typeof WeixinJSBridge == "undefined"){
+			if( document.addEventListener ){
+				document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+			}else if (document.attachEvent){
+				document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+				document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+			}
+		}else{
+			onBridgeReady();
+		}
+	}
+
+
+
+	function sub_bind_tel(){
+		var phone = $("#phone").val();
+		var code = $("#code").val();
+		if (phone == "") {
+			layer.msg("请输入手机号~");
+			return;
+		}
+		if (code == "") {
+			layer.msg("请输入验证码~");
+			return;
+		}
+		var data = {
+			phone:phone,
+			code:code,
+		}
+		$.post("{:U("Index/ajax_bind_phone")}",data,function(ret){
+			if (ret['code'] != 0) {
+				layer.msg(ret['msg']);
+			}
+			else{
+				layer.msg("恭喜您绑定成功~");
+				window.location.reload();
+			}
+		})
+
+	}
+
+
+	var timer = null;
+	var last_seconds = 60;
+	function change_code(){
+		if (last_seconds < 0) {
+			last_seconds = 60;
+			$("#code_ctrl").text("获取验证码");
+			clearInterval(timer);
+			return;
+		}
+		else{
+			last_seconds -= 1;
+			$("#code_ctrl").text(last_seconds + "s");
+		}
+	}
+	function get_code(){
+		if (last_seconds != 60) {
+			return;
+		}
+		var phone = $("#phone").val();
+		if (phone == "") {
+			layer.msg("请输入手机号~");
+			return;
+		}
+		var data = {
+			phone:phone,
+		}
+		$.post("{:U("Index/ajax_send_code")}",data,function(ret){
+			if (ret['code'] != 0) {
+				layer.msg(ret['msg']);
+			}
+			else{
+				timer = setInterval('change_code()',1000);
+			}
+		})
+	}
+</script>

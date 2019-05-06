@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+    <title>会员中心</title>
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/vip.css">
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/reset_weiui.css">
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="__PUBLIC__/weixin/css/swiper.min.css">
+    <!-- <link rel="stylesheet" href="__PUBLIC__/weixin/css/idangerous.swiper.3dflow.css"> -->
+    <script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+</head>
+<style type="text/css">
+    .vip_gray{
+        -webkit-filter: grayscale(100%);
+    }
+</style>
+<body>
+    <header class="navbar search personal">
+        <div class="nav-wrap-left">
+            <a href="javascript:;" class="react back" onclick="back()">
+                <i class="text-icon icon-back"></i>
+            </a>
+        </div>
+        <div class="nav-header">会员中心</div>
+        <div class="nav-wrap-right">
+            <a href="{:U("Vip/index")}" class="">
+                <span class="nav-btn">
+                    <i class="text-icon icon-sp icon-collect" style="background-size: 1.8rem 1.8rem;background-position: -0.41rem -1rem; "></i>
+                    首页
+                </span>
+            </a>
+            <a href="{:U("Vip/search")}" class="">
+                <span class="nav-btn">
+                    <i class="text-icon icon-sp icon-collect icon-search"></i>
+                    搜索
+                </span>
+            </a>
+        </div>  
+    </header>
+    <!-- <div>
+        <a class="my-account" gaevent="imt/account/myinfo" href="//i.meituan.com/account/myinfo">
+            <img src="//ms0.meituan.net/touch/img/my-photo.png">
+            <img class="avater" src="https://img.meituan.net/avatar/96c22f78c211bcec6cc2537e6ccfe27240815.jpg">
+            <div class="user-info more more-weak">
+                <p class="uname">Silence6995<i class="level-icon level3"></i></p>
+                <p>账户余额：<strong>0</strong>元</p>
+            </div>
+        </a>
+    </div> -->
+    <div class="boxs" style="background-color: #FFFFFF;">
+        <div class="swiper-container vip_charge_container" style="margin-top:0!important;">
+            <div class="swiper-wrapper <if condition="$is_over eq 1 || $level eq 1"> vip_gray</if>" style="height: 100%;">
+                <div class="swiper-slide" style="width: 100%;">
+					<if condition="$is_over eq 1 || $level eq 1">
+					<img src="__PUBLIC__/weixin/image/vip_card_huangjin.png" alt="" class="vip_charge_container_item" style="margin:0 auto">
+					</if>
+					<if condition="$is_over eq 0 && $level eq 2">
+					<img src="__PUBLIC__/weixin/image/vip_card_huangjin.png" alt="" class="vip_charge_container_item" style="margin:0 auto">
+					</if>
+					<if condition="$is_over eq 0 && $level eq 3">
+					<img src="__PUBLIC__/weixin/image/vip_card_zuanshi.png" alt="" class="vip_charge_container_item" style="margin:0 auto">
+					</if>
+					<div class="Thumb_box">
+						<img src="{$user['headimgurl']}" class="Thumb_img">
+					</div>
+					<p class="vip_name">{$user['nickname']}</p>
+					<!-- <p class="vip_name">{{value.name}}</p> -->
+					<if condition="$level eq 1">
+					<p class="vip_over_time">暂无资格</p>
+					</if>
+					<if condition="$level neq 1 && $is_over eq 1">
+					<p class="vip_over_time">已过期</p>
+					</if>
+					<if condition="$level neq 1 && $is_over neq 1">
+					<p class="vip_over_time">{$user['over_time']|substr=0,10}到期</p>
+					</if>
+					<div class="Number">TEL：{$user['phone']|default="未绑定"}(ID：{$user['id']})</div>
+				</div>
+            </div>
+        </div> 
+        <div class="class" style="padding: 0px 20px 10px;">
+            <a class="dibu_text" href="{:U("Index/article",array('id'=>3))}" >
+                <div class="dibuIcon"></div>
+                <div class="name_Two" style="margin-left: 5px;padding-bottom:1px;border-bottom:1px solid #9c9c9c;">会员权益详细说明</div>
+            </a>
+        </div>
+    </div>
+    <!-- <dl class="list">
+        <dd>
+            <a class="react" href="//i.meituan.com/brunch/order">
+                <div class="more more-weak">
+                    <i class="text-icon my-ding order-icon"></i>支付记录<span data-key="all" class="more-after"></span>
+                </div>
+            </a>
+        </dd>
+        <dd>
+            <ul class="orderindex">
+                <li>
+                    <a href="//i.meituan.com/brunch/order?status=1" class="react">
+                        <i class="text-icon list_one"></i>
+                        <span>待付款</span>
+                        <span data-key="unpaid" class="amount-icon"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="//i.meituan.com/brunch/order?status=2" class="react">
+                        <i class="text-icon list_two"></i>
+                        <span>待使用</span>
+                        <span data-key="unused" class="amount-icon"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="//i.meituan.com/brunch/order?status=3" class="react">
+                        <i class="text-icon list_three"></i>
+                        <span>待评价</span>
+                        <span data-key="needfeedback" class="amount-icon"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="//i.meituan.com/brunch/order?status=4" class="react">
+                        <i class="text-icon list_four"></i>
+                        <span>退款/售后</span>
+                    </a>
+                </li>
+            </ul>
+        </dd>
+    </dl> -->
+    <dl class="list">
+        <dd>
+            <a class="react" href="{:U("Vip/sign")}">
+                <div class="more more-weak">
+                    <i class="text-icon order-icon my-sign"></i>签到
+                </div>
+            </a>
+        </dd>
+        <dd>
+            <a class="react" href="{:U("Vip/collect")}">
+                <div class="more more-weak">
+                    <i class="text-icon order-icon my-coll"></i>我的收藏
+                    <span data-key="collection" class="more-after" style="display: block;">{$collection_count}</span>
+                </div>
+            </a>
+        </dd>
+        <dd>
+            <a class="react" href="{:U("Vip/history")}">
+                <div class="more more-weak">
+                    <i class="text-icon order-icon my-diyong"></i>浏览记录
+                    <span class="more-after" style="display: block;">仅展示最近1月内记录</span>
+                </div>
+            </a>
+        </dd>
+        <dd>
+            <a class="react" href="{:U("Index/vip_charge")}">
+                <div class="more more-weak">
+                    <i class="text-icon order-icon my-chongzhi"></i>会员充值
+                </div>
+            </a>
+        </dd>
+        <!-- <dd>
+            <a class="react" gaevent="imt/account/magiccard" href="//i.meituan.com/account/magiccard">
+                <div class="more more-weak">
+                    <i class="text-icon order-icon my-copy"></i>支付记录
+                    <span class="more-after" style="display: block;">97</span>
+                </div>
+            </a>
+        </dd>
+        <dd>
+            <a class="react" gaevent="imt/account/ordersLotterys" href="//i.meituan.com/orders/lotterys">
+                <div class="more more-weak">
+                    <i class="text-icon order-icon my-hong"></i>红包记录
+                    <span class="more-after"></span>
+                </div>
+            </a>
+        </dd> -->
+    </dl>
+    <div class="footer-copy-container">
+        <div class="footer-copy-right">
+            <div class="hr"></div>
+            <span class="footer-copy-right-text">
+                 ©2018 哐糖抓抓
+             </span>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="__PUBLIC__/weixin/js/swiper.min.js"></script>
+<!-- <script src="__PUBLIC__/weixin/js/idangerous.swiper.3dflow.js"></script>     -->
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js" apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="__PUBLIC__/weixin/js/v_share.js"></script>
+<script type="text/javascript">
+    function back(){
+        window.history.back();
+    }
+    function location_call_back(latitude,longitude,speed,accuracy){
+    }
+</script>

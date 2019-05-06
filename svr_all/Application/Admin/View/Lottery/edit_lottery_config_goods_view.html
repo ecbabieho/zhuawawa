@@ -1,0 +1,193 @@
+<div class="layui-fluid">
+	<div class="layui-row layui-col-space15">
+		<div class="layui-col-sm12">
+			<div class="layui-card row">
+				<div class="layui-card-body">
+					<blockquote class="layui-elem-quote"><strong>温馨提示：</strong> <br/>所有奖品概率之和不超过<b>2147483647</b>（整数最大数）即可~~3-715827882 4-536870911 5-429496729</blockquote>
+					<p style="color:#F00;text-align: center;font-weight: bolder">此抓娃娃每次消耗糖豆{$lottery_config.coin_num}个~</p>
+					<form class="layui-form" action="">
+						<div class="layui-form-item">
+							<label class="layui-form-label">名称</label>
+							<div class="layui-input-block">
+								<input type="text" id="name" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input" value="{$lottery_config.name}" disabled>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">奖品（1）</label>
+							<div class="layui-input-block">
+								<select id="lottery_good_id0" name="lottery_good_id0">
+									<option value="0">请选择奖品</option>
+									<volist name="lottery_goods" id="vo">
+										<option value="{$vo.id}" <if condition="$vo['id'] eq $lottery_config['lottery_good_id0']"> selected </if>>{$vo.name}-{$vo.cost}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">概率（1）</label>
+							<div class="layui-input-block">
+								<input type="text" id="percent0" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input" value="{$lottery_config.percent0}"  onkeydown="get_percent_show(0)">
+								<small id="show0"></small>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">奖品（2）</label>
+							<div class="layui-input-block">
+								<select id="lottery_good_id1" name="lottery_good_id1">
+									<option value="0">请选择奖品</option>
+									<volist name="lottery_goods" id="vo">
+										<option value="{$vo.id}" <if condition="$vo['id'] eq $lottery_config['lottery_good_id1']"> selected </if>>{$vo.name}-{$vo.cost}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">概率（2）</label>
+							<div class="layui-input-block">
+								<input type="text" id="percent1" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input" value="{$lottery_config.percent1}" onkeydown="get_percent_show(1)">
+								<small id="show1"></small>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">奖品（3）</label>
+							<div class="layui-input-block">
+								<select id="lottery_good_id2" name="lottery_good_id2">
+									<option value="0">请选择奖品</option>
+									<volist name="lottery_goods" id="vo">
+										<option value="{$vo.id}" <if condition="$vo['id'] eq $lottery_config['lottery_good_id2']"> selected </if>>{$vo.name}-{$vo.cost}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">概率（3）</label>
+							<div class="layui-input-block">
+								<input type="text" id="percent2" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input" value="{$lottery_config.percent2}"  onkeydown="get_percent_show(2)">
+								<small id="show2"></small>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">奖品（4）</label>
+							<div class="layui-input-block">
+								<select id="lottery_good_id3" name="lottery_good_id3">
+									<option value="0">请选择奖品</option>
+									<volist name="lottery_goods" id="vo">
+										<option value="{$vo.id}" <if condition="$vo['id'] eq $lottery_config['lottery_good_id3']"> selected </if>>{$vo.name}-{$vo.cost}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">概率（4）</label>
+							<div class="layui-input-block">
+								<input type="text" id="percent3" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input" value="{$lottery_config.percent3}"  onkeydown="get_percent_show(3)">
+								<small id="show3"></small>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">奖品（5）</label>
+							<div class="layui-input-block">
+								<select id="lottery_good_id4" name="lottery_good_id4">
+									<option value="0">请选择奖品</option>
+									<volist name="lottery_goods" id="vo">
+										<option value="{$vo.id}" <if condition="$vo['id'] eq $lottery_config['lottery_good_id4']"> selected </if>>{$vo.name}-{$vo.cost}</option>
+									</volist>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">概率（5）</label>
+							<div class="layui-input-block">
+								<input type="text" id="percent4" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input" value="{$lottery_config.percent4}"  onkeydown="get_percent_show(4)">
+								<small id="show4"></small>
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<a href='javascript:;' class="layui-btn" onclick='sub()'>立即提交</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var layer, element;
+	layui.use(['layer', 'element'], function () {
+		layer = layui.layer;
+	});
+		//单图片上传
+	layui.use('upload', function () {
+		var upload = layui.upload;
+		var uploadInst = upload.render({
+			elem: '#cover_image',//绑定元素
+			url: '{:U("Index/upload_image")}',//上传接口
+			before: function (obj){
+				//预读图片
+				obj.preview(function (index, file, result) {
+					$('#cover_image').attr('src', result);
+				});
+			},
+			done: function (res) {
+				$('#cover_image').attr('src', res['data']['path']);
+			},
+			error: function () {
+				//请求异常回调
+			}
+		});
+	});
+	function get_percent_show(i){
+		var percent = $("#percent" + i).val();
+		if (percent == "") {
+			percent = "0";
+		}
+		$("#show" + i).text(parseInt(percent)/2147483647);
+	}
+	function sub() {
+		var percent0 = $("#percent0").val();
+		var lottery_good_id0 = $("#lottery_good_id0").val();
+		var percent1 = $("#percent1").val();
+		var lottery_good_id1 = $("#lottery_good_id1").val();
+		var percent2 = $("#percent2").val();
+		var lottery_good_id2 = $("#lottery_good_id2").val();
+		var percent3 = $("#percent3").val();
+		var lottery_good_id3 = $("#lottery_good_id3").val();
+		var percent4 = $("#percent4").val();
+		var lottery_good_id4 = $("#lottery_good_id4").val();
+		var add_xinxi = {
+			id:{:I('id')},
+			percent0: percent0,
+			lottery_good_id0: lottery_good_id0,
+			percent1:percent1,
+			lottery_good_id1:lottery_good_id1,
+			percent2:percent2,
+			lottery_good_id2:lottery_good_id2,
+			percent3:percent3,
+			lottery_good_id3:lottery_good_id3,
+			percent4:percent4,
+			lottery_good_id4:lottery_good_id4,
+		};
+		lottery_config = encodeURIComponent(JSON.stringify(add_xinxi));
+		var data = {
+			lottery_config: lottery_config
+		}
+		$.post("{:U('Lottery/ajax_edit_lottery_config_goods')}", data, function (ret) {
+			if (ret['code'] == '0') {
+				layer.msg('配置成功', function () {
+					window.location.href="{:U('Lottery/lottery_list')}";
+				});
+			} else {
+				layer.msg(ret['msg']);
+			}
+		})
+	}
+	$(function(){
+		for (var i = 0; i <5 ; i++) {
+			get_percent_show(i);
+		}
+	})
+</script>

@@ -1,0 +1,100 @@
+
+<div class="layui-fluid">
+	<div class="layui-card">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">用户</label>
+					<div class="layui-input-block">
+						<select id="user_id_s">
+							<option value="">全部用户</option>
+							<volist name="user_list" id="vo">
+							<option value="{$vo['id']}">{$vo['id']}-{$vo['nickname']}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">会员等级</label>
+					<div class="layui-input-block">
+						<select id="lottery_goods_id_s">
+							<option value="">全部等级</option>
+							<volist name="grade_list" id="vo">
+							<option value="{$vo['level']}">{$vo['name']}</option>
+							</volist>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label" style="width:88px;">用户ID</label>
+					<div class="layui-input-block" style="margin-left: 118px;">
+						<input type="text" id="search_val" placeholder="请输入用户ID" autocomplete="off" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<a class="layui-btn layuiadmin-btn-order" onclick="search_lottery()">
+						<i class="layui-icon layui-icon-search  layuiadmin-button-btn"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="layui-card-body">
+			<table id="users" lay-filter="logs">
+			</table>
+		</div>
+		<div class="layui-tab layui-tab-brief">
+		</div>
+	</div>
+</div>
+<script type="text/html" id="publicTpl">
+	{{#  if(d.type === '0'){ }}
+	<span class="layui-badge" style="color:white;background-color:green;">用户购买</span>
+	{{#  } }}
+	{{#  if(d.type === '1'){ }}
+	<span class="layui-badge" style="color:white;background-color:red;">管理员赠送</span>
+
+	{{#  } }}
+</script>
+<script src="__PUBLIC__/resources/layui/layui.all.js"></script>
+<script type="text/javascript">
+	var table = layui.table;
+	layui.use('table', function(){
+		table.render({
+			elem: '#users',
+			height: 500,
+			url: '{:U("User/ajax_get_vip_pay_log")}', //数据接口
+			page: true, //开启分页
+			id:'users',
+			cols: [
+			[ 
+					//表头
+					{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'},
+					{field: 'nickname', title: '用户昵称', width:200, sort: true},
+					{field: 'level_name', title: '会员等级', width:200},
+					{field: 'day_num', title: '购买天数', width:200},
+					{field: 'money', title: '价格', width:200},
+					{field: 'over_time', title: '到期时间', width:200},
+					{field: 'add_time', title: '购买时间', width:200},
+					{field: 'type', title: '类型', width:200, templet:"#publicTpl"},
+					]
+					]
+				});
+
+	});
+	
+	function search_lottery(){
+		var user_id = $("#user_id_s").val();
+		var level = $("#lottery_goods_id_s").val();
+		var search_val = $("#search_val").val();
+		table.reload("users",{
+			page:{
+				curr : 1
+			},
+			where:{
+				user_id:user_id,
+				level:level,
+				search_val:search_val,
+			}
+		})
+	}
+</script>

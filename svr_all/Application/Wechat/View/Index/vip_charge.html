@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>会员充值</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/swiper.min.css">
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/idangerous.swiper.3dflow.css">
+	<script type="text/javascript" src="__PUBLIC__/weixin/js/rem.js"></script>
+	<link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body class="index-bg vip_charge_bg">
+	<div class="swiper-container vip_charge_container">
+		<div class="swiper-wrapper" id="vip_level">
+		</div>
+	</div> 
+	<div class="class" style="padding: 20px 20px;margin-top:10px;">
+		<a class="dibu_text" href="{:U("Index/article",array('id'=>3))}" >
+			<div class="dibuIcon"></div>
+			<div class="name_Two" style="margin-left: 5px;padding-bottom:1px;border-bottom:1px solid #9c9c9c;">会员权益详细说明</div>
+		</a>
+	</div>
+	<ul class="vip_charge_list" style="margin-bottom: 40px;" id="vip_charge">
+
+	</ul>
+	<script>
+		var _mtac = {};
+		(function() {
+			var mta = document.createElement("script");
+			mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+			mta.setAttribute("name", "MTAH5");
+			mta.setAttribute("sid", "500627254");
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(mta, s);
+		})();
+	</script>
+	<script type="text/html" id="vip_list_tmpl">
+		{{each vip_pay_config as value index}}
+		<li>
+			{{if value.info != ""}}
+			<span class="left">
+				<p class="text">{{value.name}}</p>
+				<p class="memo">{{value.info}}</p>
+			</span>
+			{{/if}}
+			{{if value.info == ""}}
+			<span class="left">
+				<p class="text" style="line-height: 50px;margin-top:0px;">{{value.name}}</p>
+			</span>
+			{{/if}}
+			<div class="right">
+				<div class="right_main">
+					<p class="discount_price">￥{{value.discount_price}}</p>
+					<p class="price">￥{{value.price}}</p>
+				</div>
+				<a href="javascript:charge({{value.id}});" class="btn">立即开通</a>
+			</div>
+		</li>
+		{{/each}}
+	</script>
+	<script type="text/html" id="vip_level_tmpl">
+		{{each data as value index}}
+		<div class="swiper-slide"{{if value.is_this_level == 0 || value.is_over == 1}} style="-webkit-filter: grayscale(100%);" {{/if}}>
+				{{if value.level  == 2}}
+				<img src="__PUBLIC__/weixin/image/vip_card_huangjin.png" alt="" class="vip_charge_container_item">
+				{{/if}}
+				{{if value.level  == 3}}
+				<img src="__PUBLIC__/weixin/image/vip_card_zuanshi.png" alt="" class="vip_charge_container_item">
+				{{/if}}
+				<div class="Thumb_box">
+					<img src="{$user['headimgurl']|default='__PUBLIC__/weixin/image/charge_icon_b.png'}" alt="{$user['nickname']}" class="Thumb_img">
+				</div>
+				<p class="vip_name">{$user['nickname']}</p>
+				<!-- <p class="vip_name">{{value.name}}</p> -->
+				<p class="vip_over_time">
+					{{if value.is_this_level == 0}}
+						暂无资格
+					{{/if}}
+					{{if value.is_this_level == 1}}
+						{{if value.is_over == 1}}
+						暂无资格
+						{{/if}}
+						{{if value.is_over == 0}}
+						{{value.over_time}}到期
+						{{/if}}
+					{{/if}}
+				</p>
+				<div class="Number">TEL：{$user['phone']|default="未绑定"} (ID：{$user['id']})</div>
+
+			</div>
+		{{/each}}
+	</script>
+</body>
+</html>
+
+<script src="__PUBLIC__/weixin/js/swiper.min.js"></script>
+<script src="__PUBLIC__/weixin/js/idangerous.swiper.3dflow.js"></script>	
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="__PUBLIC__/weixin/js/template.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	var mySwiper;
+	var vip_config;
+	function init_data(){
+		var data = {
+		}
+		$.post("{:U("Index/ajax_get_vip")}",data,function(ret){
+			if (ret['code'] == 0) {
+				vip_config = ret;
+				var htmlVipList = template('vip_list_tmpl',vip_config['data'][0]);
+				$("#vip_charge").html(htmlVipList);
+				var htmlVipLevel = template('vip_level_tmpl',vip_config);
+				$("#vip_level").html(htmlVipLevel);
+				mySwiper = new Swiper('.swiper-container',{
+					// slidesPerView:1,
+					loop:false,
+					centeredSlides : true,
+					//Enable 3D Flow
+					tdFlow: {
+						rotate : 10,
+						stretch :10,
+						depth: 400,
+						modifier : 1,
+						shadows:true
+					},
+					onSlideChangeEnd:function(swiper){
+						var html = template('vip_list_tmpl',vip_config['data'][swiper.activeIndex]);
+						$("#vip_charge").html(html);
+					}
+				})
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	init_data();
+	function pay(data){
+		function onBridgeReady(){
+			WeixinJSBridge.invoke(
+			'getBrandWCPayRequest', {
+			"appId":data['appId'],     //公众号名称，由商户传入     
+			"timeStamp":data['timeStamp'],         //时间戳，自1970年以来的秒数     
+			"nonceStr":data['nonceStr'], //随机串     
+			"package":data['package'],     
+			"signType":data['signType'],         //微信签名方式：     
+			"paySign":data['paySign'] //微信签名 
+		},
+		function(res){
+			if(res.err_msg == "get_brand_wcpay_request:ok" ){
+				window.location.reload();
+			}
+			else{
+				JSON.stringify(res);
+			} 
+		}); 
+		}
+		if (typeof WeixinJSBridge == "undefined"){
+			if( document.addEventListener ){
+				document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+			}else if (document.attachEvent){
+				document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+				document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+			}
+		}else{
+			onBridgeReady();
+		}
+	}
+	function charge(id){
+		var data = {
+			config_id:id,
+		}
+		$.post("{:U("Pay/ajax_pay_vip")}",data,function(ret){
+			if (ret['code'] == 0) {
+				pay(ret['data']);
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+	$(function(){
+		fly.init();   		
+	})        
+</script>

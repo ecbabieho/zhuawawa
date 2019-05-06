@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no">
+	<title>哐糖</title>
+	<link rel="stylesheet" href="__PUBLIC__/weixin/css/index.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<link rel="stylesheet" href="https://elrumordelaluz.github.io/csshake/csshake.css">
+</head>
+<body class="index-bg">
+	<div class="banners">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<foreach name="banners" item="vo" >
+					<div class="swiper-slide">
+						<a href="{$vo['url']}" title="{$vo['title']}">
+							<img src="{$vo['cover_image']}" class="img">
+						</a>
+					</div>
+				</foreach>
+			</div>
+			<div class="swiper-pagination"></div>
+		</div>
+	</div>
+	<ul class="index-nav">
+		<li>
+			<a href="{:U("Index/user")}" title="个人中心">
+				<img src="__PUBLIC__/weixin/image/index_user.png" alt="" class="nav">
+			</a>
+		</li>
+		<li>
+			<a href="{:U("Index/charge")}" title="糖豆充值">
+				<img src="__PUBLIC__/weixin/image/index_candy_charge.png" alt="" class="nav">
+			</a>
+		</li>
+		<li>
+			<a href="{:U("Index/bag")}" title="我的背包">
+				<img src="__PUBLIC__/weixin/image/index_bag.png" alt="" class="nav">
+			</a>
+		</li>
+<!-- 		<li>
+			<a href="{:U("Index/charge")}" title="糖豆充值">
+				<img src="__PUBLIC__/weixin/image/index_charge.png" alt="" class="nav">
+			</a>
+		</li>
+		<li>
+			<a href="{:U("Community/paihang")}" title="排行榜">
+				<img src="__PUBLIC__/weixin/image/index_paihang.png" alt="" class="nav">
+			</a>
+		</li> -->
+	</ul>
+	<div class="index-list-container">
+		<div class="header">
+			<ul id="type_header">
+				<foreach name="lottery_types" item="vo" >
+					<if condition="$vo['id'] neq 8">
+					<li class="
+						<if condition= "$Think.get.lottery_type_id eq $vo['id'] 
+						or ($Think.get.lottery_type_id eq '' and $vo['id'] eq 4)">
+						active
+						</if>">
+						<if condition = "$vo['id'] eq -1">
+							<i class="ui-subscript ui-subscript-red">New</i>
+						</if>
+						<a href="{:U("Index/index",array('lottery_type_id'=>$vo['id']))}" title="{$vo['name']}">{$vo['name']}</a>
+					</li>
+					</if>
+				</foreach>
+			</ul>
+		</div>
+		<div class="content">
+			<ul>
+				<foreach name="lottery_configs" item="vo" >
+				<li>
+					<a href="javascript:void(0);" title="{$vo['name']}">
+					<if condition= " $vo['lottery_type_id'] eq 4 AND $vo['new_stock'] gt 0" >
+						<i class="ui-subscript ui-subscript-red">当天发</i>
+					</if>
+					<if condition= " $vo['lottery_type_id'] eq 4 AND $vo['new_stock'] eq 0" >
+						<i class="ui-subscript ui-subscript-blue">7天到</i>
+					</if>	
+					<if condition='$vo["lottery_type_id"] eq 8'>
+						<i class="ui-subscript ui-subscript-red">钻石会员</i>
+					</if>
+					<if condition='$vo["lottery_type_id"] eq 6'>
+						<i class="ui-subscript ui-subscript-blue">黄金会员</i>
+					</if>
+						<span class="icon_suoyao" onclick="jump_beg({$vo['id']})"></span>
+						<span class="icon_collect <if condition='$vo["is_collection"] eq 1'>icon_collected</if>"  onclick="collect(this,{$vo['id']})"></span>
+						<img class="image" src="{$vo['cover_image']}" onclick="jump_detail('<if condition="$vo['lottery_type_id'] eq 8">{:U('Index/game_diamond',array('id'=>$vo['id']))}</if><if condition="$vo['lottery_type_id'] eq 6">{:U('Index/game_gloden',array('id'=>$vo['id']))}</if><if condition="$vo['lottery_type_id'] eq 4">{:U('Index/game',array('id'=>$vo['id']))}</if>')">
+						<div class="info">
+							<p class="name">{$vo['name']}</p>
+							<p class="price">{$vo['coin_num']}糖豆/次</p>
+						</div>
+					</a>
+				</li>
+				</foreach>
+			</ul>
+		</div>
+	</div>
+	<!-- 领养娃娃 -->
+	<div class="baoxiang_box">
+		<a href="{:U("Index/my_wawa",array("user_id"=>$user['id']))}" title="领养娃娃游戏">
+			<img src="__PUBLIC__/weixin/image/wawa_page/adopt-icon.png" alt="领养娃娃游戏" class="img">
+		</a>
+	</div>
+
+
+<script>
+	var _mtac = {};
+	(function() {
+		var mta = document.createElement("script");
+		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.2";
+		mta.setAttribute("name", "MTAH5");
+		mta.setAttribute("sid", "500627254");
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(mta, s);
+	})();
+</script>
+	
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="__PUBLIC__/weixin/js/fly.js"></script>
+<script src="https://js.fundebug.cn/fundebug.1.1.2.min.js"
+  apikey="62393626ed1383ae5c9cca4b0916540a756347a82d67d74a7e4d82696590a3e1"></script>
+<script type="text/javascript">
+	var mySwiper = new Swiper('.swiper-container', {
+			autoplay: true,//可选选项，自动滑动
+			loop:true,
+			pagination: {
+			el: '.swiper-pagination',
+		}
+	})
+	fly.init();
+	function jump_beg(id){
+		var url = "{:U("Community/fabu",array('beg_gift_id'=>'-1'))}";
+		url = url.replace('-1',id);
+		window.location.href = url;
+
+	}
+	function jump_detail(url){
+		window.location.href = url;
+	}
+	function collect(obj,id){
+		var data = {
+			lottery_config_id:id,
+		}
+		$.post("{:U("Index/ajax_collection")}",data,function(ret){
+			if (ret['code'] == 0) {
+				if (ret['data'] == "取消成功~") {
+					$(obj).removeClass("icon_collected");
+				}
+				else{
+					$(obj).addClass("icon_collected");
+				}
+				alert(ret['data']);
+			}
+			else{
+				alert(ret['msg']);
+			}
+		})
+	}
+</script>
