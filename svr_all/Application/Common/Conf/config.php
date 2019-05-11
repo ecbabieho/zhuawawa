@@ -43,4 +43,8 @@ return array(
 	'MERCHANT_VIP_MAID' => 0.3, //用户购买会员分佣到商户的比例
 	'PAY_VIP_GIVE_COIN_HUANGJIN' => 0, //用户购买会员赠送用户糖豆数   0表示不赠送（黄金会员）
 	'PAY_VIP_GIVE_COIN_ZUANSHI' => 0, //用户购买会员赠送用户糖豆数   0表示不赠送（钻石会员）
+	'APP_ID'=>'',		//微信公众号 appId
+	'MCH_ID'=>'',		//微信支付商户ID mch_id
+	'APP_SECRET'=>'',	//微信公众号 appSecret
+	'SVR_IP'=>'',		//服务器ip微信支付使用 ip
 );
